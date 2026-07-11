@@ -1,0 +1,493 @@
+/* Container Principal da Ficha */
+.sheet-container {
+    padding: 100px 2rem 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-back {
+    display: inline-block;
+    color: var(--accent-purple);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    transition: 0.2s;
+}
+
+.btn-back:hover {
+    color: #fff;
+}
+
+/* Cabeçalho do Personagem */
+.sheet-header {
+    display: flex;
+    gap: 2rem;
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.character-portrait {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid var(--accent-purple);
+    box-shadow: 0 0 15px rgba(122, 27, 156, 0.4);
+}
+
+.character-identity h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.2rem;
+    color: #fff;
+}
+
+.character-identity h3 {
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.char-meta {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Layout em Grid para o Corpo da Ficha */
+.sheet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.sheet-section {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.sheet-section h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--accent-purple);
+    border-bottom: 1px solid rgba(122, 27, 156, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+}
+
+/* Barras de Sobrevivência */
+.status-bar-container {
+    margin-bottom: 1.5rem;
+}
+
+.status-bar-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-bar {
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.health-bar .bar-fill {
+    background: #ff4d4d;
+    height: 100%;
+}
+
+.sanity-bar .bar-fill {
+    background: var(--accent-blue);
+    height: 100%;
+}
+
+.stress-track {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stress-mark {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stress-mark.filled {
+    background: #ff4d4d;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 8px #ff4d4d;
+}
+
+.stress-warning {
+    margin-left: 10px;
+    color: #ff4d4d;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Atributos Mortais */
+.attributes-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.attr-box {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.attr-box .attr-value {
+    display: block;
+    font-size: 2rem;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.attr-box .attr-name {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.attribute-anchor {
+    border-color: var(--accent-purple);
+    background: rgba(122, 27, 156, 0.1);
+}
+
+/* Âncoras Literais */
+.anchor-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.anchor-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 3px solid var(--accent-blue);
+}
+
+.anchor-icon {
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+    margin-top: 3px;
+}
+
+.anchor-info {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Inventário */
+.inventory-capacity {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-align: right;
+}
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inv-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.inv-item.relic {
+    background: rgba(122, 27, 156, 0.15);
+    border: 1px solid rgba(122, 27, 156, 0.4);
+    color: #fff;
+}
+
+.item-slot {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sheet-grid {
+        grid-template-columns: 1fr;
+    }
+    .sheet-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .char-meta {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+/* ---- CONTROLES DE BARRAS (+ e -) ---- */
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.status-header label {
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.btn-ctrl {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-ctrl:hover {
+    background: var(--accent-purple);
+}
+
+/* Nova Barra de Fluxo */
+.flow-bar .bar-fill {
+    background: #a855f7; /* Roxo para representar o Fluxo/Magia */
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Transição suave nas barras de Vida e Sanidade */
+.health-bar .bar-fill, .sanity-bar .bar-fill {
+    transition: width 0.3s ease;
+}
+
+/* Bolinhas de Estresse (Ajustadas para caber 8) */
+.stress-track {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.stress-mark {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+}
+
+/* ---- INPUTS DE ATRIBUTOS ---- */
+.attr-input {
+    display: block;
+    width: 100%;
+    font-size: 2rem;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    background: transparent;
+    border: none;
+    text-align: center;
+    outline: none;
+}
+
+/* Remove as setinhas feias dos inputs de número no navegador */
+.attr-input::-webkit-outer-spin-button,
+.attr-input::-webkit-inner-spin-button,
+.meta-input::-webkit-outer-spin-button,
+.meta-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.attr-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ---- CAMPOS DE CABEÇALHO EDITÁVEIS ---- */
+.char-title-input {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    width: 100%;
+    outline: none;
+    transition: 0.2s;
+}
+
+.char-subtitle-input {
+    font-family: 'Inter', sans-serif;
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    width: 100%;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+.char-title-input:focus, .char-subtitle-input:focus {
+    border-bottom: 1px dashed var(--accent-purple);
+}
+
+.meta-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    width: 30px;
+    outline: none;
+    text-align: center;
+}
+
+.meta-input.text-input {
+    width: 120px;
+    text-align: left;
+}
+
+.meta-input:focus {
+    border-bottom: 1px dashed var(--accent-purple);
+    color: #fff;
+}
+
+/* ---- ÂNCORAS E INVENTÁRIO EDITÁVEL ---- */
+.inline-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.2);
+    color: #fff;
+    width: 70%;
+    outline: none;
+    font-size: 0.9rem;
+    padding-bottom: 2px;
+}
+
+.inline-input:focus {
+    border-bottom-color: var(--accent-blue);
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(122, 27, 156, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.inventory-header h2 {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.btn-add {
+    background: rgba(122, 27, 156, 0.2);
+    border: 1px solid var(--accent-purple);
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.2s;
+}
+
+.btn-add:hover {
+    background: var(--accent-purple);
+}
+
+.inv-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inv-input-name {
+    flex: 2;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.inv-input-slot {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-align: right;
+    outline: none;
+}
+
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: 0.2s;
+}
+
+.btn-remove:hover {
+    opacity: 1;
+}

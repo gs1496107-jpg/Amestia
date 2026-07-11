@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campanhas - AMESTIA</title>
+    <link rel="stylesheet" href="style.css"> <!-- Seu CSS base -->
+    <link rel="stylesheet" href="campanhas.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Efeito de partículas do relógio -->
+    <div id="shadowParticles" class="particles-overlay"></div>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html">Início</a>
+            <a href="Biblioteca.html">Biblioteca</a>
+            <a href="perfil.html">Personagens</a>
+            <a href="Campanhas.html" class="active">Campanhas</a>
+        </div>
+    </nav>
+
+    <!-- TELA 1: LISTA DE CAMPANHAS (LOBBY) -->
+    <main id="campanhasLobby" class="view-section active">
+        <div class="container">
+            <h1 class="page-title">Suas Campanhas</h1>
+            <div class="campaign-grid">
+                
+                <!-- Botão de Criar Nova Campanha -->
+                <div class="campaign-card new-campaign-card" onclick="abrirCriacaoCampanha()">
+                    <div class="campaign-info" style="text-align: center; padding-top: 40px;">
+                        <i class="fas fa-plus-circle" style="font-size: 3rem; color: #7a1b9c; margin-bottom: 1rem;"></i>
+                        <h2>Criar Nova Campanha</h2>
+                    </div>
+                </div>
+
+                <!-- Botão de Entrar em Campanha via Código -->
+                <div class="campaign-card join-campaign-card" onclick="entrarPorCodigo()">
+                    <div class="campaign-info" style="text-align: center; padding-top: 40px;">
+                        <i class="fas fa-sign-in-alt" style="font-size: 3rem; color: #1b4b9c; margin-bottom: 1rem;"></i>
+                        <h2>Entrar com Código</h2>
+                    </div>
+                </div>
+
+                <!-- Cartão de Campanha Padrão -->
+                <div class="campaign-card" onclick="entrarCampanha('Ecos de Sal e Sangue')">
+                    <img src="https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Capa da Campanha" class="campaign-img">
+                    <div class="campaign-info">
+                        <h2>Ecos de Sal e Sangue</h2>
+                        <p><strong>Mestre:</strong> O Guardião</p>
+                        <p><strong>Jogadores:</strong> 4/5</p>
+                        <p class="last-session"><i class="fas fa-clock"></i> Última sessão: Há 2 dias</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- TELA 3: FORMULÁRIO DE CRIAÇÃO -->
+    <main id="telaCriarCampanha" class="view-section">
+        <div class="container">
+            <button class="back-btn" onclick="voltarLobby()"><i class="fas fa-arrow-left"></i> Cancelar</button>
+            <h1 class="page-title">Forjar Nova Realidade</h1>
+            
+            <div class="creator-box">
+                <div class="form-group">
+                    <label>Nome da Campanha</label>
+                    <input type="text" id="novaCamNome" placeholder="Ex: O Mistério de Dunwich">
+                </div>
+                <div class="form-group">
+                    <label>URL da Imagem de Capa</label>
+                    <input type="text" id="novaCamImg" placeholder="Link da imagem da campanha">
+                </div>
+                <div class="form-group">
+                    <label>Sinopse / Descrição Pública</label>
+                    <textarea id="novaCamDesc" rows="4" placeholder="O que os investigadores sabem até agora?"></textarea>
+                </div>
+                <button class="btn-primary" onclick="salvarCampanha()">Criar e Iniciar Sessão</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- TELA 2: DENTRO DA CAMPANHA -->
+    <main id="campanhaInterna" class="view-section">
+        <!-- Relógio de Sombra Fixo -->
+        <div class="shadow-clock-container" onclick="avancarRelogio()" title="Clique para avançar o relógio (Apenas Mestre)">
+            <div class="clock-face">
+                <div id="clockProgress" class="clock-progress"></div>
+                <div class="clock-center"></div>
+            </div>
+            <span id="clockStatus">0/12</span>
+        </div>
+
+        <div class="campaign-layout">
+            <!-- Menu Lateral -->
+            <aside class="campaign-sidebar">
+                <button class="back-btn" onclick="voltarLobby()"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <h3 id="campaignTitleDisplay">Nome da Campanha</h3>
+                <nav class="campaign-nav">
+                    <button class="tab-btn active" onclick="openCamTab(event, 'VisaoGeral')"><i class="fas fa-eye"></i> Visão Geral</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Jogadores')"><i class="fas fa-users"></i> Jogadores</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Diario')"><i class="fas fa-book-dead"></i> Diário</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Evidencias')"><i class="fas fa-search"></i> Evidências</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'NPCs')"><i class="fas fa-address-book"></i> NPCs</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Locais')"><i class="fas fa-map"></i> Locais</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Arquivos')"><i class="fas fa-folder-open"></i> Arquivos</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Chat')"><i class="fas fa-dice-d20"></i> Chat</button>
+                    <button class="tab-btn" onclick="openCamTab(event, 'Calendario')"><i class="fas fa-calendar-alt"></i> Calendário</button>
+                    <button class="tab-btn master-tab" onclick="openCamTab(event, 'Mestre')"><i class="fas fa-dragon"></i> Escudo do Mestre</button>
+                </nav>
+            </aside>
+
+            <!-- Área de Conteúdo das Abas -->
+            <section class="campaign-content">
+                
+                <!-- ABA: VISÃO GERAL -->
+                <div id="VisaoGeral" class="tab-content active">
+                    <h2>Resumo da Campanha</h2>
+                    <p>O véu se rompeu na cidade costeira. As marés trazem coisas que não deveriam existir.</p>
+                    <div class="info-box">
+                        <h3><i class="fas fa-calendar-check"></i> Próxima Sessão</h3>
+                        <p>Sábado, 20:00h - "A descida ao farol"</p>
+                    </div>
+                    <div class="info-box alert">
+                        <h3><i class="fas fa-bullseye"></i> Objetivo Atual</h3>
+                        <p>Descobrir quem está financiando as escavações antes do próximo eclipse.</p>
+                    </div>
+                </div>
+
+                <!-- ABA EXCLUSIVA DO MESTRE -->
+                <div id="Mestre" class="tab-content">
+                    <h2 style="color: #9c1b1b;"><i class="fas fa-mask"></i> Área do Mestre</h2>
+                    <p>O que os jogadores não veem. Use este espaço para preparar a sessão.</p>
+                    <div class="master-grid">
+                        <div class="info-box alert">
+                            <h3><i class="fas fa-skull"></i> Preparação de Encontros</h3>
+                            <textarea rows="6" style="width: 100%; background: rgba(0,0,0,0.5); color: #fff; padding: 10px; border: 1px solid #555; border-radius: 4px;" placeholder="Ex: 3x Fragmentados no Farol. HP: 15."></textarea>
+                        </div>
+                        <div class="info-box">
+                            <h3><i class="fas fa-eye-slash"></i> Segredos & Entidades</h3>
+                            <textarea rows="6" style="width: 100%; background: rgba(0,0,0,0.5); color: #fff; padding: 10px; border: 1px solid #555; border-radius: 4px;" placeholder="Anotações ocultas sobre a trama..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+<!-- ABA: JOGADORES -->
+<div id="Jogadores" class="tab-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Investigadores Inscritos</h2>
+        <!-- O botão de adicionar jogador só aparecerá para o Mestre (controlado pelo JS) -->
+        <button class="btn-primary btn-mestre-only" onclick="adicionarJogador()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+            <i class="fas fa-user-plus"></i> Adicionar Personagem
+        </button>
+    </div>
+    
+    <div class="campaign-grid" id="gridJogadores">
+        <!-- O primeiro card fica de exemplo fixo -->
+        <div class="campaign-card">
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Arthur" class="campaign-img">
+            <div class="campaign-info">
+                <h2>Arthur Pendelton</h2>
+                <p><strong>Jogador:</strong> Biel</p>
+                <p><strong>Caminho:</strong> Lâmina do Vazio</p>
+                <p class="last-session"><i class="fas fa-heartbeat"></i> Status: Estável</p>
+                <button class="btn-remover-card btn-mestre-only" onclick="removerElemento(this)">Remover Personagem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!-- ABA: DIÁRIO -->
+                <div id="Diario" class="tab-content">
+                    <h2>Diário de Bordo</h2>
+                    <p>Registros das memórias que ainda nos restam.</p>
+                    <div class="info-box">
+                        <h3>Sessão 01: O Cheiro do Sal</h3>
+                        <p>A equipe chegou à cidade portuária. Encontramos uma porta arrombada perto das docas velhas.</p>
+                    </div>
+                </div>
+
+                <!-- ABA: EVIDÊNCIAS -->
+                <div id="Evidencias" class="tab-content">
+                    <h2>Quadro de Evidências</h2>
+                    <div class="evidence-grid">
+                        <div class="evidence-card animated-discovery">
+                            <h4>O Relógio Quebrado</h4>
+                            <p>Parou exatamente às 03:33. Há manchas de algo escuro nas engrenagens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA: NPCs -->
+                <div id="NPCs" class="tab-content">
+                    <h2>Pessoas de Interesse</h2>
+                    <div class="evidence-grid">
+                        <div class="evidence-card">
+                            <h4><i class="fas fa-user-secret"></i> Padre Thomas</h4>
+                            <p>Líder da igreja local. Suas mãos estão sempre sujas de terra úmida.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA: LOCAIS -->
+                <div id="Locais" class="tab-content">
+                    <h2>Locais Mapeados</h2>
+                    <div class="evidence-grid">
+                        <div class="evidence-card animated-discovery">
+                            <h4><i class="fas fa-map-marker-alt"></i> Farol Abandonado</h4>
+                            <p>O feixe de luz foi destruído há décadas, mas algo brilha lá no topo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA: ARQUIVOS -->
+                <div id="Arquivos" class="tab-content">
+                    <h2>Arquivos Compartilhados</h2>
+                    <p>Documentos e papéis encontrados ao longo das investigações.</p>
+                    <div class="info-box">
+                        <h3>Documento #12A</h3>
+                        <p>Clique para editar informações sobre este arquivo histórico.</p>
+                    </div>
+                </div>
+
+                <!-- ABA: CHAT -->
+                <div id="Chat" class="tab-content">
+                    <h2>Frequência de Rádio (Chat)</h2>
+                    <textarea rows="4" style="width: 100%; background: rgba(0,0,0,0.4); color: #fff; padding: 10px; border-radius: 4px; border: 1px solid #444;" placeholder="Envie mensagens ou rolagens para o grupo..."></textarea>
+                </div>
+
+                <!-- ABA: CALENDÁRIO -->
+                <div id="Calendario" class="tab-content">
+                    <h2>Calendário de Eventos</h2>
+                    <p>Marque aqui os dias importantes e as fases do ciclo de terror.</p>
+                    <div class="info-box alert">
+                        <h3>Dia do Alinhamento</h3>
+                        <p>O mestre definirá o progresso dos dias aqui.</p>
+                    </div>
+                </div>
+                
+            </section>
+        </div>
+    </main>
+
+    <script src="campanhas.js"></script>
+</body>
+</html>

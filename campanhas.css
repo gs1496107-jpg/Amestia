@@ -1,0 +1,382 @@
+/* =========================================
+   GERAL E LAYOUT
+   ========================================= */
+.view-section {
+    display: none;
+    padding-top: 80px; /* Espaço da navbar */
+    min-height: 100vh;
+}
+.view-section.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* =========================================
+   TELA 1: LOBBY DE CAMPANHAS
+   ========================================= */
+.campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.campaign-card {
+    background: rgba(20, 20, 30, 0.8);
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.campaign-card:hover {
+    transform: translateY(-5px);
+    border-color: #7a1b9c;
+    box-shadow: 0 5px 15px rgba(122, 27, 156, 0.4);
+}
+
+.campaign-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid #7a1b9c;
+}
+
+.campaign-info {
+    padding: 1.5rem;
+}
+.campaign-info h2 { color: #fff; margin-bottom: 0.5rem; font-family: 'Cinzel', serif; }
+.campaign-info p { color: #aaa; font-size: 0.9rem; margin-bottom: 0.3rem; }
+.last-session { color: #1b4b9c !important; margin-top: 1rem !important; }
+
+/* =========================================
+   TELA 2: DENTRO DA CAMPANHA
+   ========================================= */
+.campaign-layout {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.campaign-sidebar {
+    width: 250px;
+    background: rgba(10, 10, 15, 0.9);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+.back-btn:hover { color: #fff; }
+
+.campaign-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.campaign-nav .tab-btn {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 1rem;
+}
+
+.campaign-nav .tab-btn:hover, .campaign-nav .tab-btn.active {
+    background: rgba(122, 27, 156, 0.2);
+    color: #fff;
+    border-left: 3px solid #7a1b9c;
+}
+
+.campaign-content {
+    flex: 1;
+    background: rgba(20, 20, 30, 0.6);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s; }
+
+/* Caixas de Informação */
+.info-box {
+    background: rgba(255,255,255,0.05);
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #1b4b9c;
+}
+.info-box.alert { border-left-color: #9c1b1b; }
+
+/* Evidências */
+.evidence-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.evidence-card {
+    background: #111;
+    border: 1px dashed #555;
+    padding: 1rem;
+    position: relative;
+}
+.animated-discovery {
+    animation: glowPulse 2s infinite alternate;
+    border-color: #7a1b9c;
+}
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 5px rgba(122, 27, 156, 0.2); }
+    to { box-shadow: 0 0 15px rgba(122, 27, 156, 0.8); }
+}
+
+/* =========================================
+   SISTEMA DE TERROR: RELÓGIO DE SOMBRA
+   ========================================= */
+.shadow-clock-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 100;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clock-face {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    background: rgba(0,0,0,0.8);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+/* A barra que vai enchendo em círculo */
+.clock-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%; /* Controlado pelo JS */
+    background: rgba(156, 27, 27, 0.8);
+    transition: height 0.5s ease, background 0.5s ease;
+}
+
+#clockStatus {
+    color: #fff;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-family: 'Cinzel', serif;
+}
+
+/* CLASSES DE ESTÁGIO (Adicionadas ao <body> via JS) */
+
+/* Estágio Médio: Escurece, som ambiente (fictício), e o relógio "sangra" */
+body.shadow-mid .clock-face {
+    border-color: #9c1b1b;
+    box-shadow: 0 0 20px rgba(156, 27, 27, 0.5);
+}
+body.shadow-mid .clock-progress {
+    background: rgba(156, 27, 27, 0.9);
+}
+body.shadow-mid .campaign-content {
+    background: rgba(10, 5, 5, 0.8);
+}
+
+/* Estágio Crítico (Final): Distorção e Glitch */
+body.shadow-critical {
+    animation: glitchScreen 0.2s infinite;
+    filter: sepia(0.5) hue-rotate(-30deg) saturate(2);
+}
+
+@keyframes glitchScreen {
+    0% { transform: translate(0) skewX(0deg); }
+    20% { transform: translate(-2px, 2px) skewX(2deg); }
+    40% { transform: translate(-2px, -2px) skewX(0deg); }
+    60% { transform: translate(2px, 2px) skewX(-2deg); }
+    80% { transform: translate(2px, -2px) skewX(0deg); }
+    100% { transform: translate(0) skewX(0deg); }
+}
+
+/* Partículas (Fundo da tela) */
+.particles-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0) 100%);
+    transition: background 2s ease;
+}
+body.shadow-mid .particles-overlay {
+    background: radial-gradient(circle, transparent 30%, rgba(20, 0, 0, 0.6) 100%);
+}
+
+/* Mobile Responsivo */
+@media (max-width: 768px) {
+    .campaign-layout { flex-direction: column; }
+    .campaign-sidebar { width: 100%; }
+    .campaign-nav { flex-direction: row; flex-wrap: wrap; }
+    .campaign-nav .tab-btn { flex: 1; text-align: center; }
+}
+/* =========================================
+   SISTEMA DE CRIAÇÃO E ÁREA DO MESTRE
+   ========================================= */
+
+/* Cartão de Nova Campanha */
+.new-campaign-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px dashed #7a1b9c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.new-campaign-card:hover {
+    background: rgba(122, 27, 156, 0.1);
+    border-color: #fff;
+}
+
+/* Formulário de Criação */
+.creator-box { 
+    background: rgba(20, 20, 30, 0.8); 
+    border: 1px solid #333; 
+    padding: 2.5rem; 
+    border-radius: 8px; 
+}
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; color: #aaa; font-weight: bold; }
+.form-group input, .form-group textarea { 
+    width: 100%; 
+    padding: 1rem; 
+    background: rgba(0,0,0,0.5); 
+    border: 1px solid #555; 
+    color: #fff; 
+    border-radius: 4px; 
+    font-family: 'Inter', sans-serif;
+}
+.btn-primary { 
+    background: #7a1b9c; 
+    color: #fff; 
+    padding: 1rem 2rem; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    font-size: 1.1rem;
+    transition: 0.2s;
+}
+.btn-primary:hover { background: #9c1b1b; }
+
+/* Estilização Única da Aba do Mestre */
+.master-tab { color: #9c1b1b !important; }
+.master-tab:hover, .master-tab.active { 
+    background: rgba(156, 27, 27, 0.2) !important; 
+    color: #ff4d4d !important; 
+    border-left: 3px solid #ff4d4d !important; 
+}
+.master-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1.5rem; 
+    margin-top: 1.5rem; 
+}
+@media (max-width: 768px) { 
+    .master-grid { grid-template-columns: 1fr; } 
+}
+/* Cartão de Entrar em Campanha */
+.join-campaign-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px dashed #1b4b9c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.join-campaign-card:hover {
+    background: rgba(27, 75, 156, 0.2);
+    border-color: #fff;
+}
+
+/* Estilo para elementos que o jogador/mestre pode editar direto na tela */
+[contenteditable="true"] {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+    outline: none;
+    transition: 0.2s;
+    min-height: 20px;
+    display: block;
+}
+[contenteditable="true"]:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #7a1b9c;
+}
+
+/* Botão dinâmico de adicionar novo registro dentro das abas */
+.btn-add-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: #aaa;
+    border: 1px dashed #555;
+    padding: 12px;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.btn-add-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border-color: #fff;
+}
+/* Botão de Excluir Personagens e Campanhas */
+.btn-remover-card {
+    background: rgba(156, 27, 27, 0.1);
+    color: #ff4d4d;
+    border: 1px dashed #ff4d4d;
+    padding: 8px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.btn-remover-card:hover {
+    background: #9c1b1b;
+    color: #fff;
+    border-style: solid;
+}
+
+/* Esconde botões do mestre quando for a visão do jogador */
+body.visao-jogador .btn-mestre-only {
+    display: none !important;
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha do Investigador - AMESTIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="ficha.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html">Início</a>
+            <a href="Biblioteca.html">Biblioteca</a>
+            <a href="perfil.html" class="active">Personagens</a> 
+            <a href="Criador.html">Criar Personagem</a>
+        </div>
+        <div class="nav-right">
+            <a href="usuario.html" class="profile-link">Biel <i class="fas fa-user-circle"></i></a>
+        </div>
+    </nav>
+
+    <div class="sheet-container">
+        <a href="perfil.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar ao Cofre</a>
+
+        <header class="sheet-header">
+            <div class="character-portrait" style="background-image: url('1000310460.jpg');"></div>
+            <div class="character-identity">
+                <!-- Nomes e conceitos agora são editáveis -->
+                <input type="text" id="ficha-nome" class="char-title-input" value="Arthur Pendelton">
+                <input type="text" id="ficha-conceito" class="char-subtitle-input" value="Desperto | Caminho da Lâmina do Vazio">
+                <div class="char-meta">
+                    <span><strong>Grau:</strong> <input type="number" id="ficha-grau" value="1" class="meta-input"></span>
+                    <span><strong>Ocupação:</strong> <input type="text" id="ficha-ocupacao" value="Detetive Privado" class="meta-input text-input"></span>
+                </div>
+            </div>
+        </header>
+
+        <div class="sheet-grid">
+            <div class="sheet-column">
+                
+                <!-- Pilares de Sobrevivência Interativos -->
+                <section class="sheet-section survival-section">
+                    <h2>Pilares de Sobrevivência</h2>
+                    
+                    <!-- Vitalidade -->
+                    <div class="status-bar-container">
+                        <div class="status-header">
+                            <label>Vitalidade</label>
+                            <div class="status-controls">
+                                <button class="btn-ctrl" onclick="changeBar('hp', -1, 15)">-</button>
+                                <span><span id="hp-val">15</span> / 15</span>
+                                <button class="btn-ctrl" onclick="changeBar('hp', 1, 15)">+</button>
+                            </div>
+                        </div>
+                        <div class="status-bar health-bar">
+                            <div id="hp-bar-fill" class="bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sanidade -->
+                    <div class="status-bar-container">
+                        <div class="status-header">
+                            <label>Sanidade</label>
+                            <div class="status-controls">
+                                <button class="btn-ctrl" onclick="changeBar('san', -1, 15)">-</button>
+                                <span><span id="san-val">12</span> / 15</span>
+                                <button class="btn-ctrl" onclick="changeBar('san', 1, 15)">+</button>
+                            </div>
+                        </div>
+                        <div class="status-bar sanity-bar">
+                            <div id="san-bar-fill" class="bar-fill" style="width: 80%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Fluxo -->
+                    <div class="status-bar-container">
+                        <div class="status-header">
+                            <label>Fluxo</label>
+                            <div class="status-controls">
+                                <button class="btn-ctrl" onclick="changeBar('fluxo', -1, 10)">-</button>
+                                <span><span id="fluxo-val">5</span> / 10</span>
+                                <button class="btn-ctrl" onclick="changeBar('fluxo', 1, 10)">+</button>
+                            </div>
+                        </div>
+                        <div class="status-bar flow-bar">
+                            <div id="fluxo-bar-fill" class="bar-fill" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Estresse Akedôntico (8 Pontos) -->
+                    <div class="status-bar-container mt-3">
+                        <div class="status-header">
+                            <label>Estresse Akedôntico</label>
+                            <div class="status-controls">
+                                <button class="btn-ctrl" onclick="changeStress(-1)">-</button>
+                                <span><span id="stress-val">1</span> / 8</span>
+                                <button class="btn-ctrl" onclick="changeStress(1)">+</button>
+                            </div>
+                        </div>
+                        <div class="stress-track" id="stress-track">
+                            <div class="stress-mark filled"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                            <div class="stress-mark"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atributos Editáveis -->
+                <section class="sheet-section attributes-section">
+                    <h2>Atributos Mortais</h2>
+                    <div class="attributes-grid">
+                        <div class="attr-box">
+                            <input type="number" id="attr-proeza" class="attr-input" value="2" min="0" max="10">
+                            <span class="attr-name">Proeza</span>
+                        </div>
+                        <div class="attr-box">
+                            <input type="number" id="attr-percepcao" class="attr-input" value="1" min="0" max="10">
+                            <span class="attr-name">Percepção</span>
+                        </div>
+                        <div class="attr-box">
+                            <input type="number" id="attr-cognicao" class="attr-input" value="3" min="0" max="10">
+                            <span class="attr-name">Cognição</span>
+                        </div>
+                        <div class="attr-box">
+                            <input type="number" id="attr-influencia" class="attr-input" value="1" min="0" max="10">
+                            <span class="attr-name">Influência</span>
+                        </div>
+                        <div class="attr-box attribute-anchor">
+                            <input type="number" id="attr-ancora" class="attr-input" value="2" min="0" max="10">
+                            <span class="attr-name">Âncora</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sheet-column">
+                <section class="sheet-section anchors-section">
+                    <h2>Âncoras Literais</h2>
+                    <ul class="anchor-list">
+                        <li>
+                            <i class="fas fa-user anchor-icon"></i>
+                            <div class="anchor-info w-100">
+                                <strong>Pessoa:</strong> <input type="text" class="inline-input" value="Thomas (Irmão mais novo)">
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt anchor-icon"></i>
+                            <div class="anchor-info w-100">
+                                <strong>Lugar:</strong> <input type="text" class="inline-input" value="O velho escritório na Rua 42">
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-gem anchor-icon"></i>
+                            <div class="anchor-info w-100">
+                                <strong>Objeto/Memória:</strong> <input type="text" class="inline-input" value="O relógio de bolso enferrujado">
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Inventário Interativo -->
+                <section class="sheet-section inventory-section">
+                    <div class="inventory-header">
+                        <h2>Inventário & Relíquias</h2>
+                        <button class="btn-add" onclick="addInventoryItem()">+ Novo Item</button>
+                    </div>
+                    <div class="inventory-list" id="inventory-list">
+                        <div class="inv-item">
+                            <input type="text" value="Revólver Magnum" class="inv-input-name">
+                            <input type="text" value="2 Slots" class="inv-input-slot">
+                            <button class="btn-remove" onclick="removeItem(this)"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="inv-item">
+                            <input type="text" value="Lanterna" class="inv-input-name">
+                            <input type="text" value="1 Slot" class="inv-input-slot">
+                            <button class="btn-remove" onclick="removeItem(this)"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let personagemAtual = null;
+
+        window.onload = function() {
+            // 1. Pega o ID da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const personagemId = urlParams.get('id');
+
+            if (!personagemId) {
+                alert("Nenhum personagem selecionado!");
+                window.location.href = "perfil.html";
+                return;
+            }
+
+            // 2. Busca no banco de dados local
+            const bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
+            personagemAtual = bancoDePersonagens.find(p => p.id == personagemId);
+
+            if (!personagemAtual) {
+                alert("Personagem não encontrado!");
+                window.location.href = "perfil.html";
+                return;
+            }
+
+            // 3. Prepara atributos e status padrões (caso o personagem seja novo e não tenha isso ainda)
+            personagemAtual.atributos = personagemAtual.atributos || { proeza: 1, percepcao: 1, cognicao: 1, influencia: 1, ancora: 1 };
+            personagemAtual.vitalidade = personagemAtual.vitalidade || 15;
+            personagemAtual.sanidade = personagemAtual.sanidade || 15;
+            personagemAtual.fluxo = personagemAtual.fluxo || 10;
+            personagemAtual.estresse = personagemAtual.estresse || 0;
+
+            // 4. Preenche a ficha com os dados salvos
+            document.getElementById('ficha-nome').value = personagemAtual.nome || "Desconhecido";
+            document.getElementById('ficha-conceito').value = personagemAtual.conceito || (personagemAtual.raca + " | " + personagemAtual.caminho);
+            document.getElementById('ficha-grau').value = personagemAtual.grau || 1;
+            document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "Desconhecido";
+
+            // Atualiza a Foto de Perfil (Avatar)
+            if (personagemAtual.imagem) {
+                document.querySelector('.character-portrait').style.backgroundImage = `url('${personagemAtual.imagem}')`;
+            }
+
+            // Atualiza os atributos
+            document.getElementById('attr-proeza').value = personagemAtual.atributos.proeza;
+            document.getElementById('attr-percepcao').value = personagemAtual.atributos.percepcao;
+            document.getElementById('attr-cognicao').value = personagemAtual.atributos.cognicao;
+            document.getElementById('attr-influencia').value = personagemAtual.atributos.influencia;
+            document.getElementById('attr-ancora').value = personagemAtual.atributos.ancora;
+
+            // Atualiza as barras
+            atualizarBarraVisual('hp', personagemAtual.vitalidade, 15);
+            atualizarBarraVisual('san', personagemAtual.sanidade, 15);
+            atualizarBarraVisual('fluxo', personagemAtual.fluxo, 10);
+            atualizarEstresseVisual(personagemAtual.estresse);
+            
+            // Inicia os salvamentos automáticos dos inputs
+            configurarAutoSave();
+        };
+
+        function atualizarBarraVisual(stat, valor, max) {
+            document.getElementById(stat + '-val').innerText = valor;
+            const barElement = document.getElementById(stat + '-bar-fill');
+            const percentage = Math.max(0, Math.min(100, (valor / max) * 100)); // Garante que a barra não passe de 100% ou fique negativa
+            barElement.style.width = percentage + '%';
+        }
+
+        function atualizarEstresseVisual(valor) {
+            document.getElementById('stress-val').innerText = valor;
+            const marks = document.getElementById('stress-track').children;
+            for (let i = 0; i < marks.length; i++) {
+                if (i < valor) {
+                    marks[i].classList.add('filled');
+                } else {
+                    marks[i].classList.remove('filled');
+                }
+            }
+        }
+
+        // Funções para alterar os valores nos botões de + e -
+        window.changeBar = function(stat, delta, max) {
+            if(!personagemAtual) return;
+            
+            let valorAtual = 0;
+            if(stat === 'hp') valorAtual = personagemAtual.vitalidade;
+            if(stat === 'san') valorAtual = personagemAtual.sanidade;
+            if(stat === 'fluxo') valorAtual = personagemAtual.fluxo;
+
+            let novoValor = valorAtual + delta;
+            if (novoValor > max) novoValor = max; // Não deixa passar do máximo
+            if (novoValor < 0) novoValor = 0;     // Não deixa ficar negativo
+
+            if(stat === 'hp') personagemAtual.vitalidade = novoValor;
+            if(stat === 'san') personagemAtual.sanidade = novoValor;
+            if(stat === 'fluxo') personagemAtual.fluxo = novoValor;
+
+            atualizarBarraVisual(stat, novoValor, max);
+            salvarAlteracoesNoBanco();
+        };
+
+        window.changeStress = function(delta) {
+            if(!personagemAtual) return;
+            
+            let novoValor = personagemAtual.estresse + delta;
+            if (novoValor > 8) novoValor = 8;
+            if (novoValor < 0) novoValor = 0;
+
+            personagemAtual.estresse = novoValor;
+            atualizarEstresseVisual(novoValor);
+            salvarAlteracoesNoBanco();
+        };
+
+        // Salva as informações no navegador
+        function salvarAlteracoesNoBanco() {
+            let bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
+            const index = bancoDePersonagens.findIndex(p => p.id == personagemAtual.id);
+            
+            if(index !== -1) {
+                bancoDePersonagens[index] = personagemAtual;
+                localStorage.setItem('amestia_personagens', JSON.stringify(bancoDePersonagens));
+            }
+        }
+
+        // Essa função detecta se você digitou algo num input e salva sozinho
+        function configurarAutoSave() {
+            const inputsParaSalvar = [
+                { id: 'ficha-nome', chave: 'nome' },
+                { id: 'ficha-conceito', chave: 'conceito' },
+                { id: 'ficha-grau', chave: 'grau' },
+                { id: 'ficha-ocupacao', chave: 'ocupacao' },
+                { id: 'attr-proeza', chaveSecundaria: 'proeza' },
+                { id: 'attr-percepcao', chaveSecundaria: 'percepcao' },
+                { id: 'attr-cognicao', chaveSecundaria: 'cognicao' },
+                { id: 'attr-influencia', chaveSecundaria: 'influencia' },
+                { id: 'attr-ancora', chaveSecundaria: 'ancora' }
+            ];
+
+            inputsParaSalvar.forEach(item => {
+                const input = document.getElementById(item.id);
+                if(input) {
+                    input.addEventListener('change', function() { 
+                        if(item.chaveSecundaria) {
+                            personagemAtual.atributos[item.chaveSecundaria] = this.value;
+                        } else {
+                            personagemAtual[item.chave] = this.value;
+                        }
+                        salvarAlteracoesNoBanco();
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

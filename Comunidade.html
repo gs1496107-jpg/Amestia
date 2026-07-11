@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunidade - AMESTIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="comunidade.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- MENU 100% CONECTADO -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html">Início</a>
+            <a href="Biblioteca.html">Biblioteca</a>
+            <a href="perfil.html">Personagens</a>
+            <a href="Criador.html">Criar Personagem</a>
+            <a href="Campanhas.html">Campanhas</a>
+            <a href="BancoDeDados.html">Banco de Dados</a>
+            <a href="Comunidade.html" class="active">Comunidade</a>
+        </div>
+        <div class="nav-right">
+            <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="#"><i class="fas fa-bell"></i></a>
+            <a href="perfil.html" class="profile-link">Perfil <i class="fas fa-user-circle"></i></a>
+        </div>
+    </nav>
+
+    <main class="comm-container">
+        <!-- Cabeçalho e Filtros -->
+        <header class="comm-header">
+            <h1 class="comm-title">Acervo do Véu</h1>
+            <p class="comm-subtitle">Descubra, compartilhe e avalie as criações de outros Investigadores.</p>
+            
+            <button id="btnPublicar" class="publish-btn" onclick="iniciarPublicacao()">
+        <i class="fas fa-plus-circle"></i> Compartilhar Meu Acervo
+    </button>
+</div>
+    
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filtrarFeed('tudo')">Tudo</button>
+                <button class="filter-btn" onclick="filtrarFeed('campanha')"><i class="fas fa-map"></i> Campanhas</button>
+                <button class="filter-btn" onclick="filtrarFeed('criatura')"><i class="fas fa-skull"></i> Criaturas</button>
+                <button class="filter-btn" onclick="filtrarFeed('reliquia')"><i class="fas fa-gem"></i> Relíquias</button>
+                <button class="filter-btn" onclick="filtrarFeed('mapa')"><i class="fas fa-map-marked-alt"></i> Mapas</button>
+                <button class="filter-btn" onclick="filtrarFeed('ritual')"><i class="fas fa-book-dead"></i> Rituais</button>
+                <button class="filter-btn" onclick="filtrarFeed('personagem')"><i class="fas fa-user"></i> Personagens</button>
+            </div>
+        </header>
+
+        <!-- Feed da Comunidade -->
+        <section class="feed-grid" id="feedContainer">
+            
+            <div class="post-actions">
+    <div class="action-group">
+        <button class="action-btn like-btn" onclick="toggleInteracao(this, 'like')">...</button>
+        <button class="action-btn save-btn" onclick="toggleInteracao(this, 'save')">...</button>
+    </div>
+    
+    <!-- Novo Botão para Acessar/Ver o Acervo -->
+    <button class="action-btn view-btn" onclick="abrirAcervo('id_do_acervo')">
+        <i class="fas fa-eye"></i> Acessar
+    </button>
+</div>
+
+            <!-- Exemplo de Criação 1 -->
+            <article class="post-card criatura">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=500');"></div>
+                <div class="post-content">
+                    <span class="post-tag">Criatura</span>
+                    <h2 class="post-title">O Rastejante de Cobre</h2>
+                    <p class="post-author" onclick="abrirPerfilCriador('MestreGallo')">Por: <strong>@MestreGallo</strong></p>
+                    <p class="post-desc">Uma anomalia que se alimenta de fiação elétrica e causa apagões antes de atacar.</p>
+                </div>
+                <div class="post-actions">
+                    <div class="action-group">
+                        <button class="action-btn like-btn" onclick="toggleInteracao(this, 'like')"><i class="fas fa-heart"></i> <span>245</span></button>
+                        <button class="action-btn fav-btn" onclick="toggleInteracao(this, 'fav')"><i class="fas fa-star"></i></button>
+                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 12</button>
+                    </div>
+                    <button class="action-btn save-btn" onclick="toggleInteracao(this, 'save')"><i class="fas fa-bookmark"></i> Salvar</button>
+                </div>
+            </article>
+
+            <!-- Exemplo de Criação 2 -->
+            <article class="post-card campanha">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?w=500');"></div>
+                <div class="post-content">
+                    <span class="post-tag">Campanha Pronta</span>
+                    <h2 class="post-title">A Mansão dos Relógios</h2>
+                    <p class="post-author" onclick="abrirPerfilCriador('NyxInvestigadora')">Por: <strong>@NyxInvestigadora</strong></p>
+                    <p class="post-desc">Módulo de 3 sessões voltado para iniciantes. Foco em puzzles e distorção temporal.</p>
+                </div>
+                <div class="post-actions">
+                    <div class="action-group">
+                        <button class="action-btn like-btn" onclick="toggleInteracao(this, 'like')"><i class="fas fa-heart"></i> <span>890</span></button>
+                        <button class="action-btn fav-btn" onclick="toggleInteracao(this, 'fav')"><i class="fas fa-star"></i></button>
+                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 45</button>
+                    </div>
+                    <button class="action-btn save-btn" onclick="toggleInteracao(this, 'save')"><i class="fas fa-bookmark"></i> Salvar</button>
+                </div>
+            </article>
+            
+            <!-- Exemplo de Criação 3 -->
+            <article class="post-card reliquia">
+                <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1590059530491-d28c310469b8?w=500');"></div>
+                <div class="post-content">
+                    <span class="post-tag">Relíquia</span>
+                    <h2 class="post-title">Lampião do Sol Morto</h2>
+                    <p class="post-author" onclick="abrirPerfilCriador('MestreGallo')">Por: <strong>@MestreGallo</strong></p>
+                    <p class="post-desc">Revela passagens ocultas, mas drena a sanidade de quem o carrega por muito tempo.</p>
+                </div>
+                <div class="post-actions">
+                    <div class="action-group">
+                        <button class="action-btn like-btn" onclick="toggleInteracao(this, 'like')"><i class="fas fa-heart"></i> <span>112</span></button>
+                        <button class="action-btn fav-btn" onclick="toggleInteracao(this, 'fav')"><i class="fas fa-star"></i></button>
+                        <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 3</button>
+                    </div>
+                    <button class="action-btn save-btn" onclick="toggleInteracao(this, 'save')"><i class="fas fa-bookmark"></i> Salvar</button>
+                </div>
+            </article>
+        </section>
+
+    </main>
+
+    <!-- PAINEL (MODAL) DO PERFIL DO CRIADOR -->
+    <div id="creatorProfileModal" class="modal-overlay">
+        <div class="creator-card">
+            <button class="close-btn" onclick="fecharPerfilCriador()"><i class="fas fa-times"></i></button>
+            
+            <div class="creator-header">
+                <i class="fas fa-user-circle creator-avatar"></i>
+                <div>
+                    <h2 id="modalCreatorName">@MestreGallo</h2>
+                    <button class="btn-follow" onclick="toggleFollow(this)">Seguir</button>
+                </div>
+            </div>
+
+            <div class="creator-stats">
+                <div class="stat-box">
+                    <strong>15</strong>
+                    <span>Criações</span>
+                </div>
+                <div class="stat-box">
+                    <strong>3.2k</strong>
+                    <span>Downloads</span>
+                </div>
+                <div class="stat-box">
+                    <strong id="modalFollowerCount">840</strong>
+                    <span>Seguidores</span>
+                </div>
+            </div>
+
+            <div class="creator-achievements">
+                <h3>Conquistas</h3>
+                <div class="badges-container">
+                    <div class="badge" title="Forjador Ancião: Conta com mais de 1 ano"><i class="fas fa-hammer"></i></div>
+                    <div class="badge gold" title="Ouro da Comunidade: Item com mais de 1000 likes"><i class="fas fa-crown"></i></div>
+                    <div class="badge purple" title="Arquiteto de Pesadelos: 5+ Campanhas publicadas"><i class="fas fa-brain"></i></div>
+                </div>
+            </div>
+            
+                <!-- MODAL DE PUBLICAÇÃO -->
+    <div id="publishModal" class="modal-overlay">
+        <div class="creator-card" style="max-width: 600px;">
+            <button class="close-btn" onclick="fecharModalPublicacao()"><i class="fas fa-times"></i></button>
+            <div class="creator-header" style="margin-bottom: 1rem;">
+                <h2><i class="fas fa-book-open"></i> Nova Publicação</h2>
+            </div>
+            <form id="formPublicacao">
+                <div class="form-group">
+                    <label>Título da Obra</label>
+                    <input type="text" id="pubTitulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="pubCategoria" required>
+                        <option value="campanha">Campanha</option>
+                        <option value="criatura">Criatura</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-follow" style="width: 100%;">Publicar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="comunidade.js"></script>
+    <script src="comunidade.js"></script>
+</body>
+</html>

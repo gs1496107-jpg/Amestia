@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - AMESTIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="usuario.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Menu Superior Atualizado -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html">Início</a>
+            <a href="biblioteca.html">Biblioteca</a>
+            <a href="criador.html">Criar Personagem</a>
+        </div>
+        <div class="nav-right">
+            <!-- ID nav-profile-link adicionado aqui -->
+            <a href="#" class="profile-link active" id="nav-profile-link">Conectar Google <i class="fas fa-google"></i></a>
+        </div>
+    </nav>
+
+    <div class="user-container">
+        
+        <!-- VISÃO DESLOGADA (Padrão) -->
+        <div id="visao-deslogado" style="text-align: center; padding: 5rem 0;">
+            <i class="fas fa-user-lock" style="font-size: 4rem; color: var(--accent-purple); margin-bottom: 1.5rem;"></i>
+            <h2>Perfil Restrito</h2>
+            <p style="color: var(--text-secondary); margin-top: 1rem;">Conecte-se com sua conta do Google no menu superior para visualizar suas estatísticas, conquistas e configurações.</p>
+        </div>
+
+        <!-- VISÃO LOGADA (Escondida por padrão) -->
+        <div id="visao-logado" style="display: none;">
+            <header class="user-header">
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/150" alt="Foto de Perfil" id="profileImage">
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <button class="edit-avatar" id="btnEditAvatar"><i class="fas fa-camera"></i></button>
+                </div>
+                <div class="user-info">
+                    <h1>Biel <span class="user-tag">#2026</span></h1>
+                    <p class="user-bio" id="userBio" contenteditable="true" title="Clique para editar sua biografia">
+                        "Clique aqui para escrever sua própria descrição..."
+                    </p>
+                    <div class="user-quick-stats">
+                        <span><i class="fas fa-clock"></i> 340h de Jogo</span>
+                        <span><i class="fas fa-book"></i> 5 Campanhas Concluídas</span>
+                        <span><i class="fas fa-users"></i> 12 Personagens Criados</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="user-dashboard">
+                <div class="dashboard-left">
+                    <section class="dashboard-card">
+                        <h3><i class="fas fa-chart-line"></i> Estatísticas de Jogo</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Sessões Realizadas</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Criaturas Derrotadas</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Mistérios Resolvidos</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Relíquias Encontradas</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-card">
+                        <h3><i class="fas fa-trophy"></i> Conquistas e Títulos</h3>
+                        <div class="achievements-list">
+                            <!-- Conquistas começam trancadas -->
+                            <div class="achievement locked">
+                                <div class="achieve-icon"><i class="fas fa-lock"></i></div>
+                                <div class="achieve-text">
+                                    <h4>Visão Além do Alcance</h4>
+                                    <p>Sobreviveu a um encontro com o Akedonte.</p>
+                                </div>
+                            </div>
+                            <div class="achievement locked">
+                                <div class="achieve-icon"><i class="fas fa-lock"></i></div>
+                                <div class="achieve-text">
+                                    <h4>Mestre da Ordem</h4>
+                                    <p>Narrou mais de 50 sessões consecutivas.</p>
+                                </div>
+                            </div>
+                            <div class="achievement locked">
+                                <div class="achieve-icon"><i class="fas fa-lock"></i></div>
+                                <div class="achieve-text">
+                                    <h4>Colecionador do Véu</h4>
+                                    <p>Encontre todas as relíquias primordiais.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="dashboard-right">
+                    <section class="dashboard-card">
+                        <h3><i class="fas fa-cog"></i> Configurações</h3>
+                        
+                        <div class="settings-group">
+                            <h4>Aparência e Som</h4>
+                            <div class="setting-item">
+                                <span>Tema do Sistema</span>
+                                <select id="themeSelect">
+                                    <option value="dark">Escuro (Padrão)</option>
+                                    <option value="light">Claro</option>
+                                    <option value="void">Abismo (Alto Contraste)</option>
+                                    <option value="theme-red-black">Vermelho e Preto</option>
+                                    <option value="theme-green-black">Verde e Preto</option>
+                                    <option value="theme-blue-black">Azul e Preto</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <span>Idioma</span>
+                                <select id="langSelect">
+                                    <option value="pt-br">Português (Brasil)</option>
+                                    <option value="es">Español</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                            <div class="setting-item toggle-row">
+                                <span>Música Ambiente</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="toggleMusic" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h4>Notificações e Privacidade</h4>
+                            <div class="setting-item toggle-row">
+                                <span>Avisos de Sessão</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="toggleNotifs" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item toggle-row">
+                                <span>Perfil Público</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="togglePrivacy">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Autenticação Real adicionado aqui -->
+    <script type="module" src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="usuario.js"></script>
+</body>
+</html>

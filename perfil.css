@@ -1,0 +1,164 @@
+/* Container da Galeria */
+.vault-container {
+    padding: 100px 2rem 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.vault-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.vault-header h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.vault-header p {
+    color: var(--text-secondary);
+}
+
+.vault-stats span {
+    background: rgba(122, 27, 156, 0.2);
+    border: 1px solid var(--accent-purple);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Grid de Personagens */
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+/* Card Padrão de Personagem */
+.char-card {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.char-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 5px 15px rgba(27, 75, 156, 0.4);
+}
+
+.char-portrait {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-bottom: 2px solid var(--accent-purple);
+}
+
+.char-portrait::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(to top, rgba(10,10,15,1), transparent);
+}
+
+.char-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
+.char-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.char-info h3 {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.char-details {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.char-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.btn-play {
+    flex: 1;
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-play:hover { background: #2a66cc; }
+
+.btn-delete {
+    background: rgba(255, 50, 50, 0.2);
+    color: #ff4d4d;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-delete:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* Card de Criar Novo */
+.create-new {
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 350px;
+    color: var(--text-secondary);
+}
+
+.create-new:hover {
+    border-color: var(--accent-purple);
+    background: rgba(122, 27, 156, 0.1);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(122, 27, 156, 0.3);
+}
+
+.create-new i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--accent-purple);
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMESTIA - Até o Esquecimento</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+
+    <audio id="ambientMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+<nav class="navbar">
+    <div class="nav-left">
+    <a href="index.html" class="active" data-lang="nav_inicio">Início</a>
+    <a href="Biblioteca.html" data-lang="nav_biblioteca">Biblioteca</a>
+    <a href="perfil.html" data-lang="nav_personagens">Personagens</a>
+    <a href="Criador.html" data-lang="nav_criar">Criar Personagem</a>
+    <a href="Campanhas.html" data-lang="nav_campanhas">Campanhas</a>
+    <a href="BancoDeDados.html" data-lang="nav_banco">Banco de Dados</a>
+    <a href="Comunidade.html" data-lang="nav_comunidade">Comunidade</a>
+</div>
+    <div class="nav-right">
+        <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
+        <a href="#"><i class="fas fa-search"></i></a>
+        <a href="#"><i class="fas fa-bell"></i></a>
+        <!-- Atualizado para o arquivo da conta do usuário -->
+        <a href="usuario.html" class="profile-link" id="nav-profile-link">Perfil <i class="fas fa-user-circle"></i></a>
+    </div>
+</nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="logo-title">AMESTIA</h1>
+            <h2 class="logo-subtitle">Até o Esquecimento</h2>
+            <p class="hero-text">O véu foi rompido. O que aguarda além da compreensão humana?</p>
+            <div class="hero-buttons">
+                <button class="btn-primary">Entrar no Véu</button>
+                <button class="btn-secondary">Criar Personagem</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="lore-section" id="universo">
+        <h3 class="section-title">Conheça o Universo</h3>
+        <div class="lore-grid">
+            <div class="lore-card">
+                <h4>O Akedonte</h4>
+                <p>A entidade primordial que devora memórias e distorce a realidade tangível.</p>
+            </div>
+            <div class="lore-card">
+                <h4>O Véu</h4>
+                <p>A frágil barreira que separa nossa sanidade do abismo incomensurável.</p>
+            </div>
+            <div class="lore-card">
+                <h4>As Constelações</h4>
+                <p>Padrões de luz morta que guiam aqueles que ousam caminhar no escuro.</p>
+            </div>
+            <div class="lore-card">
+                <h4>Os Caminhos</h4>
+                <p>Rotas fragmentadas forjadas por andarilhos esquecidos pelo tempo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="updates-section">
+        <h3 class="section-title">Últimas Atualizações</h3>
+        <div class="updates-grid">
+            <div class="update-card">
+                <span class="tag">Novo Caminho</span>
+                <h4>O Trilho dos Sussurros</h4>
+            </div>
+            <div class="update-card">
+                <span class="tag">Nova Criatura</span>
+                <h4>Anomalia Fragmentada</h4>
+            </div>
+            <div class="update-card">
+                <span class="tag">Atualização</span>
+                <h4>Regras de Sanidade v1.2</h4>
+            </div>
+            <div class="update-card">
+                <span class="tag">Novo Capítulo</span>
+                <h4>Episódio 4: O Eco de Cobre</h4>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="socials">
+                <a href="#"><i class="fab fa-discord"></i> Discord</a>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+            </div>
+            <div class="credits">
+                <p>Criado para os corajosos. © 2026 AMESTIA RPG.</p>
+            </div>
+            <div class="version">
+                <p>v.1.0.4 - Acesso ao Banco de Dados Seguro.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
