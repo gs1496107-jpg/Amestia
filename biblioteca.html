@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - AMESTIA</title>
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="biblioteca.css"> <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" data-lang="nav_inicio">Início</a>
+            <a href="biblioteca.html" data-lang="nav_biblioteca">Biblioteca</a>
+            <a href="perfil.html" data-lang="nav_personagens">Personagens</a>
+            <a href="criador.html" data-lang="nav_criar">Criar Personagem</a>
+            <a href="campanhas.html" data-lang="nav_campanhas">Campanhas</a>
+            <a href="bancodedados.html" data-lang="nav_banco">Banco de Dados</a>
+            <a href="comunidade.html" data-lang="nav_comunidade">Comunidade</a>
+        </div>
+        
+        <!-- O bloco nav-right abaixo só precisa existir nas páginas que têm a busca, sino de notificação e o toggle de música, como o seu index.html. -->
+        <div class="nav-right">
+            <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="#"><i class="fas fa-bell"></i></a>
+            <a href="usuario.html" class="profile-link" id="nav-profile-link">Perfil <i class="fas fa-user-circle"></i></a>
+        </div>
+    </nav>
+
+    <button id="sidebarToggle" class="sidebar-toggle-btn"><i class="fas fa-bars"></i> Capítulos</button>
+
+    <div class="library-container">
+        
+        <aside class="sidebar" id="librarySidebar">
+            <div class="sidebar-search">
+                <input type="text" placeholder="Pesquisar na biblioteca...">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3><i class="fas fa-book-open"></i> Capítulos</h3>
+                ul class="chapter-list">
+                    <li><a href="#" class="active-chapter">Prólogo: O Rompimento</a></li>
+                    <li><a href="#">Capítulo 1: Fragmentos de Sanidade</a></li>
+                    <li><a href="#">Capítulo 2: Sob a Luz Morta</a></li>
+                    <li><a href="#">Capítulo 3: O Eco de Cobre</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fas fa-bookmark"></i> Marcadores & Favoritos</h3>
+                <ul class="bookmark-list">
+                    <li><a href="#"><i class="fas fa-star"></i> Página 12 - Regras do Véu</a></li>
+                    <li><a href="#"><i class="fas fa-bookmark"></i> O Ritual de Invocação</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="reader-area" id="readerArea">
+            <div class="reader-toolbar">
+                <div class="tools-left">
+                    <button id="btnReadingMode" title="Modo Leitura Focada"><i class="fas fa-eye"></i> Modo Foco</button>
+                    <button id="btnToggleTheme" title="Alternar Modo Escuro/Claro"><i class="fas fa-moon"></i></button>
+                </div>
+                <div class="tools-right">
+                    <button id="fontDecrease" title="Diminuir Fonte">A-</button>
+                    <button id="fontIncrease" title="Aumentar Fonte">A+</button>
+                    <button id="btnShare" title="Compartilhar Capítulo"><i class="fas fa-share-alt"></i></button>
+                </div>
+            </div>
+
+<article class="book-content" id="bookContent">
+    <h1 class="chapter-title">Prólogo: A Grande Costura</h1>
+    
+    <p class="paragraph">
+        No princípio, não havia o espaço, o tempo ou a matéria. Não existia o peso, a luz ou a escuridão. Antes do nascimento do universo, o que preenchia a infinitude era o <span class="interactive-term" data-term="absurdo">Absurdo</span>: um estado de não-existência primordial, um vazio caótico que não podia ser medido, compreendido ou narrado, pois não havia nenhuma palavra para descrevê-lo. O Absurdo era o nada em sua forma mais pura e violenta.
+    </p>
+
+    <p class="paragraph">
+        A criação do mundo que conhecemos não se deu por uma explosão física de matéria, mas por um evento metafísico conhecido como <span class="interactive-term" data-term="costura">A Grande Costura</span>. Em um instante, a primeira Consciência desperta se impôs contra o vazio. O universo nasceu no momento em que o primeiro Conceito foi pronunciado. No segundo em que a ideia de "Existir" foi separada do "Nada", a realidade começou a ser tecida.
+    </p>
+
+    <p class="paragraph">
+        A Grande Costura foi o processo de organização do caos. Para que o mundo fizesse sentido, a Consciência Primordial precisou criar definições. Ela determinou que a luz seria o oposto da sombra; que o peso forçaria os corpos para baixo; que o tempo correria apenas para a frente; e que a vida seria delimitada pela morte. Cada uma dessas regras não era uma lei física, mas um decreto semântico.
+    </p>
+
+    <div class="book-illustration animate-fade">
+        <div class="illustration-placeholder">[ Ilustração da Bolha de Ordem e Significado ]</div>
+        <p class="caption">Figura 1.1 — A realidade mundana expandindo-se sobre o oceano infinito do Absurdo.</p>
+    </div>
+
+    <p class="paragraph">
+        À medida que esses conceitos eram estabelecidos, eles empurravam o Absurdo para as margens da existência. A realidade mundana expandiu-se como uma bolha de ordem e significado flutuando no meio de um oceano infinito de nada. Para sustentar essa bolha e garantir que o tecido da realidade não se desfizesse, a criação foi dividida e ancorada sob a vigília de seis grandes forças cósmicas, conhecidas hoje como os <span class="interactive-term" data-term="primordiais">Seis Primordiais</span>.
+    </p>
+
+    <p class="paragraph">
+        Os Seis não são aglomerados de estrelas físicas no céu, mas as seis mentes arquetípicas que sustentam os pilares de tudo o que os seres humanos conseguem experimentar, pensar ou sentir. Cada uma delas assumiu a responsabilidade de governar uma faceta da Semântica Pura através de emanações menores, chamadas de os 24 Caminhos.
+    </p>
+
+    <div class="table-container">
+        <table class="book-table">
+            <thead>
+                <tr>
+                    <th>O Primordial</th>
+                    <th>Domínio Conceitual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Kritérion, a Balança Cósmica</strong></td>
+                    <td>A ordem, as leis imutáveis, a estrutura lógica do pensamento, o julgamento e a causa e efeito.</td>
+                </tr>
+                <tr>
+                    <td><strong>O Escultor da Carne</strong></td>
+                    <td>A matéria orgânica, os instintos primitivos, a dor física, a violência biológica e a necessidade de transformação através do sangue.</td>
+                </tr>
+                <tr>
+                    <td><strong>As Páginas Ocultas</strong></td>
+                    <td>O arquivo absoluto do conhecimento. Governa a erudição, os segredos do universo e a compreensão da própria Semântica.</td>
+                </tr>
+                <tr>
+                    <td><strong>O Véu Estrelado</strong></td>
+                    <td>A imensidão do espaço, os mistérios do macrocosmo, o destino e as forças intangíveis da sorte, azar ou sincronicidade.</td>
+                </tr>
+                <tr>
+                    <td><strong>O Coração Despedaçado</strong></td>
+                    <td>A semente da emoção humana. Governa a empatia, o amor, o desespero, os laços psicológicos e a devastação da perda.</td>
+                </tr>
+                <tr>
+                    <td><strong>As Cartas Marcadas</strong></td>
+                    <td>A mente cósmica que rege o acaso controlado, as ilusões, as máscaras sociais, o engano e as reviravoltas da fortuna.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="paragraph">
+        Durante milênios, a humanidade prosperou sob a arquitetura dessas Seis Entidades, alheia ao fato de que o chão que pisavam e o ar que respiravam eram apenas conceitos sustentados por um esforço cósmico constante.
+    </p>
+
+    <p class="paragraph">
+        O Absurdo, no entanto, nunca desapareceu. Ele permaneceu do lado de fora da bolha da realidade, pressionando as bordas do universo, faminto por retomar o espaço que lhe foi roubado pela lógica. O grande erro da humanidade foi acreditar que a realidade era indestrutível.
+    </p>
+
+    <p class="paragraph">
+        Conforme a civilização humana avançou, ela começou a saturar e desgastar os próprios conceitos que a protegiam. O cinismo, o esquecimento, a perda de conexão com os laços fundamentais e o surgimento de paradoxos filosóficos começaram a enfraquecer a Grande Costura. Cada vez que um grupo de pessoas esquece o real significado de algo, ou quando a loucura de um indivíduo cria uma quebra na lógica local, o tecido da realidade sofre um micro-rompimento.
+    </p>
+
+    <div class="book-note">
+        <h5><i class="fas fa-exclamation-triangle"></i> Arquivo Oculto: A Necessidade de Tradução</h5>
+        <p>O poder bruto e a vastidão conceitual das seis mentes eram avassaladores demais para interagir diretamente com o mundo físico. Se o Escultor da Carne tocasse a matéria bruta diretamente, toda a biologia colapsaria em uma massa amorfa de sangue e mutação; se as Páginas Ocultas despejassem sua erudição de uma só vez, a mente dos mortais derreteria sob o peso de verdades absolutas. A realidade precisava de canais e regras de tradução.</p>
+    </div>
+
+    <p class="paragraph">
+        Essas rachaduras acumularam-se ao longo dos séculos. O Absurdo encontrou frestas para vazar de volta para o mundo. Esse vazamento é o que chamamos de <span class="interactive-term" data-term="veu">O Véu</span>.
+    </p>
+
+    <p class="paragraph">
+        Hoje, o mundo vive em um estado de fratura silenciosa. O Véu do Absurdo age como uma infecção invisível. Ele se manifesta em locais onde a lógica mundana se desgastou, criando zonas de entropia conceitual onde as Seis Constelações perdem sua autoridade. Quando o Véu se sobrepõe a uma região, os conceitos morrem. Uma rua pode perder o conceito de direção, transformando-se em um labirinto infinito; uma pessoa pode perder o conceito de identidade, tornando-se uma casca sem nome cujas memórias evaporaram.
+    </p>
+
+    <p class="paragraph">
+        As criaturas que emergem do Véu não são animais de carne e osso; são pedaços do Absurdo primordial que ganharam forma ao devorar conceitos mundanos. Elas caçam o significado.
+    </p>
+</article>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="termModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h3 id="modalTitle">Título do Termo</h3>
+            <div id="modalBody">Explicação detalhada virá aqui...</div>
+            <div id="modalFooter">
+                <button id="modalActionBtn" class="modal-btn">Ir para a Ficha Completa</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <script src="biblioteca.js"></script>
+</body>
+</html>

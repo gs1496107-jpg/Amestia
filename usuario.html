@@ -15,13 +15,21 @@
     <!-- Menu Superior Atualizado -->
     <nav class="navbar">
         <div class="nav-left">
-            <a href="index.html">Início</a>
-            <a href="biblioteca.html">Biblioteca</a>
-            <a href="criador.html">Criar Personagem</a>
+            <a href="index.html" data-lang="nav_inicio">Início</a>
+            <a href="biblioteca.html" data-lang="nav_biblioteca">Biblioteca</a>
+            <a href="perfil.html" data-lang="nav_personagens">Personagens</a>
+            <a href="criador.html" data-lang="nav_criar">Criar Personagem</a>
+            <a href="campanhas.html" data-lang="nav_campanhas">Campanhas</a>
+            <a href="bancodedados.html" data-lang="nav_banco">Banco de Dados</a>
+            <a href="comunidade.html" data-lang="nav_comunidade">Comunidade</a>
         </div>
+        
+        <!-- O bloco nav-right abaixo só precisa existir nas páginas que têm a busca, sino de notificação e o toggle de música, como o seu index.html. -->
         <div class="nav-right">
-            <!-- ID nav-profile-link adicionado aqui -->
-            <a href="#" class="profile-link active" id="nav-profile-link">Conectar Google <i class="fas fa-google"></i></a>
+            <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="#"><i class="fas fa-bell"></i></a>
+            <a href="usuario.html" class="profile-link" id="nav-profile-link">Perfil <i class="fas fa-user-circle"></i></a>
         </div>
     </nav>
 

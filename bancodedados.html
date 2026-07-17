@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Dados - AMESTIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bancodedados.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" data-lang="nav_inicio">Início</a>
+            <a href="biblioteca.html" data-lang="nav_biblioteca">Biblioteca</a>
+            <a href="perfil.html" data-lang="nav_personagens">Personagens</a>
+            <a href="criador.html" data-lang="nav_criar">Criar Personagem</a>
+            <a href="campanhas.html" data-lang="nav_campanhas">Campanhas</a>
+            <a href="bancodedados.html" data-lang="nav_banco">Banco de Dados</a>
+            <a href="comunidade.html" data-lang="nav_comunidade">Comunidade</a>
+        </div>
+        
+        <!-- O bloco nav-right abaixo só precisa existir nas páginas que têm a busca, sino de notificação e o toggle de música, como o seu index.html. -->
+        <div class="nav-right">
+            <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
+            <a href="#"><i class="fas fa-search"></i></a>
+            <a href="#"><i class="fas fa-bell"></i></a>
+            <a href="usuario.html" class="profile-link" id="nav-profile-link">Perfil <i class="fas fa-user-circle"></i></a>
+        </div>
+    </nav>
+
+    <main class="db-container">
+        <!-- BARRA DE PESQUISA CENTRAL -->
+        <header class="db-header">
+            <h1 class="db-title">Enciclopédia do Véu</h1>
+            <p class="db-subtitle">Todo o conhecimento fragmentado em um só lugar.</p>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Pesquisar 'Vampiro', 'Akedonte', 'Corvo'..." onkeyup="verificarPesquisa(event)">
+                <button class="btn-search" onclick="executarPesquisa()">Buscar</button>
+            </div>
+        </header>
+
+        <!-- TELA 1: CATEGORIAS -->
+        <section id="categoryView" class="view-section active">
+            <div class="category-grid">
+    <div class="category-card" onclick="filtrarPorCategoria('Constelações')"><i class="fas fa-star"></i> Constelações</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Caminhos')"><i class="fas fa-route"></i> Caminhos</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Raças')"><i class="fas fa-dna"></i> Raças</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Criaturas')"><i class="fas fa-skull"></i> Criaturas</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Relíquias')"><i class="fas fa-gem"></i> Relíquias</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Armas')"><i class="fas fa-khanda"></i> Armas</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Equipamentos')"><i class="fas fa-shield-alt"></i> Equipamentos</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Condições')"><i class="fas fa-biohazard"></i> Condições</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Perícias')"><i class="fas fa-brain"></i> Perícias</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Rituais')"><i class="fas fa-book-dead"></i> Rituais</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Itens Alquímicos')"><i class="fas fa-flask"></i> Itens Alquímicos</div>
+    <div class="category-card" onclick="filtrarPorCategoria('NPCs Históricos')"><i class="fas fa-user-tie"></i> NPCs Históricos</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Organizações')"><i class="fas fa-users"></i> Organizações</div>
+    <div class="category-card" onclick="filtrarPorCategoria('Locais')"><i class="fas fa-map-marked-alt"></i> Locais</div>
+</div>
+            </div>
+        </section>
+
+        <!-- TELA 2: RESULTADOS DA PESQUISA -->
+        <section id="searchResultsView" class="view-section">
+            <button class="btn-back" onclick="voltarParaCategorias()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <h2>Resultados para: <span id="termoPesquisado" class="highlight"></span></h2>
+            
+            <div id="resultadosContainer" class="results-container">
+                <!-- O JavaScript vai preencher os resultados aqui, divididos por categoria -->
+            </div>
+        </section>
+
+        <!-- TELA 3: PÁGINA ESPECÍFICA DO ITEM -->
+        <section id="entryView" class="view-section">
+            <button class="btn-back" onclick="voltarParaResultados()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            
+            <div class="entry-layout">
+                <!-- Cabeçalho do Item -->
+                <div class="entry-header">
+                    <img id="entryImage" src="" alt="Imagem do Registro" class="entry-image">
+                    <div class="entry-title-box">
+                        <span id="entryCategory" class="entry-tag">Categoria</span>
+                        <h1 id="entryTitle">Nome do Registro</h1>
+                    </div>
+                </div>
+
+                <div class="entry-grid">
+                    <!-- Coluna Esquerda: História e Lore -->
+                    <div class="entry-lore-col">
+                        <div class="content-block">
+                            <h3><i class="fas fa-book-open"></i> Lore</h3>
+                            <p id="entryLore">Descrição narrativa do item...</p>
+                        </div>
+                        
+                        <div class="content-block">
+                            <h3><i class="fas fa-scroll"></i> História</h3>
+                            <p id="entryHistory">A origem cronológica e eventos passados...</p>
+                        </div>
+
+                        <div class="content-block">
+                            <h3><i class="fas fa-link"></i> Relacionamentos</h3>
+                            <ul id="entryRelationships" class="relation-list">
+                                <!-- Preenchido via JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita: Regras e Tabela -->
+                    <div class="entry-rules-col">
+                        <div class="content-block mechanics-block">
+                            <h3><i class="fas fa-dice-d20"></i> Regras Mecânicas</h3>
+                            <p id="entryRules">Como isso funciona no sistema do jogo.</p>
+                        </div>
+
+                        <div class="content-block table-block">
+                            <h3>Tabela de Efeitos / Status</h3>
+                            <table class="amestia-table" id="entryTable">
+                                <!-- Preenchido via JS -->
+                            </table>
+                        </div>
+
+                        <div class="content-block">
+                            <h3>Itens Relacionados</h3>
+                            <div id="entryRelatedItems" class="related-tags">
+                                <!-- Tags via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="bancodedados.js"></script>
+</body>
+</html>
