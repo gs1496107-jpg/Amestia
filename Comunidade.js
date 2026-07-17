@@ -127,3 +127,81 @@ function fazerLoginComGoogle() {
 function abrirAcervo(idAcervo) {
     console.log("Abrindo acervo: ", idAcervo);
 }
+// ==========================================
+// CONTROLE DO MODAL DE PUBLICAÇÃO
+// ==========================================
+const publishModal = document.getElementById('publishModal');
+
+// Função chamada após a autenticação bem-sucedida (já declarada no seu código)
+function abrirModalDePublicacao() {
+    publishModal.classList.add('active');
+}
+
+// Função para fechar o modal e limpar os campos
+function fecharModalPublicacao() {
+    publishModal.classList.remove('active');
+    document.getElementById('formPublicacao').reset(); // Limpa o formulário ao fechar
+}
+
+// Fechar clicando fora da caixa do modal
+publishModal.addEventListener('click', function(e) {
+    if (e.target === publishModal) {
+        fecharModalPublicacao();
+    }
+});
+
+// ==========================================
+// LÓGICA DE CRIAÇÃO DA NOVA PUBLICAÇÃO
+// ==========================================
+document.getElementById('formPublicacao').addEventListener('submit', function(e) {
+    e.preventDefault(); // Impede a página de recarregar
+
+    // 1. Captura os valores digitados pelo usuário
+    const titulo = document.getElementById('pubTitulo').value;
+    const categoria = document.getElementById('pubCategoria').value;
+    const imgUrl = document.getElementById('pubImg').value;
+    const desc = document.getElementById('pubDesc').value;
+
+    // 2. Define o nome do autor com base no Firebase (ou fallback se estiver testando sem login)
+    let nomeAutor = "InvestigadorAnônimo";
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+        // Tira os espaços do nome para gerar a tag (ex: @MestreGallo)
+        nomeAutor = firebase.auth().currentUser.displayName.replace(/\s+/g, '') || "Investigador";
+    }
+
+    // 3. Formata o nome da tag visual para o card
+    const tagTexto = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+
+    // 4. Constrói o novo elemento HTML para o feed
+    const novoPost = document.createElement('article');
+    novoPost.className = `post-card ${categoria}`;
+    novoPost.innerHTML = `
+        <div class="post-image" style="background-image: url('${imgUrl}');"></div>
+        <div class="post-content">
+            <span class="post-tag">${tagTexto}</span>
+            <h2 class="post-title">${titulo}</h2>
+            <p class="post-author" onclick="abrirPerfilCriador('${nomeAutor}')">Por: <strong>@${nomeAutor}</strong></p>
+            <p class="post-desc">${desc}</p>
+        </div>
+        <div class="post-actions">
+            <div class="action-group">
+                <button class="action-btn like-btn" onclick="toggleInteracao(this, 'like')"><i class="fas fa-heart"></i> <span>0</span></button>
+                <button class="action-btn fav-btn" onclick="toggleInteracao(this, 'fav')"><i class="fas fa-star"></i></button>
+                <button class="action-btn comment-btn"><i class="fas fa-comment"></i> 0</button>
+            </div>
+            <button class="action-btn save-btn" onclick="toggleInteracao(this, 'save')"><i class="fas fa-bookmark"></i> Salvar</button>
+        </div>
+        <button class="action-btn view-btn" style="width:100%; border-top:1px solid #333; border-radius:0 0 8px 8px; padding: 10px;" onclick="abrirAcervo('novo_acervo')">
+            <i class="fas fa-eye"></i> Acessar
+        </button>
+    `;
+
+    // 5. Insere o card como o PRIMEIRO item do feed (topo da lista)
+    const feedContainer = document.getElementById('feedContainer');
+    feedContainer.prepend(novoPost);
+
+    // 6. Fecha o modal
+    fecharModalPublicacao();
+    
+    // (Opcional) Aqui futuramente você adicionaria o código para salvar a publicação no Banco de Dados do Firebase Realtime/Firestore
+});

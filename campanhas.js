@@ -1,15 +1,11 @@
-// ==========================================
-// CONFIGURAÇÃO DE ACESSO (Mestre vs Player)
-// ==========================================
-let isMestre = true; // Mude para false para ver como os jogadores enxergam a tela
-
-// ==========================================
-// BANCO DE DADOS LOCAL (LOCALSTORAGE)
-// ==========================================
 // Carrega as campanhas salvas ou cria uma lista vazia
 let minhasCampanhas = JSON.parse(localStorage.getItem('campanhasSalvas')) || [];
+// ==========================================
+// CONFIGURAÇÃO DE ACESSO E CONTROLE
+// ==========================================
+let isMestre = true;
+let indiceCampanhaAtiva = -1;
 
-// Ao carregar a página, desenha as campanhas salvas no Lobby
 window.onload = () => {
     renderizarLobby();
 };
@@ -22,11 +18,11 @@ function renderizarLobby() {
     const grid = document.querySelector('#campanhasLobby .campaign-grid');
     if (!grid) return;
 
-    // Remove os cartões dinâmicos antigos para não duplicar ao recarregar
     document.querySelectorAll('.cartao-dinamico').forEach(el => el.remove());
 
-    // Desenha cada campanha salva
     minhasCampanhas.forEach((camp, index) => {
+        const qtd = camp.qtdJogadores || 0; // Lê a quantidade (se não houver, é 0)
+
         const novoCartao = document.createElement('div');
         novoCartao.className = 'campaign-card cartao-dinamico';
         novoCartao.innerHTML = `
@@ -35,6 +31,7 @@ function renderizarLobby() {
                 <h2 onclick="entrarCampanha('${camp.nome}', '${camp.codigo}')">${camp.nome}</h2>
                 <p style="color: #7a1b9c; font-weight: bold; font-size: 0.85rem; letter-spacing: 1px;"><i class="fas fa-key"></i> Código: ${camp.codigo}</p>
                 <p><strong>Mestre:</strong> ${camp.mestre}</p>
+                <p><strong>Jogadores:</strong> <i class="fas fa-users"></i> ${qtd}</p>
                 <button class="btn-remover-card" onclick="apagarCampanha(${index})"><i class="fas fa-trash"></i> Abandonar Campanha</button>
             </div>
         `;
@@ -65,6 +62,15 @@ function entrarCampanha(nome, codigo = "") {
     if (titleDisplay) {
         titleDisplay.innerHTML = codigo ? `${nome} <span style="font-size: 0.8rem; color: #888; display: block; margin-top: 5px;"><i class="fas fa-key"></i> ${codigo}</span>` : nome;
     }
+
+    // Descobre qual campanha abrimos no banco de dados
+    indiceCampanhaAtiva = minhasCampanhas.findIndex(c => c.nome === nome || (codigo && c.codigo === codigo));
+    
+    // Se a campanha existir e já tiver conteúdo salvo, nós injetamos na tela!
+    if (indiceCampanhaAtiva !== -1 && minhasCampanhas[indiceCampanhaAtiva].htmlSalvo) {
+        document.querySelector('.campaign-content').innerHTML = minhasCampanhas[indiceCampanhaAtiva].htmlSalvo;
+    }
+
     aplicarPermissoes();
 }
 
@@ -258,17 +264,24 @@ function adicionarNovoRegistro(abaId) {
             <button class="btn-remover-card btn-mestre-only" onclick="removerElemento(this)" style="margin-top: 10px; padding: 4px;">Excluir</button>
         `;
         gridContainer.appendChild(novoCard);
+
     } else {
         const novaBox = document.createElement('div');
         novaBox.className = 'info-box';
+        // Atualizado para incluir o botão de remover ao lado do título
         novaBox.innerHTML = `
-            <h3 contenteditable="true">${titulo}</h3>
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <h3 contenteditable="true" style="flex: 1; margin: 0;">${titulo}</h3>
+                <button class="btn-remover-card btn-mestre-only" onclick="removerElemento(this)" style="width: auto; padding: 4px 10px; margin-top: 0;"><i class="fas fa-trash"></i></button>
+            </div>
             <p contenteditable="true">${descricao}</p>
         `;
         const btnAddItem = aba.querySelector('.btn-add-item');
         if (btnAddItem) aba.insertBefore(novaBox, btnAddItem);
         else aba.appendChild(novaBox);
     }
+    
+    salvarEstadoCampanha(); // Salva automaticamente ao adicionar!
 }
 
 // Relógio de Sombra
@@ -293,3 +306,44 @@ function avancarRelogio() {
         }, 3000);
     }
 }
+// ==========================================
+// EXCLUSÃO E SALVAMENTO AUTOMÁTICO
+// ==========================================
+
+// Função que faz o botão "Remover" funcionar em qualquer lugar
+function removerElemento(botao) {
+    if (confirm("Tem certeza que deseja apagar este registro permanentemente?")) {
+        // Procura a caixa principal (jogador, evidência ou info-box) que envolve o botão e a deleta
+        const elementoPai = botao.closest('.campaign-card, .evidence-card, .info-box');
+        if (elementoPai) {
+            elementoPai.remove();
+            salvarEstadoCampanha(); // Salva a campanha sem o elemento
+        }
+    }
+}
+
+// Tira uma foto da campanha atual e salva no LocalStorage
+function salvarEstadoCampanha() {
+    if (indiceCampanhaAtiva === -1) return; // Não salva se for uma campanha não registrada
+    
+    const areaConteudo = document.querySelector('.campaign-content');
+    if(!areaConteudo) return;
+
+    // Conta quantos cartões de jogador existem na aba Jogadores
+    const gridJogadores = document.getElementById('gridJogadores');
+    const qtdAtual = gridJogadores ? gridJogadores.querySelectorAll('.campaign-card').length : 0;
+    
+    // Salva o HTML modificado e a contagem de jogadores
+    minhasCampanhas[indiceCampanhaAtiva].htmlSalvo = areaConteudo.innerHTML;
+    minhasCampanhas[indiceCampanhaAtiva].qtdJogadores = qtdAtual;
+    
+    salvarNoNavegador(); // Grava tudo no navegador
+}
+
+// "Espião" de Auto-Save: Salva automaticamente sempre que você digitar algo em um campo editável
+document.addEventListener('input', function(e) {
+    // Se a alteração aconteceu dentro da área da campanha, salva!
+    if (e.target.closest('.campaign-content')) {
+        salvarEstadoCampanha();
+    }
+});

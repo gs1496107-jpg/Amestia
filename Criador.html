@@ -25,7 +25,7 @@
         </div>
 
         <div class="creator-box">
-<!-- ETAPA 1: IDENTIDADE (Corrigida e Fechada certinho) -->
+<!-- ETAPA 1: IDENTIDADE -->
 <div class="step-content active" id="step1">
     <div class="form-group">
         <label>Nome do Personagem</label>
@@ -59,7 +59,13 @@
         <label>Histórico (Background)</label>
         <textarea id="charHistory" rows="4" placeholder="O que você fazia antes do Véu romper?"></textarea>
     </div>
-</div> <!-- Este fechamento agora isola a Etapa 1 perfeitamente! -->
+    
+    <!-- NOVO CAMPO: Habilidade Inata -->
+    <div class="form-group">
+        <label>Habilidade Inata</label>
+        <textarea id="charInnate" rows="2" placeholder="Descreva sua habilidade inata principal..."></textarea>
+    </div>
+</div> 
 
             <div class="step-content" id="step2">
                 <div class="selection-grid" id="raceGrid">
@@ -162,11 +168,7 @@
         <h4 id="constName">Selecione uma Constelação</h4>
         <p id="constLore"></p>
     </div>
-</div> <!-- Etapa 6 fechada com sucesso -->
-
-                <div class="constellation-grid" id="constellationGrid">
-                    </div>
-            </div>
+</div> 
 
             <div class="step-content" id="step7">
                 <div class="selection-grid" id="pathGrid"></div>
@@ -235,10 +237,11 @@ function salvarNovoPersonagem() {
     const novoPersonagem = {
         id: Date.now(),
         nome: document.getElementById('charName').value || "Desconhecido",
-        imagem: imagemFinal, // <-- Nova linha para salvar a imagem!
+        imagem: imagemFinal,
         conceito: (racaSelected ? racaSelected.innerText : "Sem Origem") + " | " + (pathSelected ? pathSelected.innerText : "Sem Caminho"),
         grau: 1, 
         ocupacao: jobSelected ? jobSelected.innerText : "Sem Ocupação",
+        habilidadeInata: document.getElementById('charInnate').value || "Nenhuma habilidade inata definida.", 
         vitalidade: parseInt(document.getElementById('statVit').innerText) || 15,
         sanidade: parseInt(document.getElementById('statSan').innerText) || 15,
         fluxo: parseInt(document.getElementById('statFlux').innerText) || 10,

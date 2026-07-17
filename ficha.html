@@ -113,6 +113,10 @@
                         </div>
                     </div>
                 </section>
+                <section class="sheet-section innate-section">
+                    <h2>Habilidade Inata</h2>
+                    <textarea id="ficha-habilidade-inata" class="inline-input w-100" style="resize: vertical; min-height: 60px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; font-family: 'Inter', sans-serif; line-height: 1.5;" placeholder="Sua habilidade inata aparecerá aqui..."></textarea>
+                </section>
 
                 <!-- Atributos Editáveis -->
                 <section class="sheet-section attributes-section">
@@ -226,6 +230,7 @@
             document.getElementById('ficha-conceito').value = personagemAtual.conceito || (personagemAtual.raca + " | " + personagemAtual.caminho);
             document.getElementById('ficha-grau').value = personagemAtual.grau || 1;
             document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "Desconhecido";
+            document.getElementById('ficha-habilidade-inata').value = personagemAtual.habilidadeInata || "";
 
             // Atualiza a Foto de Perfil (Avatar)
             if (personagemAtual.imagem) {
@@ -319,6 +324,7 @@
                 { id: 'ficha-conceito', chave: 'conceito' },
                 { id: 'ficha-grau', chave: 'grau' },
                 { id: 'ficha-ocupacao', chave: 'ocupacao' },
+                { id: 'ficha-habilidade-inata', chave: 'habilidadeInata' },
                 { id: 'attr-proeza', chaveSecundaria: 'proeza' },
                 { id: 'attr-percepcao', chaveSecundaria: 'percepcao' },
                 { id: 'attr-cognicao', chaveSecundaria: 'cognicao' },

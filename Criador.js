@@ -62,49 +62,256 @@ const racas = [
     }
 ];
 
+// ===============================================
+// DADOS OFICIAIS: O VÉU DO ABSURDO - OCUPAÇÕES
+// ===============================================
+
 const ocupacoes = [
     { 
         id: 'o1', 
-        nome: "Criador de Mídias / Analista de Símbolos", 
-        desc: "Especialistas em edição e análise de padrões. Perícias Fixas: Tecnologia e Redes, Linguística, Investigação de Campo.", 
-        abs: "Edição de vídeo/áudio e recuperação de arquivos digitais corrompidos de fontes mundanas.", 
+        nome: "Vidente / Cartomante", 
+        desc: "Atributo: Percepção ou Influência. Perícias Fixas: Intuição, Ciências Ocultas e Persuasão.", 
+        abs: "Ler a 'intenção' ou o estado emocional de um cliente através de símbolos (tarô, runas). Nunca falha ao notar quando uma coincidência na verdade é um padrão intencional do Véu.", 
         maxSkills: 4 
-    },
+    }, //[span_0](start_span)[span_0](end_span)
     { 
         id: 'o2', 
-        nome: "Herborista / Botânico Semântico", 
-        desc: "Especialistas em plantas e infusões para efeitos práticos. Perícias Fixas: Medicina de Emergência, Sobrevivência, Ciências Ocultas.", 
-        abs: "Identificar propriedades de plantas e preparar extratos, tinturas ou óleos para relaxamento e primeiros socorros.", 
+        nome: "Parapsicólogo / Pesquisador de Fenômenos", 
+        desc: "Atributo: Cognição. Perícias Fixas: Investigação de Campo, Tecnologia e Redes e Ciências Ocultas.", 
+        abs: "Isolar fraudes e truques humanos em 'casas mal-assombradas'. Identifica imediatamente vestígios magnéticos ou térmicos anômalos.", 
         maxSkills: 4 
-    },
+    }, //[span_1](start_span)[span_1](end_span)
     { 
         id: 'o3', 
-        nome: "Antropólogo / Linguista", 
-        desc: "Estudiosos do comportamento e das línguas antigas. Perícias Fixas: Linguística, História e Religião, Persuasão.", 
-        abs: "Compreensão e tradução imediata de dialetos humanos mortos, gírias locais e isolamento de sotaques regionais.", 
+        nome: "Médium / Espiritista", 
+        desc: "Atributo: Âncora ou Percepção. Perícias Fixas: Intuição, Resistência Mental e Ciências Ocultas.", 
+        abs: "Sentir flutuações bruscas de 'ambiente' (frio repentino, peso no ar). Nunca entra em pânico ao presenciar manifestações visuais leves do invisível.", 
         maxSkills: 4 
-    },
+    }, //[span_2](start_span)[span_2](end_span)
     { 
         id: 'o4', 
-        nome: "Parapsicólogo", 
-        desc: "Pesquisadores de fenômenos anômalos. Perícias Fixas: Investigação de Campo, Tecnologia e Redes, Ciências Ocultas.", 
-        abs: "Isolar fraudes e identificar imediatamente vestígios magnéticos ou térmicos anômalos.", 
+        nome: "Ilusionista de Palco", 
+        desc: "Atributo: Influência. Perícias Fixas: Malandragem/Disfarce, Percepção Espacial e Persuasão.", 
+        abs: "Prestidigitação, ocultação de pequenos objetos nas mãos e detecção de truques de mágica ou manipulação visual feitos por outras pessoas.", 
         maxSkills: 4 
-    },
+    }, //[span_3](start_span)[span_3](end_span)
     { 
         id: 'o5', 
-        nome: "Estrategista", 
-        desc: "Mentes voltadas para a lógica e previsão. Perícias Fixas: Criptografia e Códigos, Intuição, Resistência Mental.", 
-        abs: "Análise de probabilidade pura, memorização de padrões estritos e antecipação de movimentos lógicos.", 
+        nome: "Astrólogo", 
+        desc: "Atributo: Cognição. Perícias Fixas: Criptografia e Códigos, Ciências Ocultas e História e Religião.", 
+        abs: "Mapear o tempo simbólico, calcular mapas Astrais complexos e identificar a influência de arquétipos culturais no comportamento de seitas ou grupos.", 
         maxSkills: 4 
-    },
+    }, //[span_4](start_span)[span_4](end_span)
     { 
         id: 'o6', 
+        nome: "Criptozoólogo", 
+        desc: "Atributo: Percepção. Perícias Fixas: Investigação de Campo, Sobrevivência e Ciências Puras.", 
+        abs: "Anatomia comparada de fauna exótica. Identifica na hora se uma pegada ou rastro biológico pertence a um animal conhecido ou se é algo que 'não deveria existir'.", 
+        maxSkills: 4 
+    }, //[span_5](start_span)[span_5](end_span)
+    { 
+        id: 'o7', 
+        nome: "Exorcista", 
+        desc: "Atributo: Âncora. Perícias Fixas: História e Religião, Resistência Mental e Ciências Ocultas.", 
+        abs: "Identificar a autenticidade de objetos sacros, dogmas religiosos e manter a calma absoluta diante de blasfêmias ou profanações visuais.", 
+        maxSkills: 4 
+    }, //[span_6](start_span)[span_6](end_span)
+    { 
+        id: 'o8', 
         nome: "Detetive Particular", 
-        desc: "Investigadores calejados das ruas. Perícias Fixas: Investigação de Campo, Percepção Espacial, Intuição.", 
+        desc: "Atributo: Percepção. Perícias Fixas: Investigação de Campo, Percepção Espacial e Intuição.", 
         abs: "Encontrar pistas físicas ocultas, fundos falsos e sinais de arrombamento em cenas de crime mundanas.", 
         maxSkills: 4 
-    }
+    }, //[span_7](start_span)[span_7](end_span)
+    { 
+        id: 'o9', 
+        nome: "Perito Legista", 
+        desc: "Atributo: Cognição. Perícias Fixas: Ciências Puras, Medicina de Emergência e Investigação de Campo.", 
+        abs: "Determinar a causa exata, hora aproximada e arma utilizada em mortes biológicas comuns sem precisar de testes.", 
+        maxSkills: 4 
+    }, //[span_8](start_span)[span_8](end_span)
+    { 
+        id: 'o10', 
+        nome: "Jornalista Investigativo", 
+        desc: "Atributo: Influência. Perícias Fixas: Persuasão, Tecnologia e Redes e Investigação de Campo.", 
+        abs: "Encontrar fontes anônimas, arrancar fofocas institucionais e cruzar informações públicas para expor podres corporativos.", 
+        maxSkills: 4 
+    }, //[span_9](start_span)[span_9](end_span)
+    { 
+        id: 'o11', 
+        nome: "Guarda Florestal / Mateiro", 
+        desc: "Atributo: Percepção. Perícias Fixas: Sobrevivência, Percepção Espacial e Medicina de Emergência.", 
+        abs: "Orientação geográfica perfeita em ambientes selvagens e rastreamento de fauna local sem se perder.", 
+        maxSkills: 4 
+    }, //[span_10](start_span)[span_10](end_span)
+    { 
+        id: 'o12', 
+        nome: "Agente de Segurança / Guarda-Costas", 
+        desc: "Atributo: Âncora. Perícias Fixas: Percepção Espacial, Atletismo/Luta e Resistência Mental.", 
+        abs: "Identificar posturas suspeitas, armas ocultas sob roupas e rotas de evacuação imediata em locais cheios.", 
+        maxSkills: 4 
+    }, //[span_11](start_span)[span_11](end_span)
+    { 
+        id: 'o13', 
+        nome: "Investigador de Seguros", 
+        desc: "Atributo: Cognição. Perícias Fixas: Intuição, Criptografia e Códigos e Persuasão.", 
+        abs: "Detectar mentiras financeiras, fraudes estruturais (como incêndios criminosos) e avaliar o valor real de bens destruídos.", 
+        maxSkills: 4 
+    }, //[span_12](start_span)[span_12](end_span)
+    { 
+        id: 'o14', 
+        nome: "Oficial de Condicional / Caçador de Recompensas", 
+        desc: "Atributo: Percepção. Perícias Fixas: Intimidação, Investigação de Campo e Condução/Pilotagem.", 
+        abs: "Rastrear o paradeiro de alvos urbanos analisando seus hábitos diários, vícios e conexões sociais.", 
+        maxSkills: 4 
+    }, //[span_13](start_span)[span_13](end_span)
+    { 
+        id: 'o15', 
+        nome: "Estrategista", 
+        desc: "Atributo: Cognição. Perícias Fixas: Criptografia e Códigos, Intuição e Resistência Mental.", 
+        abs: "Análise de probabilidade pura, memorização de padrões estritos e antecipação de movimentos lógicos.", 
+        maxSkills: 4 
+    }, //[span_14](start_span)[span_14](end_span)
+    { 
+        id: 'o16', 
+        nome: "Filósofo / Historiador da Arte", 
+        desc: "Atributo: Cognição. Perícias Fixas: História e Religião, Linguística e Artes e Ofícios.", 
+        abs: "Datar pinturas, identificar correntes filosóficas e decodificar metáforas visuais pesadas em obras clássicas.", 
+        maxSkills: 4 
+    }, //[span_15](start_span)[span_15](end_span)
+    { 
+        id: 'o17', 
+        nome: "Antropólogo / Linguista", 
+        desc: "Atributo: Influência ou Cognição. Perícias Fixas: Linguística, História e Religião e Persuasão.", 
+        abs: "Compreensão e tradução imediata de dialetos humanos mortos, gírias locais e isolamento de sotaques regionais.", 
+        maxSkills: 4 
+    }, //[span_16](start_span)[span_16](end_span)
+    { 
+        id: 'o18', 
+        nome: "Arquivista / Bibliotecário", 
+        desc: "Atributo: Cognição. Perícias Fixas: Criptografia e Códigos, História e Religião e Tecnologia e Redes.", 
+        abs: "Encontrar qualquer documento, microfilme ou livro específico em acervos caóticos ou bibliotecas públicas na metade do tempo.", 
+        maxSkills: 4 
+    }, //[span_17](start_span)[span_17](end_span)
+    { 
+        id: 'o19', 
+        nome: "Arqueólogo", 
+        desc: "Atributo: Percepção. Perícias Fixas: História e Religião, Investigação de Campo e Sobrevivência.", 
+        abs: "Avaliar a idade, civilização de origem e utilidade prática de artefatos antigos ou ruínas estruturais subterrâneas.", 
+        maxSkills: 4 
+    }, //[span_18](start_span)[span_18](end_span)
+    { 
+        id: 'o20', 
+        nome: "Físico Teórico / Matemático", 
+        desc: "Atributo: Cognição. Perícias Fixas: Ciências Puras, Criptografia e Códigos e Tecnologia e Redes.", 
+        abs: "Resolver equações mundanas massivas e identificar inconsistências na física clássica de um perímetro.", 
+        maxSkills: 4 
+    }, //[span_19](start_span)[span_19](end_span)
+    { 
+        id: 'o21', 
+        nome: "Teólogo / Especialista em Mitologia", 
+        desc: "Atributo: Cognição. Perícias Fixas: História e Religião, Linguística e Ciências Ocultas.", 
+        abs: "Reconhecer heranças de rituais antigos, panteões esquecidos e dogmas de seitas heréticas documentadas.", 
+        maxSkills: 4 
+    }, //[span_20](start_span)[span_20](end_span)
+    { 
+        id: 'o22', 
+        nome: "Criador de Mídias / Analista de Símbolos", 
+        desc: "Atributo: Cognição ou Influência. Perícias Fixas: Tecnologia e Redes, Linguística e Investigação de Campo.", 
+        abs: "Edição de vídeo/áudio e recuperação de arquivos digitais corrompidos de fontes mundanas.", 
+        maxSkills: 4 
+    }, //[span_21](start_span)[span_21](end_span)
+    { 
+        id: 'o23', 
+        nome: "Hacker / Engenheiro de Software", 
+        desc: "Atributo: Cognição. Perícias Fixas: Tecnologia e Redes, Criptografia e Códigos e Ciências Puras.", 
+        abs: "Invasão de servidores locais, quebra de criptografias digitais civis e programação de ferramentas de varredura automatizada.", 
+        maxSkills: 4 
+    }, //[span_22](start_span)[span_22](end_span)
+    { 
+        id: 'o24', 
+        nome: "Técnico em Radiotransmissão", 
+        desc: "Atributo: Percepção. Perícias Fixas: Tecnologia e Redes, Percepção Espacial e Criptografia e Códigos.", 
+        abs: "Sintonizar frequências analógicas raras, isolar ruídos em gravações de áudio e triangular a origem de sinais de rádio.", 
+        maxSkills: 4 
+    }, //[span_23](start_span)[span_23](end_span)
+    { 
+        id: 'o25', 
+        nome: "Cientista", 
+        desc: "Atributo: Cognição. Perícias Fixas: Tecnologia e Redes, Criptografia e Códigos e Ciências Puras.", 
+        abs: "Cruzar bancos de dados gigantescos na internet para encontrar anomalias estatísticas ou picos de comportamento populacional.", 
+        maxSkills: 4 
+    }, //[span_24](start_span)[span_24](end_span)
+    { 
+        id: 'o26', 
+        nome: "Restaurador de Arte / Falsificador", 
+        desc: "Atributo: Percepção. Perícias Fixas: Artes e Ofícios, Malandragem/Disfarce e Percepção Espacial.", 
+        abs: "Identificar instantaneamente se um quadro, documento ou assinatura foi adulterado, replicado ou se é uma peça original.", 
+        maxSkills: 4 
+    }, //[span_25](start_span)[span_25](end_span)
+    { 
+        id: 'o27', 
+        nome: "Fotógrafo", 
+        desc: "Atributo: Percepção. Perícias Fixas: Percepção Espacial, Tecnologia e Redes e Artes e Ofícios.", 
+        abs: "Capturar detalhes milimétricos em imagens com iluminação precária e mapear perímetros aéreos usando lentes especiais.", 
+        maxSkills: 4 
+    }, //[span_26](start_span)[span_26](end_span)
+    { 
+        id: 'o28', 
+        nome: "Serralheiro / Engenheiro", 
+        desc: "Atributo: Cognição. Perícias Fixas: Artes e Ofícios, Percepção Espacial e Criptografia e Códigos.", 
+        abs: "Desmantelar trancas mecânicas comuns, abrir cadeados sem chaves e reparar motores ou fiação exposta de veículos.", 
+        maxSkills: 4 
+    }, //[span_27](start_span)[span_27](end_span)
+    { 
+        id: 'o29', 
+        nome: "Terapeuta / Conselheiro", 
+        desc: "Atributo: Influência ou Âncora. Perícias Fixas: Intuição, Persuasão e Resistência Mental.", 
+        abs: "Desescalar crises de pânico, histeria humana e guiar conversas de estabilização mental de aliados após choques mundanos.", 
+        maxSkills: 4 
+    }, //[span_28](start_span)[span_28](end_span)
+    { 
+        id: 'o30', 
+        nome: "Herborista", 
+        desc: "Atributo: Percepção ou Cognição. Perícias Fixas: Medicina de Emergência, Sobrevivência e Ciências Ocultas.", 
+        abs: "Identificar propriedades de plantas e preparar extratos, tinturas ou óleos para relaxamento e primeiros socorros.", 
+        maxSkills: 4 
+    }, //[span_29](start_span)[span_29](end_span)
+    { 
+        id: 'o31', 
+        nome: "Paramédico / Socorrista", 
+        desc: "Atributo: Âncora. Perícias Fixas: Medicina de Emergência, Resistência Mental e Percepção Espacial.", 
+        abs: "Estancar sangramentos críticos, realizar RCP e manter um ferido grave vivo até chegar a um hospital.", 
+        maxSkills: 4 
+    }, //[span_30](start_span)[span_30](end_span)
+    { 
+        id: 'o32', 
+        nome: "Barman / Sommelier", 
+        desc: "Atributo: Influência. Perícias Fixas: Persuasão, Intuição e Malandragem/Disfarce.", 
+        abs: "Ler o humor de clientes de balcão, misturar substâncias discretamente em bebidas e identificar venenos ou adulterantes pelo cheiro/gosto.", 
+        maxSkills: 4 
+    }, //[span_31](start_span)[span_31](end_span)
+    { 
+        id: 'o33', 
+        nome: "Motorista Urbano / Taxista", 
+        desc: "Atributo: Percepção. Perícias Fixas: Condução/Pilotagem, Percepção Espacial e Intuição.", 
+        abs: "Conhecer rotas alternativas, becos e atalhos de uma grande cidade sem depender de GPS. Nunca sofre penalidade ao dirigir sob estresse urbano comum.", 
+        maxSkills: 4 
+    }, //[span_32](start_span)[span_32](end_span)
+    { 
+        id: 'o34', 
+        nome: "Ator / Mestre do Disfarce", 
+        desc: "Atributo: Influência. Perícias Fixas: Malandragem/Disfarce, Persuasão e Intuição.", 
+        abs: "Mudar a entonação de voz, postura e usar maquiagem básica para se passar por outra pessoa de classe social ou cargo semelhante ao infiltrar locais.", 
+        maxSkills: 4 
+    }, //[span_33](start_span)[span_33](end_span)
+    { 
+        id: 'o35', 
+        nome: "Operário de Construção / Mestre de Obras", 
+        desc: "Atributo: Âncora. Perícias Fixas: Artes e Ofícios, Percepção Espacial e Atletismo/Luta.", 
+        abs: "Avaliar a integridade estrutural de tetos, paredes e vigas. Sabe exatamente onde bater para derrubar uma parede ou se um teto velho corre risco iminente de desabar.", 
+        maxSkills: 4 
+    } //[span_34](start_span)[span_34](end_span)
 ];
 
 const constelacoes = [
