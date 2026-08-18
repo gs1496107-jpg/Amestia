@@ -42,17 +42,39 @@
     box-shadow: 0 0 15px rgba(122, 27, 156, 0.4);
 }
 
-.character-identity h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 2.5rem;
-    margin-bottom: 0.2rem;
-    color: #fff;
+.character-identity {
+    flex: 1;
 }
 
-.character-identity h3 {
+.char-title-input {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    width: 100%;
+    outline: none;
+    transition: 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.char-subtitle-input {
+    font-family: 'Inter', sans-serif;
     color: var(--accent-blue);
     font-size: 1.2rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    width: 100%;
     margin-bottom: 1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+.char-title-input:focus, .char-subtitle-input:focus {
+    border-bottom: 1px dashed var(--accent-purple);
 }
 
 .char-meta {
@@ -62,7 +84,28 @@
     font-size: 0.9rem;
 }
 
-/* Layout em Grid para o Corpo da Ficha */
+.meta-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    width: 40px;
+    outline: none;
+    text-align: center;
+}
+
+.meta-input.text-input {
+    width: 150px;
+    text-align: left;
+}
+
+.meta-input:focus {
+    border-bottom: 1px dashed var(--accent-purple);
+    color: #fff;
+}
+
+/* Layout em Grid */
 .sheet-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -91,11 +134,45 @@
     margin-bottom: 1.5rem;
 }
 
-.status-bar-container label {
-    display: block;
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 0.5rem;
+}
+
+.status-header label {
+    margin-bottom: 0;
     font-weight: 600;
     font-size: 0.9rem;
+}
+
+.status-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-ctrl {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-ctrl:hover {
+    background: var(--accent-purple);
 }
 
 .status-bar {
@@ -105,20 +182,15 @@
     overflow: hidden;
 }
 
-.health-bar .bar-fill {
-    background: #ff4d4d;
-    height: 100%;
-}
-
-.sanity-bar .bar-fill {
-    background: var(--accent-blue);
-    height: 100%;
-}
+.health-bar .bar-fill { background: #ff4d4d; height: 100%; transition: width 0.3s ease; }
+.sanity-bar .bar-fill { background: var(--accent-blue); height: 100%; transition: width 0.3s ease; }
+.flow-bar .bar-fill { background: #a855f7; height: 100%; transition: width 0.3s ease; }
 
 .stress-track {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .stress-mark {
@@ -127,19 +199,13 @@
     border-radius: 50%;
     border: 2px solid #fff;
     background: rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
 }
 
 .stress-mark.filled {
     background: #ff4d4d;
     border-color: #ff4d4d;
     box-shadow: 0 0 8px #ff4d4d;
-}
-
-.stress-warning {
-    margin-left: 10px;
-    color: #ff4d4d;
-    font-size: 0.8rem;
-    font-weight: bold;
 }
 
 /* Atributos Mortais */
@@ -158,14 +224,28 @@
     padding: 1rem 0;
 }
 
-.attr-box .attr-value {
+.attr-input {
     display: block;
+    width: 100%;
     font-size: 2rem;
     font-family: 'Cinzel', serif;
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: #fff;
+    background: transparent;
+    border: none;
+    text-align: center;
+    outline: none;
 }
+
+.attr-input::-webkit-outer-spin-button,
+.attr-input::-webkit-inner-spin-button,
+.meta-input::-webkit-outer-spin-button,
+.meta-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.attr-input[type=number] { -moz-appearance: textfield; }
 
 .attr-box .attr-name {
     font-size: 0.8rem;
@@ -202,209 +282,6 @@
     margin-top: 3px;
 }
 
-.anchor-info {
-    font-size: 0.9rem;
-    line-height: 1.4;
-}
-
-/* Inventário */
-.inventory-capacity {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
-    text-align: right;
-}
-
-.inventory-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.inv-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.inv-item.relic {
-    background: rgba(122, 27, 156, 0.15);
-    border: 1px solid rgba(122, 27, 156, 0.4);
-    color: #fff;
-}
-
-.item-slot {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .sheet-grid {
-        grid-template-columns: 1fr;
-    }
-    .sheet-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    .char-meta {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-}
-/* ---- CONTROLES DE BARRAS (+ e -) ---- */
-.status-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.status-header label {
-    margin-bottom: 0;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.status-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.btn-ctrl {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #fff;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-.btn-ctrl:hover {
-    background: var(--accent-purple);
-}
-
-/* Nova Barra de Fluxo */
-.flow-bar .bar-fill {
-    background: #a855f7; /* Roxo para representar o Fluxo/Magia */
-    height: 100%;
-    transition: width 0.3s ease;
-}
-
-/* Transição suave nas barras de Vida e Sanidade */
-.health-bar .bar-fill, .sanity-bar .bar-fill {
-    transition: width 0.3s ease;
-}
-
-/* Bolinhas de Estresse (Ajustadas para caber 8) */
-.stress-track {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.stress-mark {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    background: rgba(255, 255, 255, 0.1);
-    transition: 0.3s;
-}
-
-/* ---- INPUTS DE ATRIBUTOS ---- */
-.attr-input {
-    display: block;
-    width: 100%;
-    font-size: 2rem;
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #fff;
-    background: transparent;
-    border: none;
-    text-align: center;
-    outline: none;
-}
-
-/* Remove as setinhas feias dos inputs de número no navegador */
-.attr-input::-webkit-outer-spin-button,
-.attr-input::-webkit-inner-spin-button,
-.meta-input::-webkit-outer-spin-button,
-.meta-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-.attr-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-/* ---- CAMPOS DE CABEÇALHO EDITÁVEIS ---- */
-.char-title-input {
-    font-family: 'Cinzel', serif;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #fff;
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed transparent;
-    width: 100%;
-    outline: none;
-    transition: 0.2s;
-}
-
-.char-subtitle-input {
-    font-family: 'Inter', sans-serif;
-    color: var(--accent-blue);
-    font-size: 1.2rem;
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed transparent;
-    width: 100%;
-    margin-bottom: 1rem;
-    outline: none;
-    transition: 0.2s;
-}
-
-.char-title-input:focus, .char-subtitle-input:focus {
-    border-bottom: 1px dashed var(--accent-purple);
-}
-
-.meta-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed transparent;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    width: 30px;
-    outline: none;
-    text-align: center;
-}
-
-.meta-input.text-input {
-    width: 120px;
-    text-align: left;
-}
-
-.meta-input:focus {
-    border-bottom: 1px dashed var(--accent-purple);
-    color: #fff;
-}
-
-/* ---- ÂNCORAS E INVENTÁRIO EDITÁVEL ---- */
 .inline-input {
     background: transparent;
     border: none;
@@ -415,30 +292,10 @@
     font-size: 0.9rem;
     padding-bottom: 2px;
 }
+.inline-input:focus { border-bottom-color: var(--accent-blue); }
+.w-100 { width: 100%; }
 
-.inline-input:focus {
-    border-bottom-color: var(--accent-blue);
-}
-
-.w-100 {
-    width: 100%;
-}
-
-.inventory-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(122, 27, 156, 0.3);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.inventory-header h2 {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
+/* Inventário */
 .btn-add {
     background: rgba(122, 27, 156, 0.2);
     border: 1px solid var(--accent-purple);
@@ -450,14 +307,21 @@
     transition: 0.2s;
 }
 
-.btn-add:hover {
-    background: var(--accent-purple);
+.btn-add:hover { background: var(--accent-purple); }
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .inv-item {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
 }
 
 .inv-input-name {
@@ -488,6 +352,12 @@
     transition: 0.2s;
 }
 
-.btn-remove:hover {
-    opacity: 1;
+.btn-remove:hover { opacity: 1; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sheet-grid { grid-template-columns: 1fr; }
+    .sheet-header { flex-direction: column; text-align: center; }
+    .char-meta { justify-content: center; flex-wrap: wrap; }
+    .status-controls { justify-content: center; }
 }
