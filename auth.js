@@ -5,7 +5,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 // Importa as funções de Autenticação na MESMA versão
 import { 
     getAuth, 
-    signInWithRedirect, 
+    signInWithPopup, // <-- Correção 1: O "Redirect" saiu, entrou o "Popup" aqui
     GoogleAuthProvider, 
     onAuthStateChanged,
     signOut 
@@ -33,10 +33,10 @@ const provider = new GoogleAuthProvider();
 // Busca o elemento do menu onde o nome aparece
 const profileLink = document.getElementById('nav-profile-link');
 
-// Função para fazer login via redirecionamento
+// Função para fazer login via Popup
 async function loginComGoogle() {
     try {
-        await signInWithRedirect(auth, provider);
+        await signInWithPopup(auth, provider); // <-- Correção 2: Letra "u" minúscula
     } catch (error) {
         console.error("Erro no login:", error);
     }
