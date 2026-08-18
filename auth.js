@@ -36,7 +36,16 @@ const profileLink = document.getElementById('nav-profile-link');
 // Função para fazer login com o Google
 async function loginComGoogle() {
     try {
-        const result = await signInWithPopup(auth, provider);
+        import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+// E dentro da sua função:
+async function loginComGoogle() {
+    try {
+        await signInWithRedirect(auth, provider);
+    } catch (error) {
+        console.error("Erro no login:", error);
+    }
+}
         const user = result.user;
         console.log("Usuário logado:", user.displayName);
     } catch (error) {
