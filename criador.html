@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criador de Personagem - AMESTIA</title>
-    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="criador.css"> <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="criador.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -21,7 +23,6 @@
             <a href="comunidade.html" data-lang="nav_comunidade">Comunidade</a>
         </div>
         
-        <!-- O bloco nav-right abaixo só precisa existir nas páginas que têm a busca, sino de notificação e o toggle de música, como o seu index.html. -->
         <div class="nav-right">
             <button id="audioToggle" title="Mutar/Desmutar Música"><i class="fas fa-music"></i></button>
             <a href="#"><i class="fas fa-search"></i></a>
@@ -37,51 +38,56 @@
         </div>
 
         <div class="creator-box">
-<!-- ETAPA 1: IDENTIDADE -->
-<div class="step-content active" id="step1">
-    <div class="form-group">
-        <label>Nome do Personagem</label>
-        <input type="text" id="charName" placeholder="Ex: Arthur Pendelton">
-    </div>
-    
-    <div class="form-row">
-        <div class="form-group">
-            <label>Idade</label>
-            <input type="number" id="charAge" placeholder="Anos">
-        </div>
-        <div class="form-group">
-            <label>Pronome</label>
-            <input type="text" id="charPronoun" placeholder="Ex: Ele/Dele">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Foto do Personagem (Escolher da Galeria)</label>
-        <input type="file" id="charImageFile" accept="image/*" style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 6px; width: 100%; color: #fff;">
-        <input type="hidden" id="charImageBase64">
-        <div id="imagePreview" style="margin-top: 15px; text-align: center;"></div>
-    </div>
-
-    <div class="form-group">
-        <label>Descrição Física</label>
-        <textarea id="charDesc" rows="3" placeholder="Como as pessoas te veem?"></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Histórico (Background)</label>
-        <textarea id="charHistory" rows="4" placeholder="O que você fazia antes do Véu romper?"></textarea>
-    </div>
-    
-    <!-- NOVO CAMPO: Habilidade Inata -->
-    <div class="form-group">
-        <label>Habilidade Inata</label>
-        <textarea id="charInnate" rows="2" placeholder="Descreva sua habilidade inata principal..."></textarea>
-    </div>
-</div> 
-
-            <div class="step-content" id="step2">
-                <div class="selection-grid" id="raceGrid">
+            
+            <!-- ETAPA 1: IDENTIDADE -->
+            <div class="step-content active" id="step1">
+                <div class="form-group">
+                    <label>Nome do Personagem</label>
+                    <input type="text" id="charName" placeholder="Ex: Arthur Pendelton">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Idade</label>
+                        <input type="number" id="charAge" placeholder="Anos">
                     </div>
+                    <div class="form-group">
+                        <label>Pronome</label>
+                        <input type="text" id="charPronoun" placeholder="Ex: Ele/Dele">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Foto do Personagem (Escolher da Galeria)</label>
+                    <input type="file" id="charImageFile" accept="image/*" style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 6px; width: 100%; color: #fff;">
+                    <input type="hidden" id="charImageBase64">
+                    <div id="imagePreview" style="margin-top: 15px; text-align: center;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição Física</label>
+                    <textarea id="charDesc" rows="3" placeholder="Como as pessoas te veem?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Histórico (Background)</label>
+                    <textarea id="charHistory" rows="4" placeholder="O que você fazia antes do Véu romper?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Habilidade Inata</label>
+                    <textarea id="charInnate" rows="2" placeholder="Descreva sua habilidade inata principal..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Conceito Adicional</label>
+                    <textarea id="charBackground" rows="3" placeholder="Breve resumo do conceito do personagem..."></textarea>
+                </div>
+            </div> 
+
+            <!-- ETAPA 2: RAÇA/ORIGEM -->
+            <div class="step-content" id="step2">
+                <div class="selection-grid" id="raceGrid"></div>
                 <div class="details-panel" id="raceDetails">
                     <h3 id="raceName">Selecione uma Origem/Raça</h3>
                     <p id="raceLore">A história da raça aparecerá aqui.</p>
@@ -92,41 +98,46 @@
                 </div>
             </div>
 
-<div class="step-content" id="step3">
-    <div class="attributes-layout">
-<div class="attributes-inputs">
-    <div class="attr-row">
-        <label>Proeza</label>
-        <input type="number" class="attr-input" id="attrProeza" value="1" min="0" max="10">
-    </div>
-    <div class="attr-row">
-        <label>Percepção</label>
-        <input type="number" class="attr-input" id="attrPercepcao" value="1" min="0" max="10">
-    </div>
-    <div class="attr-row">
-        <label>Cognição</label>
-        <input type="number" class="attr-input" id="attrCognicao" value="1" min="0" max="10">
-    </div>
-    <div class="attr-row">
-        <label>Influência</label>
-        <input type="number" class="attr-input" id="attrInfluencia" value="1" min="0" max="10">
-    </div>
-    <div class="attr-row" style="border-left: 3px solid var(--accent-purple);">
-        <label>Âncora</label>
-        <input type="number" class="attr-input" id="attrAncora" value="1" min="0" max="10">
-    </div>
-</div>
-
+            <!-- ETAPA 3: ATRIBUTOS -->
+            <div class="step-content" id="step3">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h3>Distribuição de Atributos</h3>
+                    <p style="color: var(--text-secondary);">Base inicial 1 em cada. Pontos disponíveis para gastar: <strong id="pointsLeft" style="color: var(--accent-purple); font-size: 1.3rem;">3</strong> / 3</p>
+                </div>
+                <div class="attributes-layout">
+                    <div class="attributes-inputs">
+                        <div class="attr-row">
+                            <label>Proeza</label>
+                            <input type="number" class="attr-input" id="attrProeza" value="1" min="1" max="3">
+                        </div>
+                        <div class="attr-row">
+                            <label>Percepção</label>
+                            <input type="number" class="attr-input" id="attrPercepcao" value="1" min="1" max="3">
+                        </div>
+                        <div class="attr-row">
+                            <label>Cognição</label>
+                            <input type="number" class="attr-input" id="attrCognicao" value="1" min="1" max="3">
+                        </div>
+                        <div class="attr-row">
+                            <label>Influência</label>
+                            <input type="number" class="attr-input" id="attrInfluencia" value="1" min="1" max="3">
+                        </div>
+                        <div class="attr-row" style="border-left: 3px solid var(--accent-purple);">
+                            <label>Âncora</label>
+                            <input type="number" class="attr-input" id="attrAncora" value="1" min="1" max="3">
+                        </div>
+                    </div>
                     
                     <div class="derived-stats">
                         <div class="stat-box"><i class="fas fa-heart"></i> Vitalidade: <span id="statVit">15</span></div>
                         <div class="stat-box"><i class="fas fa-brain"></i> Sanidade: <span id="statSan">15</span></div>
-                        <div class="stat-box"><i class="fas fa-bolt"></i> Fluxo: <span id="statFlux">3</span></div>
-                        <div class="stat-box"><i class="fas fa-box-open"></i> Slots: <span id="statSlots">3</span></div>
+                        <div class="stat-box"><i class="fas fa-bolt"></i> Fluxo: <span id="statFlux">5</span></div>
+                        <div class="stat-box"><i class="fas fa-box-open"></i> Slots: <span id="statSlots">4</span></div>
                     </div>
                 </div>
             </div>
 
+            <!-- ETAPA 4: OCUPAÇÃO -->
             <div class="step-content" id="step4">
                 <div class="selection-grid" id="jobGrid"></div>
                 <div class="details-panel" id="jobDetails">
@@ -136,64 +147,66 @@
                 </div>
             </div>
 
-<!-- ETAPA 5: PERÍCIAS -->
-<div class="step-content" id="step5">
-    <p class="step-desc">Escolha até <span id="maxSkillsNum">4</span> perícias da lista abaixo (Baseado na sua ocupação).</p>
-    <div class="skills-grid" id="skillsGrid">
-        <!-- Físicas -->
-        <label><input type="checkbox" class="skill-cb" value="Atletismo"> Atletismo</label>
-        <label><input type="checkbox" class="skill-cb" value="Combate Corporal"> Combate Corporal</label>
-        <label><input type="checkbox" class="skill-cb" value="Furtividade"> Furtividade</label>
-        <label><input type="checkbox" class="skill-cb" value="Pontaria"> Pontaria</label>
-        <label><input type="checkbox" class="skill-cb" value="Sobrevivência"> Sobrevivência</label>
+            <!-- ETAPA 5: PERÍCIAS -->
+            <div class="step-content" id="step5">
+                <p class="step-desc">Escolha até <span id="maxSkillsNum">4</span> perícias da lista abaixo (Baseado na sua cognição).</p>
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- Físicas -->
+                    <label><input type="checkbox" class="skill-cb" value="Atletismo"> Atletismo</label>
+                    <label><input type="checkbox" class="skill-cb" value="Combate Corporal"> Combate Corporal</label>
+                    <label><input type="checkbox" class="skill-cb" value="Furtividade"> Furtividade</label>
+                    <label><input type="checkbox" class="skill-cb" value="Pontaria"> Pontaria</label>
+                    <label><input type="checkbox" class="skill-cb" value="Sobrevivência"> Sobrevivência</label>
 
-        <!-- Mentais -->
-        <label><input type="checkbox" class="skill-cb" value="Criptografia e Códigos"> Criptografia e Códigos</label>
-        <label><input type="checkbox" class="skill-cb" value="Investigação de Campo"> Investigação de Campo</label>
-        <label><input type="checkbox" class="skill-cb" value="Mecânica e Ofícios"> Mecânica e Ofícios</label>
-        <label><input type="checkbox" class="skill-cb" value="Medicina de Emergência"> Medicina de Emergência</label>
-        <label><input type="checkbox" class="skill-cb" value="Tecnologia e Redes"> Tecnologia e Redes</label>
+                    <!-- Mentais -->
+                    <label><input type="checkbox" class="skill-cb" value="Criptografia e Códigos"> Criptografia e Códigos</label>
+                    <label><input type="checkbox" class="skill-cb" value="Investigação de Campo"> Investigação de Campo</label>
+                    <label><input type="checkbox" class="skill-cb" value="Mecânica e Ofícios"> Mecânica e Ofícios</label>
+                    <label><input type="checkbox" class="skill-cb" value="Medicina de Emergência"> Medicina de Emergência</label>
+                    <label><input type="checkbox" class="skill-cb" value="Tecnologia e Redes"> Tecnologia e Redes</label>
 
-        <!-- Social -->
-        <label><input type="checkbox" class="skill-cb" value="Intimidação"> Intimidação</label>
-        <label><input type="checkbox" class="skill-cb" value="Intuição"> Intuição</label>
-        <label><input type="checkbox" class="skill-cb" value="Persuasão"> Persuasão</label>
+                    <!-- Social -->
+                    <label><input type="checkbox" class="skill-cb" value="Intimidação"> Intimidação</label>
+                    <label><input type="checkbox" class="skill-cb" value="Intuição"> Intuição</label>
+                    <label><input type="checkbox" class="skill-cb" value="Persuasão"> Persuasão</label>
 
-        <!-- Místicos -->
-        <label><input type="checkbox" class="skill-cb" value="Ciências Ocultas"> Ciencias Ocultas</label>
-        <label><input type="checkbox" class="skill-cb" value="Linguística"> Linguística</label>
-        <label><input type="checkbox" class="skill-cb" value="Contato com o Véu"> Contato com o Véu</label>
-        <label><input type="checkbox" class="skill-cb" value="Resistência Mental"> Resistência Mental</label>
-    </div>
-</div> <!-- Etapa 5 fechada com sucesso -->
+                    <!-- Místicos -->
+                    <label><input type="checkbox" class="skill-cb" value="Ciências Ocultas"> Ciencias Ocultas</label>
+                    <label><input type="checkbox" class="skill-cb" value="Linguística"> Linguística</label>
+                    <label><input type="checkbox" class="skill-cb" value="Contato com o Véu"> Contato com o Véu</label>
+                    <label><input type="checkbox" class="skill-cb" value="Resistência Mental"> Resistência Mental</label>
+                </div>
+            </div> 
 
-<!-- ETAPA 6: CONSTELAÇÃO -->
-<div class="step-content" id="step6">
-    <h3>Escolha sua Constelação</h3>
-    <p>A constelação que rege o seu investigador define a natureza do seu trauma e a fonte do seu poder.</p>
-    
-    <div class="constellation-grid" id="constellationGrid">
-        <!-- Gerado dinamicamente pelo JS -->
-    </div>
-    
-    <div id="constellationDetails" class="details-panel">
-        <h4 id="constName">Selecione uma Constelação</h4>
-        <p id="constLore"></p>
-    </div>
-</div> 
+            <!-- ETAPA 6: CONSTELAÇÃO -->
+            <div class="step-content" id="step6">
+                <h3>Escolha sua Constelação</h3>
+                <p>A constelação que rege o seu investigador define a natureza do seu trauma e a fonte do seu poder.</p>
+                
+                <div class="constellation-grid" id="constellationGrid">
+                    <!-- Gerado dinamicamente pelo JS -->
+                </div>
+                
+                <div id="constellationDetails" class="details-panel" style="margin-top: 2rem;">
+                    <h4 id="constName">Selecione uma Constelação</h4>
+                    <p id="constLore"></p>
+                </div>
+            </div> 
 
+            <!-- ETAPA 7: CAMINHOS (Movido para a ordem correta) -->
             <div class="step-content" id="step7">
-                <div class="selection-grid" id="pathGrid"></div>
+                <div class="selection-grid" id="pathGrid">
+                    <!-- Gerado via JS -->
+                </div>
+                
                 <div class="details-panel" id="pathDetails">
-                    <h3 id="pathName">Escolha seu Caminho</h3>
-                    <p id="pathLore">-</p>
-                    <div class="path-stats">
-                        <p><strong>Dificuldade:</strong> <span id="pathDiff">-</span></p>
-                        <p><strong>Estilo:</strong> <span id="pathStyle">-</span></p>
-                    </div>
+                    <h3 id="pathName">Selecione um Caminho</h3>
+                    <p id="pathLore">Clique em um dos caminhos na lista ao lado para visualizar sua filosofia e todas as habilidades.</p>
+                    <div id="pathSkills"></div>
                 </div>
             </div>
 
+            <!-- ETAPA 8: ÂNCORAS -->
             <div class="step-content" id="step8">
                 <p class="step-desc">O que te prende à realidade? Defina suas âncoras para resistir ao Akedonte.</p>
                 <div class="form-group">
@@ -210,74 +223,33 @@
                 </div>
             </div>
 
+            <!-- ETAPA 9: FINALIZAÇÃO E RESUMO -->
             <div class="step-content" id="step9">
                 <div class="summary-box">
+                    <div id="summaryPreview" style="margin-bottom: 1.5rem;"></div>
                     <div class="summary-header">
                         <h2 id="finalName">Nome do Personagem</h2>
                         <p><span id="finalRace">Raça</span> | <span id="finalJob">Ocupação</span> | <span id="finalPath">Caminho</span></p>
                     </div>
-                    <div class="summary-body">
-                        <p>Tudo pronto para adentrar o Véu. Revise seus dados ou volte para alterar.</p>
+                    <div id="summaryDetails" style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <!-- Preenchido via JS -->
                     </div>
                 </div>
                 <div class="export-buttons">
-                    <button class="btn-secondary" id="btnExportPDF"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+                    <button class="btn-secondary" id="btnExportJSON" onclick="exportarJSON()"><i class="fas fa-download"></i> Baixar JSON</button>
                     <button class="btn-primary" id="btnSave" onclick="salvarNovoPersonagem()"><i class="fas fa-save"></i> Salvar e Jogar</button>
                 </div>
             </div>
-
+ 
             <div class="creator-footer">
-                <button id="btnPrev" class="btn-nav" disabled>Voltar</button>
-                <button id="btnNext" class="btn-nav">Próximo Passo</button>
+                <button type="button" class="btn-nav" id="btnPrev">Anterior</button>
+                <button type="button" class="btn-nav" id="btnNext">Próximo Passo</button>
             </div>
-        </div>
-    </div>
-
+        </div> <!-- FECHAMENTO DA CREATOR-BOX -->
+    </div> <!-- FECHAMENTO DO CREATOR-CONTAINER -->
+      
     <script src="script.js"></script>
+    <script type="module" src="auth.js"></script>
     <script src="criador.js"></script>
-
-<script>
-function salvarNovoPersonagem() {
-    const racaSelected = document.querySelector('#raceGrid .selected');
-    const jobSelected = document.querySelector('#jobGrid .selected');
-    const pathSelected = document.querySelector('#pathGrid .selected');
-    
-    // Captura a imagem digitada ou usa uma padrão se estiver vazio
-    const imgInput = document.getElementById('charImageBase64').value;
-    const imagemFinal = imgInput ? imgInput : "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60";
-
-    const novoPersonagem = {
-        id: Date.now(),
-        nome: document.getElementById('charName').value || "Desconhecido",
-        imagem: imagemFinal,
-        conceito: (racaSelected ? racaSelected.innerText : "Sem Origem") + " | " + (pathSelected ? pathSelected.innerText : "Sem Caminho"),
-        grau: 1, 
-        ocupacao: jobSelected ? jobSelected.innerText : "Sem Ocupação",
-        habilidadeInata: document.getElementById('charInnate').value || "Nenhuma habilidade inata definida.", 
-        vitalidade: parseInt(document.getElementById('statVit').innerText) || 15,
-        sanidade: parseInt(document.getElementById('statSan').innerText) || 15,
-        fluxo: parseInt(document.getElementById('statFlux').innerText) || 10,
-        estresse: 0,
-        atributos: {
-            proeza: document.getElementById('attrProeza').value,
-            percepcao: document.getElementById('attrPercepcao').value,
-            cognicao: document.getElementById('attrCognicao').value,
-            influencia: document.getElementById('attrInfluencia').value,
-            ancora: document.getElementById('attrAncora').value
-        }
-    };
-
-    let bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
-    bancoDePersonagens.push(novoPersonagem);
-    localStorage.setItem('amestia_personagens', JSON.stringify(bancoDePersonagens));
-
-    alert("Personagem salvo com sucesso!");
-    window.location.href = "perfil.html";
-}
-      <script src="script.js"></script>
-    <script type="module" src="auth.js"></script> <!-- Adicione esta linha -->
-    <script src="criador.js"></script>
-
-</script>
 </body>
 </html>
