@@ -1,11 +1,10 @@
-// Importa as funções principais e de Analytics do seu código original
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
 
-// Importa as funções de Autenticação na MESMA versão (12.16.0)
+// Importa as funções de Autenticação com o signInWithRedirect
 import { 
     getAuth, 
-    signInWithPopup, 
+    signInWithRedirect, 
     GoogleAuthProvider, 
     onAuthStateChanged,
     signOut 
@@ -30,15 +29,10 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Busca o elemento do menu onde o nome aparece (o ID que adicionamos no HTML)
+// Busca o elemento do menu onde o nome aparece
 const profileLink = document.getElementById('nav-profile-link');
 
-// Função para fazer login com o Google
-async function loginComGoogle() {
-    try {
-        import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-
-// E dentro da sua função:
+// Função para fazer login via redirecionamento
 async function loginComGoogle() {
     try {
         await signInWithRedirect(auth, provider);
@@ -46,16 +40,10 @@ async function loginComGoogle() {
         console.error("Erro no login:", error);
     }
 }
-        const user = result.user;
-        console.log("Usuário logado:", user.displayName);
-    } catch (error) {
-        console.error("Erro no login:", error);
-    }
-}
 
 // Função para deslogar
 async function sair(evento) {
-    evento.preventDefault(); // Evita que o link recarregue a página
+    evento.preventDefault();
     try {
         await signOut(auth);
         console.log("Usuário deslogado");
@@ -74,24 +62,24 @@ onAuthStateChanged(auth, (user) => {
         // --- USUÁRIO LOGADO ---
         const primeiroNome = user.displayName.split(' ')[0];
         
-        // Atualiza a barra de navegação
-        profileLink.innerHTML = `${primeiroNome} <img src="${user.photoURL}" alt="Foto" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-left: 5px;">`;
-        profileLink.onclick = sair; 
+        if (profileLink) {
+            profileLink.innerHTML = `${primeiroNome} <img src="${user.photoURL}" alt="Foto" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-left: 5px;">`;
+            profileLink.onclick = sair; 
+        }
         
-        // Mostra o perfil e esconde a tela de bloqueio
         if (visaoDeslogado) visaoDeslogado.style.display = 'none';
         if (visaoLogado) visaoLogado.style.display = 'block';
         
     } else {
         // --- USUÁRIO DESLOGADO ---
-        profileLink.innerHTML = `Conectar <i class="fas fa-google"></i>`;
-        
-        profileLink.onclick = (evento) => {
-            evento.preventDefault();
-            loginComGoogle();
-        };
+        if (profileLink) {
+            profileLink.innerHTML = `Conectar <i class="fas fa-google"></i>`;
+            profileLink.onclick = (evento) => {
+                evento.preventDefault();
+                loginComGoogle();
+            };
+        }
 
-        // Mostra a tela de bloqueio e esconde o perfil
         if (visaoDeslogado) visaoDeslogado.style.display = 'block';
         if (visaoLogado) visaoLogado.style.display = 'none';
     }
