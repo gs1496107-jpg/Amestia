@@ -1,14 +1,15 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+// Substituímos a versão 12.16.0 pela 10.12.2 que é oficial e estável
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
-// Importa as funções de Autenticação com o signInWithRedirect
+// Importa as funções de Autenticação na MESMA versão
 import { 
     getAuth, 
     signInWithRedirect, 
     GoogleAuthProvider, 
     onAuthStateChanged,
     signOut 
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // A sua configuração real do Firebase
 const firebaseConfig = {
