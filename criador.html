@@ -39,7 +39,7 @@
 
         <div class="creator-box">
             
-            <!-- ETAPA 1: IDENTIDADE -->
+            <!-- ETAPA 1: IDENTIDADE (Sem área manual de habilidade inata) -->
             <div class="step-content active" id="step1">
                 <div class="form-group">
                     <label>Nome do Personagem</label>
@@ -72,11 +72,6 @@
                 <div class="form-group">
                     <label>Histórico (Background)</label>
                     <textarea id="charHistory" rows="4" placeholder="O que você fazia antes do Véu romper?"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Habilidade Inata</label>
-                    <textarea id="charInnate" rows="2" placeholder="Descreva sua habilidade inata principal..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -143,12 +138,21 @@
                 <div class="details-panel" id="jobDetails">
                     <h3 id="jobName">Selecione uma Ocupação</h3>
                     <p id="jobDesc">-</p>
-                    <p><strong>Competência Absoluta:</strong> <span id="jobAbs">Nenhuma</span></p>
+                    <p><strong>Atributo Chave:</strong> <span id="jobAbs">Nenhum</span></p>
                 </div>
             </div>
 
-            <!-- ETAPA 5: PERÍCIAS -->
+            <!-- ETAPA 5: HABILIDADE INATA (NOVA ETAPA DEDICADA) -->
             <div class="step-content" id="step5">
+                <div class="selection-grid" id="innateGrid"></div>
+                <div class="details-panel" id="innateDetails">
+                    <h3 id="innateName">Selecione uma Habilidade Inata</h3>
+                    <p id="innateDesc">Escolha a capacidade singular que seu personagem manifesta perante o Véu.</p>
+                </div>
+            </div>
+
+            <!-- ETAPA 6: PERÍCIAS -->
+            <div class="step-content" id="step6">
                 <p class="step-desc">Escolha até <span id="maxSkillsNum">4</span> perícias da lista abaixo (Baseado na sua cognição).</p>
                 <div class="skills-grid" id="skillsGrid">
                     <!-- Físicas -->
@@ -178,14 +182,12 @@
                 </div>
             </div> 
 
-            <!-- ETAPA 6: CONSTELAÇÃO -->
-            <div class="step-content" id="step6">
+            <!-- ETAPA 7: CONSTELAÇÃO -->
+            <div class="step-content" id="step7">
                 <h3>Escolha sua Constelação</h3>
                 <p>A constelação que rege o seu investigador define a natureza do seu trauma e a fonte do seu poder.</p>
                 
-                <div class="constellation-grid" id="constellationGrid">
-                    <!-- Gerado dinamicamente pelo JS -->
-                </div>
+                <div class="constellation-grid" id="constellationGrid"></div>
                 
                 <div id="constellationDetails" class="details-panel" style="margin-top: 2rem;">
                     <h4 id="constName">Selecione uma Constelação</h4>
@@ -193,11 +195,9 @@
                 </div>
             </div> 
 
-            <!-- ETAPA 7: CAMINHOS (Movido para a ordem correta) -->
-            <div class="step-content" id="step7">
-                <div class="selection-grid" id="pathGrid">
-                    <!-- Gerado via JS -->
-                </div>
+            <!-- ETAPA 8: CAMINHOS -->
+            <div class="step-content" id="step8">
+                <div class="selection-grid" id="pathGrid"></div>
                 
                 <div class="details-panel" id="pathDetails">
                     <h3 id="pathName">Selecione um Caminho</h3>
@@ -206,8 +206,8 @@
                 </div>
             </div>
 
-            <!-- ETAPA 8: ÂNCORAS -->
-            <div class="step-content" id="step8">
+            <!-- ETAPA 9: ÂNCORAS -->
+            <div class="step-content" id="step9">
                 <p class="step-desc">O que te prende à realidade? Defina suas âncoras para resistir ao Akedonte.</p>
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Pessoa Importante</label>
@@ -223,17 +223,15 @@
                 </div>
             </div>
 
-            <!-- ETAPA 9: FINALIZAÇÃO E RESUMO -->
-            <div class="step-content" id="step9">
+            <!-- ETAPA 10: FINALIZAÇÃO E RESUMO -->
+            <div class="step-content" id="step10">
                 <div class="summary-box">
                     <div id="summaryPreview" style="margin-bottom: 1.5rem;"></div>
                     <div class="summary-header">
                         <h2 id="finalName">Nome do Personagem</h2>
                         <p><span id="finalRace">Raça</span> | <span id="finalJob">Ocupação</span> | <span id="finalPath">Caminho</span></p>
                     </div>
-                    <div id="summaryDetails" style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                        <!-- Preenchido via JS -->
-                    </div>
+                    <div id="summaryDetails" style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;"></div>
                 </div>
                 <div class="export-buttons">
                     <button class="btn-secondary" id="btnExportJSON" onclick="exportarJSON()"><i class="fas fa-download"></i> Baixar JSON</button>
@@ -245,8 +243,8 @@
                 <button type="button" class="btn-nav" id="btnPrev">Anterior</button>
                 <button type="button" class="btn-nav" id="btnNext">Próximo Passo</button>
             </div>
-        </div> <!-- FECHAMENTO DA CREATOR-BOX -->
-    </div> <!-- FECHAMENTO DO CREATOR-CONTAINER -->
+        </div>
+    </div>
       
     <script src="script.js"></script>
     <script type="module" src="auth.js"></script>

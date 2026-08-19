@@ -51,11 +51,12 @@
 
 .step-content.active#step2, 
 .step-content.active#step4, 
-.step-content.active#step7 {
+.step-content.active#step5,
+.step-content.active#step7,
+.step-content.active#step8 {
     display: flex;
     gap: 2rem;
 }
-
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateX(10px); }

@@ -2,155 +2,182 @@
 // SISTEMA DE NAVEGAÇÃO DE ETAPAS E ESTADO
 // ===============================================
 let currentStep = 1;
-const totalSteps = 9;
-const TOTAL_ATTR_POINTS = 3; // Pontos livres para gastar
+const totalSteps = 10;
+const TOTAL_ATTR_POINTS = 3;
 
 const stepTitles = [
     "Etapa 1: Identidade",
     "Etapa 2: Raça/Origem",
     "Etapa 3: Atributos",
     "Etapa 4: Ocupação",
-    "Etapa 5: Perícias",
-    "Etapa 6: Constelação",
-    "Etapa 7: Caminho",
-    "Etapa 8: Âncoras",
-    "Etapa 9: Finalização"
+    "Etapa 5: Habilidade Inata",
+    "Etapa 6: Perícias",
+    "Etapa 7: Constelação",
+    "Etapa 8: Caminho",
+    "Etapa 9: Âncoras",
+    "Etapa 10: Finalização"
 ];
 
 const btnNext = document.getElementById('btnNext');
 const btnPrev = document.getElementById('btnPrev');
 
+function updateWizard() {
+    document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+
+    const etapaAtual = document.getElementById(`step${currentStep}`);
+    if (etapaAtual) etapaAtual.classList.add('active');
+    
+    const progresso = (currentStep / totalSteps) * 100;
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) progressBar.style.setProperty('--progress-width', `${progresso}%`);
+    
+    const titleEl = document.getElementById('stepTitle');
+    if (titleEl) titleEl.innerText = stepTitles[currentStep - 1];
+
+    if (btnPrev) btnPrev.disabled = (currentStep === 1);
+    
+    if (btnNext) {
+        if (currentStep === totalSteps) {
+            btnNext.style.display = 'none';
+            gerarResumo(); 
+        } else {
+            btnNext.style.display = 'block';
+            btnNext.innerText = "Próximo Passo";
+        }
+    }
+}
+
+function validarEtapaAtual() {
+    let valido = true;
+
+    if (currentStep === 1) {
+        const inputNome = document.getElementById('charName');
+        const nome = inputNome ? inputNome.value.trim() : "";
+        if (!nome) {
+            alert("Por favor, preencha o nome do personagem para continuar.");
+            if (inputNome) {
+                inputNome.style.borderColor = "#ff4d4d";
+                inputNome.focus();
+            }
+            valido = false;
+        } else if (inputNome) {
+            inputNome.style.borderColor = "rgba(255, 255, 255, 0.1)";
+        }
+    }
+
+    if (currentStep === 3) {
+        const pontosUsados = calcularPontosUsados();
+        if (pontosUsados > TOTAL_ATTR_POINTS) {
+            alert(`Você distribuiu ${pontosUsados} pontos. O máximo permitido é ${TOTAL_ATTR_POINTS}.`);
+            valido = false;
+        }
+    }
+
+    return valido;
+}
+
+if (btnNext) {
+    btnNext.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!validarEtapaAtual()) return;
+        if (currentStep < totalSteps) { 
+            currentStep++; 
+            updateWizard(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+}
+
+if (btnPrev) {
+    btnPrev.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentStep > 1) {
+            currentStep--;
+            updateWizard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+}
+
 // ===============================================
-// BANDO DE DADOS OFICIAIS
+// BANCO DE DADOS: O VÉU DO ABSURDO
 // ===============================================
 const racas = [
-  {
-    id: "r1",
-    nome: "Os Cárneos",
-    lore: "A bateria existencial do indivíduo rompeu-se e o corpo parou de produzir a energia biológica que o amarra à realidade. Para não se tornarem cascas vazias, canalizam fluidos e vitalidade de outros seres vivos.",
-    tracos: [
-      "Sem Reflexo: Não projetam imagem clara em espelhos ou gravações.",
-      "Hematocinese: Manipulam a coagulação e o fluxo do próprio sangue para combate ou estancamento.",
-      "Presença Inerte: Ignoram efeitos ambientais de frio extremo e parada cardíaca por curtos períodos."
-    ]
-  },
-  {
-    id: "r2",
-    nome: "Os Ferais",
-    lore: "Gerados por traumas absolutos ou surtos instintivos de sobrevivência. Diante do horror do Akedonte, a mente consciente recuou, permitindo que a besta interior assumisse o controle para preservar a vida.",
-    tracos: [
-      "Predador Perfeito: Possuem visão no escuro e rastreamento por odores emocionais (medo, sangue).",
-      "Mente Bestial: Imunidade a efeitos mentais que exijam empatia ou persuasão humana.",
-      "Garras Inatas: Capazes de desferir ataques corporais cortantes sem o uso de armas."
-    ]
-  },
-  {
-    id: "r3",
-    nome: "Filhos da Falha",
-    lore: "Humanos expostos a Áreas de Ruptura ou anomalias do Absurdo. O código biológico sofreu um erro de leitura da realidade, resultando em mutações que desafiam as leis físicas.",
-    tracos: [
-      "Anomalia Física: Estrutura óssea ou orgânica alterada (membros extras, pele endurecida).",
-      "Inumanos: Reações atípicas a medicamentos e rituais; imunidade a certas fobias místicas.",
-      "Distorção de Impacto: Absorvem choques físicos alterando a densidade corpórea local."
-    ]
-  },
-  {
-    id: "r4",
-    nome: "Os Liminares",
-    lore: "Pessoas que caíram nas frestas conceituais do mundo e retornaram. Parte de sua existência permaneceu do outro lado do Véu, fazendo com que a realidade por vezes não aplique leis físicas sobre eles.",
-    tracos: [
-      "Físico Incompleto: Atravessam obstáculos estreitos ou roçam a insubstancialidade por breves instantes.",
-      "Eco Espacial: Dificuldade extrema de serem rastreados por meios convencionais ou câmeras.",
-      "Ancoragem Instável: Gastam menos Fluxo para interagir com o Akedonte, mas sofrem mais estresse mental."
-    ]
-  }
+  { id: "r1", nome: "Os Cárneos", lore: "A bateria existencial do indivíduo rompeu-se e o corpo parou de produzir a energia biológica que o amarra à realidade. Para não se tornarem cascas vazias, canalizam fluidos e vitalidade de outros seres vivos.", tracos: ["Sem Reflexo: Não projetam imagem clara em espelhos.", "Hematocinese: Manipulam a coagulação do sangue."] },
+  { id: "r2", nome: "Os Ferais", lore: "Gerados por traumas absolutos ou surtos instintivos. Diante do horror do Akedonte, a mente consciente recuou, permitindo que a besta interior assumisse o controle.", tracos: ["Predador Perfeito: Visão no escuro e rastreamento emocional.", "Mente Bestial: Imunidade a efeitos mentais simpáticos."] },
+  { id: "r3", nome: "Filhos da Falha", lore: "Humanos expostos a Áreas de Ruptura do Absurdo. O código biológico sofreu um erro de leitura da realidade, resultando em mutações que desafiam as leis físicas.", tracos: ["Anomalia Física: Estrutura óssea ou orgânica alterada.", "Distorção de Impacto: Absorvem choques físicos."] },
+  { id: "r4", nome: "Os Liminares", lore: "Pessoas que caíram nas frestas conceituais do mundo e retornaram. Parte de sua existência permaneceu do outro lado do Véu.", tracos: ["Físico Incompleto: Roçam a insubstancialidade.", "Ancoragem Instável: Gastam menos Fluxo, sofrem mais estresse."] }
 ];
 
 const ocupacoes = [
-  {
-    id: "o1",
-    nome: "Vidente / Cartomante",
-    atributoChave: "Percepção ou Influência",
-    habilidade: "Lê a intenção imediata de pessoas através de símbolos e identifica coincidências não-naturais em investigações."
-  },
-  {
-    id: "o2",
-    nome: "Parapsicólogo",
-    atributoChave: "Cognição",
-    habilidade: "Isola fraudes instantaneamente e identifica vestígios eletromagnéticos ou anomalias conceituais no ambiente."
-  },
-  {
-    id: "o3",
-    nome: "Médium / Espiritista",
-    atributoChave: "Âncora ou Percepção",
-    habilidade: "Sente flutuações e presença de entidades no ambiente, mantendo imunidade a surtos leves de pânico místico."
-  },
-  {
-    id: "o4",
-    nome: "Detetive Particular",
-    atributoChave: "Percepção",
-    habilidade: "Encontra pistas físicas ocultas, sinais de arrombamento e reconhece mentiras por linguagem corporal."
-  },
-  {
-    id: "o5",
-    nome: "Paramédico / Socorrista",
-    atributoChave: "Âncora ou Proeza",
-    habilidade: "Estanca sangramentos graves rapidamente, estabiliza feridos críticos e ignora penalidades por trauma visual."
-  },
-  {
-    id: "o6",
-    nome: "Hacker / Eng. Software",
-    atributoChave: "Cognição",
-    habilidade: "Invade servidores civis, quebra criptografias e rastreia pegadas digitais em redes restritas."
-  },
-  {
-    id: "o7",
-    nome: "Arquivista / Bibliotecário",
-    atributoChave: "Cognição",
-    habilidade: "Localiza informações históricas ocultas ou proibidas em tempo recorde e traduz trechos de idiomas mortos."
-  },
-  {
-    id: "o8",
-    nome: "Policial / Agente de Campo",
-    atributoChave: "Proeza ou Percepção",
-    habilidade: "Acessa protocolos de autoridade, possui uso eficiente de armas de fogo e conhecimento de balística avançada."
-  },
-  {
-    id: "o9",
-    nome: "Médico Legista / Patologista",
-    atributoChave: "Cognição ou Percepção",
-    habilidade: "Determina causa exata da morte, horário e presença de toxinas ou substâncias anômalas sem testes demorados."
-  },
-  {
-    id: "o10",
-    nome: "Criminoso / Receptador",
-    atributoChave: "Proeza ou Influência",
-    habilidade: "Arromba fechaduras convencionais, avalia o valor real de itens roubados e transita no submundo sem chamar atenção."
-  },
-  {
-    id: "o11",
-    nome: "Jornalista de Investigação",
-    atributoChave: "Influência ou Percepção",
-    habilidade: "Extrai segredos de testemunhas relutantes através de entrevistas e identifica rotas de encobrimento na mídia."
-  },
-  {
-    id: "o12",
-    nome: "Coveiro / Agente Funerário",
-    atributoChave: "Âncora ou Proeza",
-    habilidade: "Possui resistência natural a odores de decomposição e facilidade em identificar rituais de sepultamento profanados."
-  },
-  {
-    id: "o13",
-    nome: "Exorcista / Sacerdote",
-    atributoChave: "Âncora",
-    habilidade: "Mantém a calma sob opressão espiritual extrema e realiza rituais de banimento contra manifestações menores."
-  },
-  {
-    id: "o14",
-    nome: "Artista / Falsificador",
-    atributoChave: "Influência ou Cognição",
-    habilidade: "Identifica falsificações em documentos e obras, além de criar réplicas precisas de assinaturas e selos oficiais."
-  }
+    { id: "o1", nome: "Vidente / Cartomante", abs: "Percepção ou Influência", desc: "Lê a intenção ou o estado emocional de um cliente através de símbolos (tarô, runas). Nunca falha ao notar padrões." },
+    { id: "o2", nome: "Parapsicólogo / Pesquisador", abs: "Cognição", desc: "Isola fraudes e truques. Identifica vestígios magnéticos ou térmicos anômalos no ambiente." },
+    { id: "o3", nome: "Médium / Espiritista", abs: "Âncora ou Percepção", desc: "Sente flutuações bruscas de ambiente. Nunca entra em pânico ao presenciar manifestações visuais leves." },
+    { id: "o4", nome: "Ilusionista de Palco", abs: "Influência", desc: "Especialista em prestidigitação, ocultação de pequenos objetos e detecção de truques de mágica." },
+    { id: "o5", nome: "Astrólogo", abs: "Cognição", desc: "Mapeia o tempo simbólico, calcula mapas Astrais complexos e identifica padrões de seitas." },
+    { id: "o6", nome: "Criptozoólogo", abs: "Percepção", desc: "Mestre em anatomia comparada exótica. Identifica rastros anômalos na hora." },
+    { id: "o7", nome: "Exorcista", abs: "Âncora", desc: "Identifica a autenticidade de objetos sacros e mantém a calma absoluta diante de blasfêmias." },
+    { id: "o8", nome: "Detetive Particular", abs: "Percepção", desc: "Encontra pistas físicas ocultas, fundos falsos e sinais de arrombamento em cenas de crime." },
+    { id: "o9", nome: "Perito Legista", abs: "Cognição", desc: "Determina a causa exata, hora aproximada e arma utilizada em mortes sem precisar de testes longos." },
+    { id: "o10", nome: "Jornalista Investigativo", abs: "Influência", desc: "Encontra fontes anônimas, arranca fofocas institucionais e cruza informações públicas." },
+    { id: "o11", nome: "Guarda Florestal / Mateiro", abs: "Percepção", desc: "Possui orientação geográfica perfeita em ambientes selvagens e rastreamento de fauna local." },
+    { id: "o12", nome: "Agente de Segurança", abs: "Âncora", desc: "Identifica posturas suspeitas, armas ocultas sob roupas e rotas de evacuação imediata em locais cheios." },
+    { id: "o13", nome: "Investigador de Seguros", abs: "Cognição", desc: "Detecta mentiras financeiras, fraudes estruturais e avalia o valor real de bens destruídos." },
+    { id: "o14", nome: "Caçador de Recompensas", abs: "Percepção", desc: "Rastreia o paradeiro de alvos urbanos analisando seus hábitos diários, vícios e conexões sociais." },
+    { id: "o15", nome: "Estrategista", abs: "Cognição", desc: "Realiza análise de probabilidade pura, memorização de padrões estritos e antecipação de movimentos." },
+    { id: "o16", nome: "Filósofo / Historiador da Arte", abs: "Cognição", desc: "Capaz de datar pinturas, identificar correntes filosóficas e decodificar metáforas visuais." },
+    { id: "o17", nome: "Antropólogo / Linguista", abs: "Influência ou Cognição", desc: "Compreensão e tradução imediata de dialetos humanos mortos e gírias locais." },
+    { id: "o18", nome: "Arquivista / Bibliotecário", abs: "Cognição", desc: "Encontra qualquer documento ou microfilme em acervos caóticos na metade do tempo." },
+    { id: "o19", nome: "Arqueólogo", abs: "Percepção", desc: "Avalia a idade, civilização de origem e utilidade prática de artefatos antigos ou ruínas." },
+    { id: "o20", nome: "Físico Teórico / Matemático", abs: "Cognição", desc: "Resolve equações mundanas massivas e identifica inconsistências na física clássica de um perímetro." },
+    { id: "o21", nome: "Teólogo / Mitólogo", abs: "Cognição", desc: "Reconhece heranças de rituais antigos, panteões esquecidos e dogmas de seitas heréticas." },
+    { id: "o22", nome: "Analista de Símbolos", abs: "Cognição ou Influência", desc: "Especialista em edição de vídeo/áudio e recuperação de arquivos digitais corrompidos." },
+    { id: "o23", nome: "Hacker / Engenheiro de Software", abs: "Cognição", desc: "Realiza invasão de servidores locais e quebra de criptografias digitais civis." },
+    { id: "o24", nome: "Técnico em Radiotransmissão", abs: "Percepção", desc: "Sintoniza frequências raras, isola ruídos em gravações e triangula a origem de sinais." },
+    { id: "o25", nome: "Cientista de Dados", abs: "Cognição", desc: "Cruza bancos de dados para encontrar anomalias estatísticas ou picos de comportamento." },
+    { id: "o26", nome: "Restaurador / Falsificador", abs: "Percepção", desc: "Identifica instantaneamente se um quadro, documento ou assinatura foi adulterado ou é original." },
+    { id: "o27", nome: "Fotógrafo / Operador de Drones", abs: "Percepção", desc: "Captura detalhes milimétricos em imagens e mapeia perímetros aéreos usando lentes especiais." },
+    { id: "o28", nome: "Serralheiro / Engenheiro Mecânico", abs: "Cognição", desc: "Desmantela trancas mecânicas comuns, abre cadeados e repara motores ou fiação exposta." },
+    { id: "o29", nome: "Terapeuta de Trauma", abs: "Influência ou Âncora", desc: "Desescala crises de pânico e guia conversas de estabilização mental de aliados." },
+    { id: "o30", nome: "Herborista / Botânico Semântico", abs: "Percepção ou Cognição", desc: "Identifica propriedades de plantas e prepara extratos para relaxamento e primeiros socorros." },
+    { id: "o31", nome: "Paramédico / Socorrista", abs: "Âncora", desc: "Estanca sangramentos críticos, realiza RCP e mantém um ferido grave vivo até o hospital." },
+    { id: "o32", nome: "Barman / Sommelier", abs: "Influência", desc: "Lê o humor de clientes, mistura substâncias discretamente e identifica venenos pelo cheiro." },
+    { id: "o33", nome: "Motorista Urbano / Taxista", abs: "Percepção", desc: "Conhece rotas alternativas sem depender de GPS. Nunca sofre penalidade ao dirigir sob estresse." },
+    { id: "o34", nome: "Ator / Mestre do Disfarce", abs: "Influência", desc: "Muda a entonação de voz, postura e usa maquiagem para se passar por outra pessoa." },
+    { id: "o35", nome: "Mestre de Obras", abs: "Âncora", desc: "Avalia a integridade de tetos e vigas. Sabe exatamente se um teto velho corre risco iminente de desabar." }
+];
+
+const habilidadesInatas = [
+    { id: "i1", nome: "O Paradoxo de Aquiles", desc: "Insere o conceito de 'infinidade' entre seu corpo e a ameaça. Qualquer ataque corpo a corpo perde velocidade infinitamente antes de tocá-lo." },
+    { id: "i2", nome: "Dobra Geométrica", desc: "Dobra o espaço entre duas paredes. Um soco desferido no ar acerta um inimigo do outro lado da sala, ignorando cobertura." },
+    { id: "i3", nome: "Fresta no Tempo", desc: "Permite agir duas vezes em um turno 'pegando emprestada' uma ação do seu futuro. No próximo turno, perde a ação principal." },
+    { id: "i4", nome: "Prisão de Sonho", desc: "Força um alvo a vivenciar as Leis da Física do Akedonte. O inimigo fica paralisado, mas você sofre dano mental enquanto mantiver o link." },
+    { id: "i5", nome: "Horizontes Estilhaçados", desc: "Transforma a gravidade de uma sala em algo não-euclidiano. Inimigos rolam testes físicos com Desvantagem." },
+    { id: "i6", nome: "Névoa Carmesim", desc: "Transforma seu próprio corpo em névoa escarlate. Ataques físicos atravessam sem causar dano." },
+    { id: "i7", nome: "Adaptação Reativa", desc: "Sempre que sofre dano de uma fonte mística, ganha resistência parcial contra aquele conceito no resto da cena." },
+    { id: "i8", nome: "Rejeição Celular", desc: "Força seu corpo a ejetar venenos e estilhaços. Restaura Vitalidade, mas avança o Relógio de Sombra em 1 Tique." },
+    { id: "i9", nome: "Metabolismo Devorador", desc: "Ao matar uma Máscara, você pode consumir seus restos para restaurar Sanidade e ganhar uma mutação temporária." },
+    { id: "i10", nome: "Sangue Fervente", desc: "Queima pontos máximos de Sanidade para ganhar dados extras em rolagens físicas, ultrapassando o limite." },
+    { id: "i11", nome: "Contrato de Talião", desc: "Impõe uma regra falada no ambiente. Quem quebrar a regra sofre dano de Sanidade massivo, sem defesa." },
+    { id: "i12", nome: "Equação Cármica", desc: "Guarda todo dano sofrido em uma reserva. O seu próximo ataque devolve exatamente o mesmo valor ao agressor." },
+    { id: "i13", nome: "Veto Existencial", desc: "Cancela instantaneamente a ação de um monstro, afirmando que ela 'não é logicamente possível'." },
+    { id: "i14", nome: "Peso Zero", desc: "Um ataque que acerta o inimigo não causa dano na hora; o impacto e a dor acumulam e são liberados apenas 2 rodadas depois." },
+    { id: "i15", nome: "Campo de Igualdade", desc: "Dentro de um raio curto, todas as Vantagens e Desvantagens de aliados e inimigos são anuladas." },
+    { id: "i16", nome: "Plágio", desc: "Permite copiar a Habilidade Inerente de outro investigador temporariamente." },
+    { id: "i17", nome: "Censura Verbal", desc: "Usando Linguística, profere um verbo de ação. O alvo deve resistir ou o efeito se materializa." },
+    { id: "i18", nome: "Reescrita de Identidade", desc: "Ao tocar em um alvo, troca o conceito de 'aliado' e 'inimigo' na cabeça dele por uma rodada." },
+    { id: "i19", nome: "Nota de Rodapé", desc: "Marca objetos com símbolos invisíveis. Pode se teleportar para esse local gastando Fluxo." },
+    { id: "i20", nome: "Glossário de Fraquezas", desc: "Após observar um inimigo, 'nomeia' uma fraqueza que não existia, tornando-a real para o próximo ataque." },
+    { id: "i21", nome: "Fantoche de Engano", desc: "Troca a posição de duas coisas no espaço instantaneamente através de estalos, contanto que possuam peso equivalente." },
+    { id: "i22", nome: "Dado Viciado", desc: "Força uma Desvantagem automática antes de rolar dados. Se passar no teste, o efeito vira um acerto crítico brutal." },
+    { id: "i23", nome: "Roleta", desc: "Toda vez que ataca, tem 50% de chance de causar o dobro de dano, e 50% de tomar o próprio dano." },
+    { id: "i24", nome: "Aposta do Idiota", desc: "Declara ao Mestre que matará um monstro com um golpe. Se acertar, morre. Se falhar, entra em Dissonância." },
+    { id: "i25", nome: "Máscara Social", desc: "Permite roubar a aparência e a voz da última Âncora que um alvo se esqueceu." },
+    { id: "i26", nome: "Vínculo Empático", desc: "Liga sua mente à do alvo. Todo dano mental que você sofre, o alvo sofre igual." },
+    { id: "i27", nome: "Fobia Encarnada", desc: "O inimigo passa a enxergar você como seu 'Predador Natural', sendo incapaz de atacar primeiro." },
+    { id: "i28", nome: "Lágrimas Físicas (Cristalização)", desc: "Emoções de medo se transformam em armas físicas cortantes feitas de vidro opaco." },
+    { id: "i29", nome: "Projeção de Trauma", desc: "Materializa um 'amigo imaginário' monstruoso. Ele luta por você, exigindo o sacrifício de uma memória." },
+    { id: "i30", nome: "Eco de Luto", desc: "Aura passiva que quebra a agressividade. Inimigos precisam gastar esforço triplo para lutar." }
 ];
 
 const constelacoes = [
@@ -163,395 +190,38 @@ const constelacoes = [
 ];
 
 const caminhos = [
-    {
-        id: "morte",
-        nome: "Caminho da Morte",
-        descricao: '"Esta cidade gasta rios de carvão para fingir que o progresso é eterno. Eles esquecem que a engrenagem mais perfeita de todas é aquela que reduz tudo ao pó."',
-        habilidades: `
-            <h4>Grau 1: O Coletor de Cinzas</h4>
-            <p><strong>Toque de Ocaso [Passiva]:</strong> Sempre que manifestar o Dado 1, a quebra psíquica acelera o tempo linear ao seu redor. Ganha a Verdade Oculta e faz uma estrutura inanimada próxima ou Máscara de NP 1 sofrer putrefação instantânea.</p>
-            <p><strong>A Morte Chega para Todos [Passiva]:</strong> Você se torna incapaz de morrer por armas normais. Caso sofra um ataque que seria letal por meios mundanos, você fica apenas desacordado, revivendo com 100% dos seus status após o período de um dia.</p>
-            
-            <h4>Grau 2: A Ceifa Sombria</h4>
-            <p><strong>Colheita [Ativa - Reação]:</strong> Quando uma Máscara menor for derrotada ou elemento de cenário perigoso for desativado, você absorve o último suspiro da ideia. O próximo aliado a agir recebe Vantagem (+1d20) e ignora coberturas ou camuflagens de névoa. Custo: 2 PF + 1d4 pontos de Sanidade.</p>
-            <p><strong>Foice de Tanatus [Ativa]:</strong> Invoca uma foice negra feita de sombras puras. A cada golpe bem-sucedido deferido com esta foice, você recupera 1d4 de vida. Custo: 2 PF.</p>
-        `
-    },
-    {
-        id: "temperanca",
-        nome: "Caminho da Temperança",
-        descricao: '"O Abismo é um ácido que corrói a realidade. Mas até o pior dos ácidos pode ser neutralizado se você souber exatamente quantas gotas de lucidez deve despejar na mistura."',
-        habilidades: `
-            <h4>Grau 1: O Destilador de Choques</h4>
-            <p><strong>Filtro Alquímico [Passiva]:</strong> Ao manifestar o Dado 1, você purifica a reação. Recebe a Verdade Oculta, mas o marcador de Estresse não se instala; vira uma Carga Volátil (use para Vantagem +1d20).</p>
-            <p><strong>Corpo Maleável [Passiva]:</strong> Maestria biológica total sobre seu próprio organismo, tornando-o capaz de transferir livremente ferimentos e traumas físicos de um local para outro em seu próprio corpo.</p>
-            
-            <h4>Grau 2: A Tintura de Calma</h4>
-            <p><strong>Diluição Simbólica [Ativa - Reação]:</strong> Ao sofrer (ou um aliado a até 6 metros sofrer) perda drástica de Vitalidade ou Sanidade, divide o dano total igualmente entre você e o alvo original. Custo: 3 PF + 1d4+2 pontos de Sanidade.</p>
-            <p><strong>Investigando Componentes [Ativa]:</strong> Revela instantaneamente quais são os ingredientes exatos que compõem fluidos, poções ou misturas líquidas. Custo: 2 PF + 1d6 de sanidade.</p>
-        `
-    },
-    {
-        id: "diabo",
-        nome: "Caminho do Diabo",
-        descricao: '"O Grande Antigo nos deu a carne e o ouro para servirem de distração. Eu prefiro usá-los como coleira para os monstros que habitam a sua névoa."',
-        habilidades: `
-            <h4>Grau 1: O Agiota de Almas</h4>
-            <p><strong>Moeda de Troca [Passiva]:</strong> Ao manifestar o Dado 1, prende o Sussurro em um pacto. Recebe a Verdade Oculta e injeta uma "Dívida de Carne" em uma Máscara de NP 1 ou 2: na próxima rodada, ela perde um dado de Oposição ou sangra.</p>
-            <p><strong>Aspecto Demoníaco [Passiva]:</strong> Você manifesta chifres e sua mão esquerda se transforma em uma garra grotesca, capaz de atacar fisicamente como se fosse uma arma média.</p>
-            
-            <h4>Grau 2: O Carcereiro dos Vícios</h4>
-            <p><strong>Percepção de Vícios [Passiva]:</strong> Consegue sentir e identificar com precisão as fixações materiais, desejos mundanos e vícios ocultos de qualquer ser ao seu redor.</p>
-            <p><strong>Vínculo Obsessivo [Ativa]:</strong> Manifesta o conceito de "Dependência". O alvo fica obcecado por um objeto inanimado da cena por 2 rodadas. Custo: 2 PF + 1d8 ponto de Sanidade Atual.</p>
-            <p><strong>Pacto [Ativa]:</strong> Faz um contrato com um ser de Grau inferior. Você recupera Sanidade e o alvo perde Vida, em troca de pequenos milagres. Custo: 3 PF.</p>
-        `
-    },
-    {
-        id: "torre",
-        nome: "Caminho da Torre",
-        descricao: '"Vocês construíram paredes de tijolos e certezas para esquecer o abismo. Eu sou o raio que lembra a esta cidade que tudo o que é sólido foi feito para desabar."',
-        habilidades: `
-            <h4>Grau 1: O Detonador de Fuligem</h4>
-            <p><strong>Expulsão de Ruína [Passiva]:</strong> Sempre que manifestar o Dado 1, gera detonação de fuligem estilhaçando uma Máscara de NP 1 ou obstáculo próximo, concedendo Vantagem (+1d20) aos aliados.</p>
-            <p><strong>Sentido do Caos [Passiva]:</strong> Você prevê quando o Caos está prestes a começar (quando o Relógio de Sombra vai dar seu último tique).</p>
-            
-            <h4>Grau 2: O Raio de Newgate</h4>
-            <p><strong>Choque de Realidade [Ativa]:</strong> Dita um paradoxo a uma Máscara de NP 1 ou 2. Ela fica Atordoada por 1 rodada, perdendo bônus de defesa. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-            <p><strong>A Torre [Ativa]:</strong> Manifesta a estrutura de uma Torre espiritual que força todos os presentes na cena a realizarem um teste de Proeza para não ficarem paralisados. Custo: 3 PF.</p>
-        `
-    },
-    {
-        id: "sonhos",
-        nome: "Caminho do Realizador de Sonhos",
-        descricao: '"Eles trancaram o céu com fumaça de fábrica para que esquecêssemos as estrelas. Mas um sonho verdadeiro não precisa de permissão do maquinista para se tornar real."',
-        habilidades: `
-            <h4>Grau 1: A Centelha de Aspiração</h4>
-            <p><strong>Luz Estreante [Ativa - Reação]:</strong> Quando manifestar o Dado 1, transmita a Verdade Oculta a um aliado a até 6 metros, dando-lhe Vantagem (+1d20) na próxima ação mística. Custo: 2 PF + 1d4 de Sanidade.</p>
-            <p><strong>Centelha de Esperança [Passiva]:</strong> No Estágio II de loucura, sua mente se mantém estável e imune a espasmos destrutivos.</p>
-            
-            <h4>Grau 2: O Poço de Calmaria</h4>
-            <p><strong>Alinhamento de Fluidos [Ativa]:</strong> Projeta névoa luminescente de lavanda. Aliados lá limpam um marcador de Estresse e recebem +2 contra Presença Aterrorizante. Custo: 2 PF + 1d4 de Sanidade.</p>
-            <p><strong>Seu Maior Desejo [Ativa]:</strong> Mostra visualmente o maior desejo do coração de uma pessoa, impedindo-a de enlouquecer na rodada. Custo: 3 PF.</p>
-        `
-    },
-    {
-        id: "lua",
-        nome: "Caminho da Lua",
-        descricao: '"A névoa não esconde as coisas; ela apenas mostra o que você mais teme ver. Na escuridão, a diferença entre um monstro real e a sua própria loucura é apenas uma questão de ângulo."',
-        habilidades: `
-            <h4>Grau 1: O Habitante do Reflexo</h4>
-            <p><strong>Fluidez Lunar [Passiva]:</strong> Quando manifestar o Dado 1, o Mestre revela duas verdades concorrentes e contraditórias que coexistem na sala até que alguém interaja com o elemento.</p>
-            <p><strong>Reflexo de Prata [Ativa]:</strong> Distorce sua posição física usando silhuetas de fumaça. O próximo ataque sofre Desvantagem (-1d20). Custo: 1 PF.</p>
-            
-            <h4>Grau 2: O Véu de Prata</h4>
-            <p><strong>Miragem da Membrana [Ativa]:</strong> Altera a percepção visual de um objeto ou ameaça de NP 1 por 2 rodadas. Pode fazer um perigo parecer inofensivo. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "sol",
-        nome: "Caminho do Sol",
-        descricao: '"A névoa deste mundo é espessa, mas o meu peito carrega o fogo da primeira fornalha do cosmos. Sob a minha luz, até o horror mais profundo é obrigado a projetar uma sombra humana."',
-        habilidades: `
-            <h4>Grau 1: A Centelha Alva</h4>
-            <p><strong>Revelação Incandescente [Passiva]:</strong> Quando gerar o Dado 1, a luz queima a névoa. Você e aliados adjacentes ganham Vantagem (+1d20) em testes de Percepção na rodada.</p>
-            <p><strong>Foco Purificador [Ativa]:</strong> Emite um feixe de luz que causa 1d6 de dano radiante a uma Máscara e expõe sua posição. Custo: 1 PF.</p>
-            
-            <h4>Grau 2: O Prisma de Clareza</h4>
-            <p><strong>Farol da Razão [Ativa - Reação]:</strong> Quando um aliado for alvo de fobia ou ilusão, derrete a mentira mística instantaneamente, restaurando 1d6 de Sanidade. Custo: 2 PF.</p>
-        `
-    },
-    {
-        id: "julgamento",
-        nome: "Caminho do Julgamento",
-        descricao: '"O som da última trombeta não vem dos céus; ele ecoa de dentro do peito daqueles que rasgaram o sudário da ignorância e decidiram acordar."',
-        habilidades: `
-            <h4>Grau 1: O Arauto do Eco</h4>
-            <p><strong>Veredito Prévio [Passiva]:</strong> Sempre que manifestar o Dado 1, ganha a Verdade Oculta e a próxima jogada de ataque de um aliado recebe Vantagem (+1d20).</p>
-            <p><strong>Apelo da Consciência [Ativa]:</strong> Força um NPC ou inimigo racional a confrontar seus pecados, deixando-o pasmo. Custo: 1 PF.</p>
-            
-            <h4>Grau 2: A Sentença de Retorno</h4>
-            <p><strong>Retribuição Axiomática [Ativa - Reação]:</strong> Quando uma Máscara infligir ferimento grave a você ou aliado, o próximo ataque bem-sucedido do grupo causará dano dobrado. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "mundo",
-        nome: "Caminho do Mundo",
-        descricao: '"O Abismo pensa que pode engolir fragmento por fragmento. Ele esquece que a Realidade não é uma colcha de retalhos, mas uma obra perfeita. E eu sou aquele que segura a caneta."',
-        habilidades: `
-            <h4>Grau 1: O Andarilho do Globo</h4>
-            <p><strong>Passo Cosmopolita [Passiva]:</strong> Ignora penalidades de movimento de terrenos difíceis conceituais. Ao manifestar o Dado 1, sua velocidade dobra na rodada.</p>
-            <p><strong>Conexão Telúrica [Ativa]:</strong> Sente as linhas de força de uma sala, revelando passagens secretas ou armadilhas. Custo: 1 PF.</p>
-
-            <h4>Grau 2: A Linha do Horizonte</h4>
-            <p><strong>Expansão de Espaço [Ativa]:</strong> Altera as dimensões da sala por 2 rodadas, afastando ou aproximando distâncias. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "cavalheiro",
-        nome: "Caminho do Cavalheiro",
-        descricao: '"O sangue não corre por pressão, mas porque eu me recuso a esquecer o Conceito de Estar Vivo. Minha vontade é a única física que reconheço aqui dentro."',
-        habilidades: `
-            <h4>Grau 1: O Sentinela da Penumbra</h4>
-            <p><strong>Retórica Vital [Passiva]:</strong> Você e aliados a até 3 metros ignoram o estresse biológico inicial do Plano Espiritual.</p>
-            <p><strong>Espada Vorpal [Ativa]:</strong> Invoca uma espada mística que causa 1d8 de dano de corte. Custo: 1 PF.</p>
-            
-            <h4>Grau 2: A Égide de Lembranças</h4>
-            <p><strong>Escudo da Memória [Ativa - Reação]:</strong> Absorve o impacto mental de um aliado manifestando o Dado 1, salvando-o do Estresse. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "fortuna",
-        nome: "Caminho da Fortuna",
-        descricao: '"A Roda não possui memória. Ela não celebra quem está no topo, nem chora por quem caiu ao fundo; ela apenas continua girando."',
-        habilidades: `
-            <h4>Grau 1: O Aprendiz do Giro</h4>
-            <p><strong>Impulso Entrópico [Passiva]:</strong> Sempre que manifestar o Dado 1, sua próxima ação na mesma cena recebe Vantagem (+1d20).</p>
-            <p><strong>Um Pouco de Sorte [Passiva]:</strong> Caso falhe em uma DT, você pode re-rolar o menor dado até conseguir um número maior que o anterior.</p>
-            
-            <h4>Grau 2: O Ponto de Virada</h4>
-            <p><strong>Inversão Polar [Ativa - Uma vez por Cena]:</strong> Transforma uma Desvantagem (-1d20) aplicada a você ou a um aliado em uma Vantagem (+1d20) de igual valor. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "pioneiro",
-        nome: "Caminho do Pioneiro",
-        descricao: '"Alguém precisa dar o primeiro passo no escuro para que os outros saibam onde pisar. Se o chão sumir, eu invento o próximo centímetro."',
-        habilidades: `
-            <h4>Grau 1: O Batedor da Membrana</h4>
-            <p><strong>Trilha de Fuligem [Passiva]:</strong> Ao realizar o primeiro teste de Navegação por Afinidade na sessão, você recebe Vantagem (+1d20).</p>
-            <p><strong>Recalibrar Foco [Ativa]:</strong> Se o grupo se dispersar, impede que andem em círculos eternamente. Custo: 1 PF + 1d4 de Sanidade Atual.</p>
-            
-            <h4>Grau 2: O Cartógrafo do Caos</h4>
-            <p><strong>Bússola Semântica [Passiva]:</strong> Sempre que rolar o Dado 1, pode abdicar da Verdade Oculta para que o Mestre revele a rota física mais rápida até o objetivo.</p>
-        `
-    },
-    {
-        id: "louco",
-        nome: "Caminho do Louco",
-        descricao: '"Vocês chamam de perda de controle. Eu chamo de parar de fingir que as paredes são de concreto. O abismo é um ótimo lugar para dar um passeio."',
-        habilidades: `
-            <h4>Grau 1: O Passo Inconsequente</h4>
-            <p><strong>Ignorância Sagrada [Passiva]:</strong> Na primeira vez que manifestar o Dado 1 em uma cena, perde Sanidade, mas não recebe o marcador de Estresse Akedôntico.</p>
-            
-            <h4>Grau 2: Desrazão Guiada</h4>
-            <p><strong>Sorte dos Desesperados [Passiva]:</strong> Se obtiver um sucesso rolando sob Desvantagem, transforma em ação espetacular. O Mestre avança 1 Tique Oculto no Relógio de Sombra.</p>
-        `
-    },
-    {
-        id: "mago",
-        nome: "Caminho do Mago",
-        descricao: '"Assim como em cima, é embaixo. Se a realidade mundana é uma mentira bem contada, eu escolho ser o narrador."',
-        habilidades: `
-            <h4>Grau 1: O Ilusionista da Membrana</h4>
-            <p><strong>Vontade Concreta [Ativa]:</strong> Materializa uma ideia simples em forma de luz sólida e branca por 1 rodada. Custo: 2 PF + 2d4 de Sanidade Atual.</p>
-            
-            <h4>Grau 2: O Canalizador do Verbo</h4>
-            <p><strong>Alquimia Verbal [Ativa - Uma vez por Cena]:</strong> Teste de Cognição ou Percepção (DT 18) para arrancar uma Verdade Oculta do cenário. Custo: 2 PF.</p>
-            <p><strong>Mestre das Palavras [Ativa]:</strong> Permite misturar e imbuir conceitos no mundo ao redor (ex: Pistola + Água = Pistola de Água). Custo: 2 PF por mistura.</p>
-        `
-    },
-    {
-        id: "sacerdotisa",
-        nome: "Caminho da Sacerdotisa",
-        descricao: '"A verdade não grita na fumaça das chaminés; ela sussurra no silêncio dos espelhos cobertos de veludo. Para ouvir o cosmos, você precisa primeiro calar o mundo."',
-        habilidades: `
-            <h4>Grau 1: A Ouvinte do Silêncio</h4>
-            <p><strong>Intuição Velada [Passiva]:</strong> Se não realizar ação barulhenta por uma rodada, ganha Vantagem (+1d20) no próximo teste de Percepção ou Cognição.</p>
-            <p><strong>Aura de Cura [Ativa]:</strong> Manifesta uma aura na mão que recupera 2d6 de vida. Custo: 2 PF + 1d4 de Sanidade.</p>
-            <p><strong>Detecção de Mentiras [Ativa]:</strong> Discernimento instantâneo da verdade. Custo: 1 PF + 1d4+1 de dano mental.</p>
-            
-            <h4>Grau 2: A Cortina de Veludo</h4>
-            <p><strong>Ocultamento [Ativa]:</strong> Manipula o conceito de presença do grupo, ignorando totalmente a percepção passiva de Máscaras de NP 1 ou 2. Custo: 2 PF + 1d4 de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "imperatriz",
-        nome: "Caminho da Imperatriz",
-        descricao: '"A névoa obedece a quem dita as ordens. O Avesso pode ser um monarca caótico, mas eu sou a dona do berço."',
-        habilidades: `
-            <h4>Grau 1: A Matriarca da Névoa</h4>
-            <p><strong>Concepção Espontânea [Ativa Reação]:</strong> Quando manifestar o Dado 1, a Verdade Oculta se materializa instantaneamente como um recurso físico abundante. Custo: 2 PF + 2d4 de Sanidade.</p>
-            <p><strong>Onisciência de uma Imperatriz [Passiva]:</strong> Sabe exatamente onde estão e o que fazem todos os seus Súditos.</p>
-            
-            <h4>Grau 2: O Decreto Soberano</h4>
-            <p><strong>Majestade Opressora [Passiva]:</strong> Ganha Vantagem (+1d20) para comandar NPCs humanos. Máscaras de NP 1 são incapazes de atacar você voluntariamente na primeira rodada.</p>
-            <p><strong>Eu Ordeno [Ativa]:</strong> Dá ordem simples a entidade de até NP 1 ou Grau 2. O alvo deve resistir à DT=12+Influência. Custo: 2 PF.</p>
-        `
-    },
-    {
-        id: "imperador",
-        nome: "Caminho do Imperador",
-        descricao: '"O Caos exige um nome; o Avesso exige uma jaula. Se a realidade está rachando, eu reforçarei os pregos."',
-        habilidades: `
-            <h4>Grau 1: O Construtor do Ferro</h4>
-            <p><strong>Estrutura de Contenção [Ativa - Reação]:</strong> Quando rolar o Dado 1 e o cenário tentar se deformar, a fuligem se solidifica em uma parede de ferro. Custo: 1 PF + 1d4 pontos de Sanidade.</p>
-            <p><strong>Cetro do Rei [Passiva]:</strong> Manifesta um cetro que serve como símbolo de poder e arma (causa 2d4 de dano).</p>
-            
-            <h4>Grau 2: O Decreto de Custódia</h4>
-            <p><strong>Grilhões de Linha [Ativa]:</strong> Injeta o conceito de "Estar Preso" em uma Máscara de NP 1. Você dita restrição geométrica por 2 rodadas. Custo: 2 PF + 1d6 pontos de Sanidade.</p>
-        `
-    },
-    {
-        id: "estudioso",
-        nome: "Caminho do Estudioso",
-        descricao: '"O Avesso não é o caos; é apenas uma língua antiga cuja gramática vocês se recusam a estudar. Até a loucura obedece a uma sintaxe."',
-        habilidades: `
-            <h4>Grau 1: O Exegeta da Névoa</h4>
-            <p><strong>Lição Compartilhada [Ativa - Reação]:</strong> Ao gerar o Dado 1, absorve o Estresse, mas concede Vantagem (+1d20) na próxima ação de um aliado. Custo: 1 PF + 1d4 pontos de Sanidade.</p>
-            <p><strong>Estudioso Sem Fundo [Passiva]:</strong> Capacidade de armazenar conhecimentos. Ao atingir o Grau 3, permite adquirir habilidade de Grau 1 de outro caminho.</p>
-            
-            <h4>Grau 2: O Dogma da Contenção</h4>
-            <p><strong>Tese Ortodoxa [Ativa]:</strong> Recita regra taxonômica sobre Máscara de NP 1 impedindo-a de usar Vantagem na Oposição. Custo: 2 PF + 1d6 de Sanidade Atual.</p>
-            <p><strong>Forçando o Conhecimento [Ativa]:</strong> Permite utilizar uma habilidade de Grau 1 de um de seus aliados. Custo: 3 PF + 2d6 de sanidade.</p>
-        `
-    },
-    {
-        id: "romance",
-        nome: "Caminho do Romance",
-        descricao: '"A engrenagem desta cidade quer nos transformar em números isolados. Mas enquanto eu lembrar do seu nome, o Avesso não poderá reescrever o meu."',
-        habilidades: `
-            <h4>Grau 1: O Eco da Afinidade</h4>
-            <p><strong>Almas Gêmeas [Passiva]:</strong> No início da sessão, escolha um aliado para ser seu Par.</p>
-            <p><strong>Dividir o Fardo [Ativa - Reação]:</strong> Quando seu Par rolar o Dado 1 e sofrer Estresse, você puxa metade do estresse dele para si. Ambos ganham a Verdade. Custo: 1 PF + 1d6 ponto de Sanidade.</p>
-            
-            <h4>Grau 2: A Encruzilhada de Névoa</h4>
-            <p><strong>O Peso da Escolha [Ativa]:</strong> Diante de bifurcação, força o Mestre a revelar a opção com menos atrito no Relógio. Custo: 2 PF + 1d4 pontos de Sanidade Atual.</p>
-            <p><strong>Troca de Lugar [Ativa - Reação]:</strong> Permite trocar de posição física instantaneamente com seu par. Custo: 2 PF.</p>
-        `
-    },
-    {
-        id: "carro",
-        nome: "Caminho do Carro",
-        descricao: '"Se não há uma estrada pavimentada através do Abismo, nós abriremos uma na marreta e na velocidade. Nada freia uma mente que sabe exatamente para onde está indo."',
-        habilidades: `
-            <h4>Grau 1: O Mestre da Arrancada</h4>
-            <p><strong>Vetor Inabalável [Passiva]:</strong> Em perseguições, fugas ou investidas na Membrana, você recebe Vantagem (+1d20) em Proeza ou Navegação por Afinidade. Se gerar o Dado 1, converte o sussurro em adrenalina: ganha a Verdade Oculta e ignora terrenos difíceis na rodada.</p>
-            
-            <h4>Grau 2: As Rédeas de Ferro</h4>
-            <p><strong>Tração Concorrente [Ativa]:</strong> Por 2 rodadas, sempre que o cenário tentar se mover ou mudar por Leis Akedônticas, você escolhe a direção exata da mudança, dando "carona" ao grupo. Custo: 2 PF + 1d4 pontos de Sanidade Atual.</p>
-            <p><strong>Positivo e Negativo [Ativa]:</strong> Adiciona polos magnéticos a até dois objetos/seres. Custo: 2 PF.</p>
-        `
-    },
-    {
-        id: "forca",
-        nome: "Caminho da Força",
-        descricao: '"A névoa esconde dentes, garras e fome. Eles acham que são os predadores desta cidade, mas esqueceram que fomos nós que inventamos as correntes e o chicote."',
-        habilidades: `
-            <h4>Grau 1: O Vetor da Teimosia</h4>
-            <p><strong>Dor Convertida [Passiva]:</strong> Sempre que manifestar o Dado 1 e sofrer Estresse Akedôntico, reativamente ganha Vantagem (+1d20) em qualquer teste de Proeza ou salvaguarda física realizado até o fim da rodada.</p>
-            <p><strong>Vigor Firme [Passiva]:</strong> Você adquire permanentemente +1 em Proeza e +10 de Vida Máxima.</p>
-            
-            <h4>Grau 2: A Couraça de Fuligem</h4>
-            <p><strong>Tolerância Industrial [Ativa - Reação]:</strong> Ao sofrer dano físico direto de uma Máscara ou colapso, reduz o dano de Vitalidade recebido pela metade. Custo: 2 PF + 1d6 pontos de Sanidade.</p>
-            <p><strong>Minha Mente também é Forte [Ativa - Reação]:</strong> Permite queimar sua própria vitalidade para blindar a mente, reduzindo o dano de presença das criaturas pela metade. Custo: 2 PF + 3d6 de Vida.</p>
-        `
-    },
-    {
-        id: "eremita",
-        nome: "Caminho do Eremita",
-        descricao: '"A névoa engole os que andam em bando procurando aprovação. No fundo do Abismo, a única luz que importa é aquela que você acende dentro de sua própria mente."',
-        habilidades: `
-            <h4>Grau 1: O Portador da Lanterna</h4>
-            <p><strong>Lanterna de Querosene [Passiva]:</strong> Você recebe uma lanterna retorcida e estranha que serve de canalizador (item inicial).</p>
-            <p><strong>Claridade Solitária [Ativa - Reação]:</strong> Quando você ou um aliado a até 3 metros rolar o Dado 1, emite um estalo de luz branca que limpa o marcador de Estresse. Custo: 2 PF + 1d4 pontos de Sanidade.</p>
-            <p><strong>Lanterna Espanta Males [Ativa]:</strong> Usa a luz focada da lanterna para acalmar as mentes do grupo, recuperando 3d4 de Sanidade para os aliados presentes. Custo: 3 PF.</p>
-            
-            <h4>Grau 2: O Manto de Solitude</h4>
-            <p><strong>Isolamento Semântico [Ativa]:</strong> Puxa sua identidade para a periferia conceitual da sala por 2 rodadas. Você não pode ser alvo de habilidades ou ataques diretos de Máscaras de NP 1 ou 2. Custo: 2 PF + 1d4 ponto de Sanidade Atual.</p>
-        `
-    },
-    {
-        id: "justica",
-        nome: "Caminho da Justiça",
-        descricao: '"O Avesso violou a propriedade da carne e distorceu o nome das coisas. Minha balança não mede ouro ou intenções; ela mede o crime de existir fora da Realidade."',
-        habilidades: `
-            <h4>Grau 1: O Meirinho</h4>
-            <p><strong>Lei da Reciprocidade [Ativa - Reação]:</strong> Ao manifestar o Dado 1 e receber Estresse Akedôntico, projeta a culpa: uma Máscara de NP 1 ou 2 em linha de visão sofre -1d20 em sua próxima Oposição. Custo: 2 PF + 1d6 ponto de Sanidade Atual.</p>
-            <p><strong>Sem Mentiras [Passiva]:</strong> Você se torna incapaz de mentir. Se descobrir a mentira de alguém, pode usar uma reação ativa para lançar uma maldição de desvantagem no mentiroso.</p>
-            
-            <h4>Grau 2: A Balança de Carvão</h4>
-            <p><strong>Olho por Olho [Ativa]:</strong> Quando um aliado a até 6 metros sofrer dano de uma Máscara, marca a criatura como "Inadimplente". O próximo ataque do grupo ganha Vantagem (+1d20). Custo: 3 PF + 1d8 pontos de Sanidade.</p>
-        `
-    },
-    {
-        id: "enforcado",
-        nome: "Caminho do Enforcado",
-        descricao: '"Vocês chamam de derrota porque eu parei de andar. Mas quando você aceita o peso da corda, percebe que o chão que vocês pisam é apenas o teto de um abismo muito maior."',
-        habilidades: `
-            <h4>Grau 1: O Olhar Invertido</h4>
-            <p><strong>Claridade Estática [Passiva]:</strong> Ao manifestar o Dado 1, você pode optar por imobilizar voluntariamente seu corpo até seu próximo turno. O estresse é amortecido e o Mestre entrega duas Verdades Ocultas em vez de uma.</p>
-            <p><strong>A Verdade está no Sofrimento [Ativa]:</strong> Permite rever uma cena específica do passado materializada no ambiente em líquido vermelho. Custo: 2 PF + 2d6 de Vida.</p>
-            
-            <h4>Grau 2: O Laço de Procura</h4>
-            <p><strong>Martírio Substitutivo [Ativa - Reação]:</strong> Quando um aliado a até 6 metros falhar em uma Resistência ao Absurdo, você assume o fardo por ele, absorvendo toda a perda mental. Custo: 2 PF + 1d6 ponto de Sanidade.</p>
-        `
-    }
+    { id: 'cam1', nome: "Caminho do Cavalheiro", descricao: "O sangue não corre por pressão, mas porque eu me recuso a esquecer o Conceito de Estar Vivo.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Retórica Vital, Espada Vorpal.</p><p><strong>2:</strong> Escudo da Memória.</p><p><strong>3:</strong> Controle de Lâminas, O Corte é só um Conceito.</p><p><strong>4:</strong> Postura Inabalável, Minha Espada é minha Companheira.</p><p><strong>5:</strong> Âncora de Almas.</p><p><strong>6:</strong> Imposição de Realidade.</p><p><strong>7:</strong> Sacrifício do Campeão.</p>" },
+    { id: 'cam2', nome: "Caminho da Fortuna", descricao: "A Roda não possui memória. Ela não celebra quem está no topo, nem chora por quem caiu ao fundo.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Impulso Entrópico, Um Pouco de Sorte.</p><p><strong>2:</strong> Inversão Polar.</p><p><strong>3:</strong> Triunfo Efêmero.</p><p><strong>4:</strong> Clareza do Abismo, Só Morro por Azar.</p><p><strong>5:</strong> Sincronia Cíclica.</p><p><strong>6:</strong> Trapaça Dimensional.</p><p><strong>7:</strong> Reinicialização do Destino, Benção da Roda.</p>" },
+    { id: 'cam3', nome: "Caminho do Pioneiro", descricao: "Alguém precisa dar o primeiro passo no escuro para que os outros saibam onde pisar.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Trilha de Fuligem, Recalibrar Foco.</p><p><strong>2:</strong> Bússola Semântica.</p><p><strong>3:</strong> Escudo de Vanguarda.</p><p><strong>4:</strong> Rota de Fuga Crítica.</p><p><strong>5:</strong> Acampamento Conceitual.</p><p><strong>6:</strong> Arrombamento da Membrana.</p><p><strong>7:</strong> Conquista Territorial.</p>" },
+    { id: 'cam4', nome: "Caminho do Louco", descricao: "Vocês chamam de perda de controle. Eu chamo de parar de fingir que as paredes são de concreto.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Ignorância Sagrada.</p><p><strong>2:</strong> Sorte dos Desesperados.</p><p><strong>3:</strong> Imprevisibilidade Absoluta.</p><p><strong>4:</strong> Milagre Cacofônico.</p><p><strong>5:</strong> Palavra Absurda.</p><p><strong>6:</strong> Êxtase de Sombra.</p><p><strong>7:</strong> Mentira Cósmica.</p>" },
+    { id: 'cam5', nome: "Caminho do Mago", descricao: "Se a realidade mundana é uma mentira bem contada, eu escolho ser o narrador.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Vontade Concreta.</p><p><strong>2:</strong> Alquimia Verbal, Mestre das Palavras.</p><p><strong>3:</strong> Elo Espiritual.</p><p><strong>4:</strong> Projeção Sintática, Minha Palavra tem Poder.</p><p><strong>5:</strong> Substituição Axiomática.</p><p><strong>6:</strong> Redescrição Semântica.</p><p><strong>7:</strong> Decreto Primordial, Sapiência Concorrente.</p>" },
+    { id: 'cam6', nome: "Caminho da Sacerdotisa", descricao: "A verdade não grita; ela sussurra. Para ouvir o cosmos, você precisa calar o mundo.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Intuição Velada, Aura de Cura, Detecção de Mentiras.</p><p><strong>2:</strong> Ocultamento.</p><p><strong>3:</strong> Psicometria Hermética.</p><p><strong>4:</strong> Reflexo do Avesso, Guardar Segredo.</p><p><strong>5:</strong> Santuário Enclausurado.</p><p><strong>6:</strong> Selo da Membrana.</p><p><strong>7:</strong> Censura Cósmica.</p>" },
+    { id: 'cam7', nome: "Caminho da Imperatriz", descricao: "A névoa obedece a quem dita as ordens. O Avesso pode ser um monarca caótico, mas eu sou a dona do berço.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Concepção Espontânea, Onisciência de uma Imperatriz.</p><p><strong>2:</strong> Majestade Opressora, Eu Ordeno.</p><p><strong>3:</strong> Proliferação do Verbo.</p><p><strong>4:</strong> Parto do Absurdo, Transformação em Névoa.</p><p><strong>5:</strong> Domínio Territorial.</p><p><strong>6:</strong> Nutrição Sombria, Meus Súditos.</p><p><strong>7:</strong> Gênese Soberana, Eu sou a Única Rainha aqui.</p>" },
+    { id: 'cam8', nome: "Caminho do Imperador", descricao: "O Caos exige um nome; o Avesso exige uma jaula. Eu reforçarei os pregos.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Estrutura de Contenção, Cetro do Rei.</p><p><strong>2:</strong> Grilhões de Linha.</p><p><strong>3:</strong> Autoridade de Vanguarda.</p><p><strong>4:</strong> Blindagem Autocrática, Olhem para Mim.</p><p><strong>5:</strong> Supressão de Mito.</p><p><strong>6:</strong> Intervenção, Recusa.</p><p><strong>7:</strong> Lei Marcial Cósmica.</p>" },
+    { id: 'cam9', nome: "Caminho do Estudioso", descricao: "O Avesso não é o caos; é uma língua cuja gramática vocês se recusam a estudar.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Lição Compartilhada, Estudioso Sem Fundo.</p><p><strong>2:</strong> Tese Ortodoxa, Forçando o Conhecimento.</p><p><strong>3:</strong> Escolástica Protetora, Novos Saberes.</p><p><strong>4:</strong> Epifania Herética, A Loucura também é Sã.</p><p><strong>5:</strong> Hermenêutica da Máscara.</p><p><strong>6:</strong> Precedente Semântico.</p><p><strong>7:</strong> Enciclopédia do Oco.</p>" },
+    { id: 'cam10', nome: "Caminho do Romance", descricao: "A engrenagem quer nos isolar. Mas enquanto eu lembrar do seu nome, o Avesso não poderá reescrever o meu.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Almas Gêmeas, Dividir o Fardo.</p><p><strong>2:</strong> O Peso da Escolha, Troca de Lugar.</p><p><strong>3:</strong> Ressonância Vital, A Força do Amor.</p><p><strong>4:</strong> Ciúmes, Obsessão.</p><p><strong>5:</strong> Ação Conjugada, Fusão.</p><p><strong>6:</strong> Ruptura de Elo.</p><p><strong>7:</strong> Devotamento Absoluto.</p>" },
+    { id: 'cam11', nome: "Caminho do Carro", descricao: "Se não há estrada através do Abismo, nós abriremos uma na marreta e na velocidade.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Vetor Inabalável.</p><p><strong>2:</strong> Tração Concorrente, Positivo e Negativo.</p><p><strong>3:</strong> Impacto Cinético, Eu sou uma Máquina.</p><p><strong>4:</strong> Avanço Cego.</p><p><strong>5:</strong> Comboio de Almas.</p><p><strong>6:</strong> Forçar Passagem.</p><p><strong>7:</strong> Carga Absoluta.</p>" },
+    { id: 'cam12', nome: "Caminho da Força", descricao: "Eles acham que são os predadores desta cidade, mas esqueceram quem inventou as correntes.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Dor Convertida, Vigor Firme.</p><p><strong>2:</strong> Tolerância Industrial, Minha Mente também é Forte.</p><p><strong>3:</strong> Submissão Semântica.</p><p><strong>4:</strong> Predador do Beco.</p><p><strong>5:</strong> Aura Indomável, Aura de Respeito.</p><p><strong>6:</strong> Amarra de Carne e Verbo.</p><p><strong>7:</strong> Dominação Absoluta, Eu sou a Guerra e o Sangue.</p>" },
+    { id: 'cam13', nome: "Caminho do Eremita", descricao: "No fundo do Abismo, a única luz que importa é aquela que você acende dentro da sua própria mente.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Lanterna de Querosene, Claridade Solitária, Lanterna Espanta Males.</p><p><strong>2:</strong> Isolamento Semântico.</p><p><strong>3:</strong> Dissipar a Névoa, Atrair / Cegar.</p><p><strong>4:</strong> Cérebro de Pedra, Substituição.</p><p><strong>5:</strong> Paciência do Monge.</p><p><strong>6:</strong> Farol da Vanguarda.</p><p><strong>7:</strong> Clausura Absoluta.</p>" },
+    { id: 'cam14', nome: "Caminho da Justiça", descricao: "Minha balança não mede ouro; ela mede o crime de existir fora da Realidade.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Lei da Reciprocidade, Sem Mentiras.</p><p><strong>2:</strong> Olho por Olho.</p><p><strong>3:</strong> Veredito de Contenção, Ferramentas Jurídicas.</p><p><strong>4:</strong> Cegueira Judicial.</p><p><strong>5:</strong> Cláusula de Retaliação, Tribunal.</p><p><strong>6:</strong> Fiança, No Caminho Certo.</p><p><strong>7:</strong> Sentença Executória, Eu sou a Justiça.</p>" },
+    { id: 'cam15', nome: "Caminho do Enforcado", descricao: "Quando você aceita o peso da corda, percebe que o chão é apenas o teto de um abismo maior.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Claridade Estática, A Verdade está no Sofrimento.</p><p><strong>2:</strong> Martírio Substitutivo.</p><p><strong>3:</strong> Aura de Chumbo, O Pendurado.</p><p><strong>4:</strong> Visão do Outro Lado.</p><p><strong>5:</strong> Armadilha de Cânhamo.</p><p><strong>6:</strong> Marionetes Místicas, Ponto de Vista.</p><p><strong>7:</strong> Sacrifício do Redentor, O Enforcado.</p>" },
+    { id: 'cam16', nome: "Caminho da Morte", descricao: "A engrenagem mais perfeita de todas é aquela que reduz tudo ao pó.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Toque de Ocaso, A Morte Chega para Todos.</p><p><strong>2:</strong> Colheita, Foice de Tanatus.</p><p><strong>3:</strong> Necrose, Corpo de Sombras.</p><p><strong>4:</strong> Necrotório.</p><p><strong>5:</strong> Amputação, Controle de Mortalidade.</p><p><strong>6:</strong> Sentença de Finitude.</p><p><strong>7:</strong> Decreto de Extinção, Corpo da Morte.</p>" },
+    { id: 'cam17', nome: "Caminho da Temperança", descricao: "Até o pior dos ácidos pode ser neutralizado se souber despejar lucidez na mistura.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Filtro Alquímico, Corpo Maleável.</p><p><strong>2:</strong> Diluição Simbólica, Investigando Componentes.</p><p><strong>3:</strong> Transmutação Reativa, Tramitação de Energias.</p><p><strong>4:</strong> Escoamento Psíquico, Controlador de Fórmulas.</p><p><strong>5:</strong> Harmonização das Fontes.</p><p><strong>6:</strong> Retardo Volumétrico, Local Seguro.</p><p><strong>7:</strong> Ascensão Impura, Diluição Absoluta.</p>" },
+    { id: 'cam18', nome: "Caminho do Diabo", descricao: "Eu prefiro usar o ouro e a carne como coleira para os monstros da névoa.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Moeda de Troca, Aspecto Demoníaco.</p><p><strong>2:</strong> Percepção de Vícios, Vínculo Obsessivo, Pacto.</p><p><strong>3:</strong> Contrato Leonino, Atacar pelas Costas.</p><p><strong>4:</strong> Anatomia Possessiva, Diabretes.</p><p><strong>5:</strong> Indução ao Delírio, Indução à Luxúria.</p><p><strong>6:</strong> Suborno.</p><p><strong>7:</strong> Pacto de Subjugação, Encarnação do Desejo.</p>" },
+    { id: 'cam19', nome: "Caminho da Torre", descricao: "Eu sou o raio que lembra a esta cidade que tudo o que é sólido foi feito para desabar.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Expulsão de Ruína, Sentido do Caos.</p><p><strong>2:</strong> Choque de Realidade, A Torre.</p><p><strong>3:</strong> Demolição Arquitetônica.</p><p><strong>4:</strong> Mente em Escombros.</p><p><strong>5:</strong> Desconstrução do Verbo.</p><p><strong>6:</strong> Sabotagem, Mergulho no Caos.</p><p><strong>7:</strong> Cataclismo Absoluto.</p>" },
+    { id: 'cam20', nome: "Caminho do Realizador de Sonhos", descricao: "Um sonho verdadeiro não precisa de permissão para se tornar real.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Luz Estreante, Centelha de Esperança.</p><p><strong>2:</strong> Alinhamento de Fluidos, Seu Maior Desejo.</p><p><strong>3:</strong> Revelação Sideral, Olhem para Aquilo.</p><p><strong>4:</strong> Mente em Florescência.</p><p><strong>5:</strong> Cúpula Onírica, Cúpula de Proteção.</p><p><strong>6:</strong> Aspiração Impenetrável.</p><p><strong>7:</strong> Utopia Concretizada, O Tecedor de Estrelas.</p>" },
+    { id: 'cam21', nome: "Caminho da Lua", descricao: "A névoa apenas mostra o que você mais teme ver.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Fluidez Lunar, Reflexo de Prata.</p><p><strong>2:</strong> Miragem da Membrana.</p><p><strong>3:</strong> Projeção do Subconsciente.</p><p><strong>4:</strong> Mente Lunar, Instabilidade Biológica.</p><p><strong>5:</strong> Alucinação Coletiva.</p><p><strong>6:</strong> Apagão Conceitual.</p><p><strong>7:</strong> Colapso do Reflexo.</p>" },
+    { id: 'cam22', nome: "Caminho do Sol", descricao: "Sob a minha luz, até o horror mais profundo é obrigado a projetar uma sombra humana.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Revelação Incandescente, Foco Purificador.</p><p><strong>2:</strong> Farol da Razão.</p><p><strong>3:</strong> Calor Industrial.</p><p><strong>4:</strong> Presença Ofuscante.</p><p><strong>5:</strong> Expulsão do Avesso.</p><p><strong>6:</strong> Combustão Semântica.</p><p><strong>7:</strong> Supernova Conceitual.</p>" },
+    { id: 'cam23', nome: "Caminho do Julgamento", descricao: "O som da trombeta ecoa de dentro do peito daqueles que decidiram acordar.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Veredito Prévio, Apelo da Consciência.</p><p><strong>2:</strong> Retribuição Axiomática.</p><p><strong>3:</strong> Vocação Desperta.</p><p><strong>4:</strong> Tribunal da Mente.</p><p><strong>5:</strong> Ressurreição Semântica.</p><p><strong>6:</strong> Balança Final.</p><p><strong>7:</strong> Apocalipse das Máscaras.</p>" },
+    { id: 'cam24', nome: "Caminho do Mundo", descricao: "A Realidade não é uma colcha de retalhos, mas uma obra perfeita. E eu seguro a caneta.", habilidades: "<h4>Graus</h4><p><strong>1:</strong> Passo Cosmopolita, Conexão Telúrica.</p><p><strong>2:</strong> Expansão de Espaço.</p><p><strong>3:</strong> Totalidade de Saberes.</p><p><strong>4:</strong> Unidade com o Todo.</p><p><strong>5:</strong> Geometria Perfeita.</p><p><strong>6:</strong> Harmonia Absoluta.</p><p><strong>7:</strong> Conclusão da Jornada.</p>" }
 ];
 
 // ===============================================
-// LÓGICA DE NAVEGAÇÃO E VALIDAÇÃO
-// ===============================================
-function updateWizard() {
-    document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
-
-    const etapaAtual = document.getElementById(`step${currentStep}`);
-    if (etapaAtual) etapaAtual.classList.add('active');
-    
-    const progresso = (currentStep / totalSteps) * 100;
-    document.querySelector('.progress-bar').style.setProperty('--progress-width', `${progresso}%`);
-    document.getElementById('stepTitle').innerText = stepTitles[currentStep - 1];
-
-    btnPrev.disabled = (currentStep === 1);
-    
-    if (currentStep === totalSteps) {
-        btnNext.style.display = 'none'; // Esconde o botão Próximo na última tela
-        gerarResumo(); 
-    } else {
-        btnNext.style.display = 'block';
-        btnNext.innerText = "Próximo Passo";
-    }
-}
-
-function validarEtapaAtual() {
-    if (currentStep === 1) {
-        const nome = document.getElementById('charName').value.trim();
-        if (!nome) {
-            alert("Por favor, preencha o nome do personagem.");
-            return false;
-        }
-    }
-    if (currentStep === 3) {
-        const pontosUsados = calcularPontosUsados();
-        if (pontosUsados > TOTAL_ATTR_POINTS) {
-            alert(`Você distribuiu ${pontosUsados} pontos. O máximo permitido é ${TOTAL_ATTR_POINTS}.`);
-            return false;
-        }
-    }
-    return true;
-}
-
-btnNext.addEventListener('click', () => {
-    if (!validarEtapaAtual()) return;
-    
-    if (currentStep < totalSteps) { 
-        currentStep++; 
-        updateWizard(); 
-    }
-});
-
-btnPrev.addEventListener('click', () => {
-    if (currentStep > 1) {
-        currentStep--;
-        updateWizard();
-    }
-});
-
-// ===============================================
-// SELEÇÃO DE GRIDS
+// SELEÇÃO DE GRIDS E EVENTOS
 // ===============================================
 function criarSelecao(lista, gridId, panelId, updatePanelFn) {
     const grid = document.getElementById(gridId);
-    if (!grid) return;
+    if (!grid || !Array.isArray(lista)) return;
     grid.innerHTML = '';
     lista.forEach(item => {
         const div = document.createElement('div');
@@ -578,7 +248,11 @@ criarSelecao(ocupacoes, 'jobGrid', 'jobDetails', (job) => {
     document.getElementById('jobAbs').innerText = job.abs;
 });
 
-// Atualizado para receber os dados complexos dos caminhos (lore + habilidades)
+criarSelecao(habilidadesInatas, 'innateGrid', 'innateDetails', (hab) => {
+    document.getElementById('innateName').innerText = hab.nome;
+    document.getElementById('innateDesc').innerText = hab.desc;
+});
+
 criarSelecao(caminhos, 'pathGrid', 'pathDetails', (cam) => {
     document.getElementById('pathName').innerText = cam.nome;
     document.getElementById('pathLore').innerHTML = `<em>${cam.descricao}</em>`;
@@ -603,7 +277,7 @@ if (constGrid) {
 }
 
 // ===============================================
-// CÁLCULO DE ATRIBUTOS E DERIVADOS (OFICIAL)
+// CÁLCULO DE ATRIBUTOS E DERIVADOS
 // ===============================================
 const attrs = document.querySelectorAll('.attr-input');
 attrs.forEach(input => input.addEventListener('input', () => {
@@ -636,9 +310,9 @@ function validarLimitesAtributos(inputAtual) {
 }
 
 function calcularSecundarios() {
-    const pro = parseInt(document.getElementById('attrProeza').value) || 1;
-    const cog = parseInt(document.getElementById('attrCognicao').value) || 1;
-    const anc = parseInt(document.getElementById('attrAncora').value) || 1;
+    const pro = parseInt(document.getElementById('attrProeza')?.value) || 1;
+    const cog = parseInt(document.getElementById('attrCognicao')?.value) || 1;
+    const anc = parseInt(document.getElementById('attrAncora')?.value) || 1;
     const grau = 1;
 
     const vit = 10 + (pro * 5);
@@ -647,10 +321,10 @@ function calcularSecundarios() {
     const slots = 3 + pro;
     const maxSkills = 2 + cog;
 
-    document.getElementById('statVit').innerText = vit; 
-    document.getElementById('statSan').innerText = san; 
-    document.getElementById('statFlux').innerText = flux; 
-    document.getElementById('statSlots').innerText = slots;
+    if (document.getElementById('statVit')) document.getElementById('statVit').innerText = vit; 
+    if (document.getElementById('statSan')) document.getElementById('statSan').innerText = san; 
+    if (document.getElementById('statFlux')) document.getElementById('statFlux').innerText = flux; 
+    if (document.getElementById('statSlots')) document.getElementById('statSlots').innerText = slots;
     
     const maxSkillsSpan = document.getElementById('maxSkillsNum');
     if (maxSkillsSpan) maxSkillsSpan.innerText = maxSkills;
@@ -663,13 +337,6 @@ function calcularSecundarios() {
 // ===============================================
 function atualizarTravaPericias(maxPermitido) {
     const skillCbs = document.querySelectorAll('.skill-cb');
-    const marcadas = document.querySelectorAll('.skill-cb:checked');
-
-    if (marcadas.length > maxPermitido) {
-        skillCbs.forEach(cb => cb.checked = false);
-        alert(`O limite de perícias mudou para ${maxPermitido} com base na sua Cognição. Suas escolhas foram resetadas.`);
-    }
-
     skillCbs.forEach(cb => {
         cb.onclick = () => {
             const atuais = document.querySelectorAll('.skill-cb:checked').length;
@@ -694,8 +361,8 @@ if (campoArquivo) {
         if (foto) {
             const leitor = new FileReader();
             leitor.onload = function(e) {
-                campoInvisivelTexto.value = e.target.result;
-                areaVisualizacao.innerHTML = `<img src="${e.target.result}" style="max-width:120px; max-height:120px; border-radius:8px; border:2px solid var(--accent-purple);">`;
+                if (campoInvisivelTexto) campoInvisivelTexto.value = e.target.result;
+                if (areaVisualizacao) areaVisualizacao.innerHTML = `<img src="${e.target.result}" style="max-width:120px; max-height:120px; border-radius:8px; border:2px solid var(--accent-purple);">`;
             };
             leitor.readAsDataURL(foto);
         }
@@ -706,17 +373,18 @@ if (campoArquivo) {
 // RESUMO FINAL E EXPORTAÇÃO
 // ===============================================
 function gerarResumo() {
-    const nome = document.getElementById('charName').value || "Desconhecido";
+    const nome = document.getElementById('charName')?.value || "Desconhecido";
     const racaSelected = document.querySelector('#raceGrid .selected');
     const jobSelected = document.querySelector('#jobGrid .selected');
+    const innateSelected = document.querySelector('#innateGrid .selected');
     const pathSelected = document.querySelector('#pathGrid .selected');
     const constSelected = document.querySelector('.constellation-card.selected h4');
-    const imgBase64 = document.getElementById('charImageBase64').value;
+    const imgBase64 = document.getElementById('charImageBase64')?.value;
 
-    document.getElementById('finalName').innerText = nome;
-    document.getElementById('finalRace').innerText = racaSelected ? racaSelected.innerText : "Sem Origem";
-    document.getElementById('finalJob').innerText = jobSelected ? jobSelected.innerText : "Sem Ocupação";
-    document.getElementById('finalPath').innerText = pathSelected ? pathSelected.innerText : "Sem Caminho";
+    if (document.getElementById('finalName')) document.getElementById('finalName').innerText = nome;
+    if (document.getElementById('finalRace')) document.getElementById('finalRace').innerText = racaSelected ? racaSelected.innerText : "Sem Origem";
+    if (document.getElementById('finalJob')) document.getElementById('finalJob').innerText = jobSelected ? jobSelected.innerText : "Sem Ocupação";
+    if (document.getElementById('finalPath')) document.getElementById('finalPath').innerText = pathSelected ? pathSelected.innerText : "Sem Caminho";
 
     const previewContainer = document.getElementById('summaryPreview');
     if (imgBase64 && previewContainer) {
@@ -725,38 +393,44 @@ function gerarResumo() {
 
     const pericias = Array.from(document.querySelectorAll('.skill-cb:checked')).map(cb => cb.value);
 
-    document.getElementById('summaryDetails').innerHTML = `
-        <p><strong>Vitalidade:</strong> ${document.getElementById('statVit').innerText} | <strong>Sanidade:</strong> ${document.getElementById('statSan').innerText} | <strong>Fluxo:</strong> ${document.getElementById('statFlux').innerText}</p>
-        <p><strong>Constelação:</strong> ${constSelected ? constSelected.innerText : "Não selecionada"}</p>
-        <p><strong>Perícias Escolhidas:</strong> ${pericias.join(', ') || "Nenhuma"}</p>
-        <p><strong>Âncoras:</strong> ${document.getElementById('anchorPerson').value || "-"} (Pessoa), ${document.getElementById('anchorPlace').value || "-"} (Lugar), ${document.getElementById('anchorObject').value || "-"} (Objeto)</p>
-    `;
+    const summaryDetails = document.getElementById('summaryDetails');
+    if (summaryDetails) {
+        summaryDetails.innerHTML = `
+            <p><strong>Vitalidade:</strong> ${document.getElementById('statVit')?.innerText || 15} | <strong>Sanidade:</strong> ${document.getElementById('statSan')?.innerText || 15} | <strong>Fluxo:</strong> ${document.getElementById('statFlux')?.innerText || 5}</p>
+            <p><strong>Habilidade Inata:</strong> ${innateSelected ? innateSelected.innerText : "Nenhuma selecionada"}</p>
+            <p><strong>Constelação:</strong> ${constSelected ? constSelected.innerText : "Não selecionada"}</p>
+            <p><strong>Perícias Escolhidas:</strong> ${pericias.join(', ') || "Nenhuma"}</p>
+            <p><strong>Âncoras:</strong> ${document.getElementById('anchorPerson')?.value || "-"} (Pessoa), ${document.getElementById('anchorPlace')?.value || "-"} (Lugar), ${document.getElementById('anchorObject')?.value || "-"} (Objeto)</p>
+        `;
+    }
 }
 
-function exportarJSON() {
-    const nome = document.getElementById('charName').value || "personagem";
+window.exportarJSON = function() {
+    const nome = document.getElementById('charName')?.value || "personagem";
+    const innateSelected = document.querySelector('#innateGrid .selected');
+    
     const dados = {
         nome: nome,
-        idade: document.getElementById('charAge').value,
-        pronome: document.getElementById('charPronoun').value,
-        habilidadeInata: document.getElementById('charInnate').value,
+        idade: document.getElementById('charAge')?.value,
+        pronome: document.getElementById('charPronoun')?.value,
+        habilidadeInata: innateSelected ? innateSelected.innerText : "Nenhuma",
         atributos: {
-            proeza: document.getElementById('attrProeza').value,
-            percepcao: document.getElementById('attrPercepcao').value,
-            cognicao: document.getElementById('attrCognicao').value,
-            influencia: document.getElementById('attrInfluencia').value,
-            ancora: document.getElementById('attrAncora').value
+            proeza: document.getElementById('attrProeza')?.value,
+            percepcao: document.getElementById('attrPercepcao')?.value,
+            cognicao: document.getElementById('attrCognicao')?.value,
+            influencia: document.getElementById('attrInfluencia')?.value,
+            ancora: document.getElementById('attrAncora')?.value
         },
         stats: {
-            vitalidade: document.getElementById('statVit').innerText,
-            sanidade: document.getElementById('statSan').innerText,
-            fluxo: document.getElementById('statFlux').innerText,
-            slots: document.getElementById('statSlots').innerText
+            vitalidade: document.getElementById('statVit')?.innerText,
+            sanidade: document.getElementById('statSan')?.innerText,
+            fluxo: document.getElementById('statFlux')?.innerText,
+            slots: document.getElementById('statSlots')?.innerText
         },
         ancorasLiterais: {
-            pessoa: document.getElementById('anchorPerson').value,
-            lugar: document.getElementById('anchorPlace').value,
-            objeto: document.getElementById('anchorObject').value
+            pessoa: document.getElementById('anchorPerson')?.value,
+            lugar: document.getElementById('anchorPlace')?.value,
+            objeto: document.getElementById('anchorObject')?.value
         }
     };
 
@@ -767,34 +441,35 @@ function exportarJSON() {
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-}
+};
 
 window.salvarNovoPersonagem = function() {
     const racaSelected = document.querySelector('#raceGrid .selected');
     const jobSelected = document.querySelector('#jobGrid .selected');
+    const innateSelected = document.querySelector('#innateGrid .selected');
     const pathSelected = document.querySelector('#pathGrid .selected');
     
-    const imgInput = document.getElementById('charImageBase64').value;
+    const imgInput = document.getElementById('charImageBase64')?.value;
     const imagemFinal = imgInput ? imgInput : "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60";
 
     const novoPersonagem = {
         id: Date.now(),
-        nome: document.getElementById('charName').value || "Desconhecido",
+        nome: document.getElementById('charName')?.value || "Desconhecido",
         imagem: imagemFinal,
         conceito: (racaSelected ? racaSelected.innerText : "Sem Origem") + " | " + (pathSelected ? pathSelected.innerText : "Sem Caminho"),
         grau: 1, 
         ocupacao: jobSelected ? jobSelected.innerText : "Sem Ocupação",
-        habilidadeInata: document.getElementById('charInnate').value || "Nenhuma habilidade inata definida.", 
-        vitalidade: parseInt(document.getElementById('statVit').innerText) || 15,
-        sanidade: parseInt(document.getElementById('statSan').innerText) || 15,
-        fluxo: parseInt(document.getElementById('statFlux').innerText) || 10,
+        habilidadeInata: innateSelected ? innateSelected.innerText : "Nenhuma habilidade inata selecionada.", 
+        vitalidade: parseInt(document.getElementById('statVit')?.innerText) || 15,
+        sanidade: parseInt(document.getElementById('statSan')?.innerText) || 15,
+        fluxo: parseInt(document.getElementById('statFlux')?.innerText) || 10,
         estresse: 0,
         atributos: {
-            proeza: document.getElementById('attrProeza').value,
-            percepcao: document.getElementById('attrPercepcao').value,
-            cognicao: document.getElementById('attrCognicao').value,
-            influencia: document.getElementById('attrInfluencia').value,
-            ancora: document.getElementById('attrAncora').value
+            proeza: document.getElementById('attrProeza')?.value || 1,
+            percepcao: document.getElementById('attrPercepcao')?.value || 1,
+            cognicao: document.getElementById('attrCognicao')?.value || 1,
+            influencia: document.getElementById('attrInfluencia')?.value || 1,
+            ancora: document.getElementById('attrAncora')?.value || 1
         }
     };
 
