@@ -1,11 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
 import { 
     getAuth, 
     signInWithPopup, 
     GoogleAuthProvider, 
     onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
     signOut 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -21,17 +22,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Captura os elementos do HTML
+// Garante persistência da sessão no navegador
+setPersistence(auth, browserLocalPersistence);
+
 const profileLink = document.getElementById('nav-profile-link');
 const visaoDeslogado = document.getElementById('visao-deslogado');
 const visaoLogado = document.getElementById('visao-logado');
-const btnLoginGoogle = document.getElementById('btnLoginGoogle'); // Botão na tela de aviso
+const btnLoginGoogle = document.getElementById('btnLoginGoogle');
 
-// Função para fazer login via Popup
 async function loginComGoogle() {
     try {
         await signInWithPopup(auth, provider);
@@ -40,37 +41,34 @@ async function loginComGoogle() {
     }
 }
 
-// Função para deslogar
 async function sair(evento) {
     if (evento) evento.preventDefault();
     try {
         await signOut(auth);
-        console.log("Usuário deslogado");
+        window.location.reload();
     } catch (error) {
         console.error("Erro ao deslogar:", error);
     }
 }
 
-// Vincula o clique ao botão grande do meio da tela (se ele existir no HTML atual)
 if (btnLoginGoogle) {
     btnLoginGoogle.addEventListener('click', loginComGoogle);
 }
 
-// Monitora o estado da autenticação
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // --- USUÁRIO LOGADO ---
         const primeiroNome = user.displayName.split(' ')[0];
         
         if (profileLink) {
             profileLink.innerHTML = `${primeiroNome} <img src="${user.photoURL}" alt="Foto" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-left: 5px;">`;
-            profileLink.onclick = sair; 
+            // Mantém o link direcionando para o perfil sem deslogar
+            profileLink.href = "usuario.html"; 
+            profileLink.onclick = null;
         }
         
         if (visaoDeslogado) visaoDeslogado.style.display = 'none';
         if (visaoLogado) visaoLogado.style.display = 'block';
-        
-        // --- ATUALIZAÇÃO VISUAL NO PERFIL ---
+
         const profileImage = document.getElementById('profileImage');
         if (profileImage) {
             const fotoSalva = localStorage.getItem('amestia_user_avatar');
@@ -82,9 +80,8 @@ onAuthStateChanged(auth, (user) => {
             nomeHeader.innerHTML = `${user.displayName} <span class="user-tag">#${user.uid.slice(0, 4)}</span>`;
         }
 
-        // --- PUXA OS DADOS DO LOCALSTORAGE ---
         const personagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
-        const campanhas = JSON.parse(localStorage.getItem('campanhasSalvas')) || [];
+        const campanhas = JSON.parse(localStorage.getItem('minhas_salas_rpg')) || [];
         const tempoDeJogoMinutos = localStorage.getItem('amestia_tempo_jogo') || '340';
 
         const quickStats = document.querySelector('.user-quick-stats');
@@ -95,16 +92,10 @@ onAuthStateChanged(auth, (user) => {
                 <span><i class="fas fa-users"></i> ${personagens.length} Personagens Criados</span>
             `;
         }
-
-        const contadorSlots = document.getElementById('contador-slots');
-        if (contadorSlots) {
-            contadorSlots.innerHTML = `<i class="fas fa-users"></i> ${personagens.length} / 10 Slots`;
-        }
-
     } else {
-        // --- USUÁRIO DESLOGADO ---
         if (profileLink) {
             profileLink.innerHTML = `Conectar <i class="fas fa-google"></i>`;
+            profileLink.href = "#";
             profileLink.onclick = (evento) => {
                 evento.preventDefault();
                 loginComGoogle();

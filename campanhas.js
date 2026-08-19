@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { 
+    getAuth, 
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { 
     getFirestore, 
     doc, 
@@ -7,12 +12,9 @@ import {
     getDoc, 
     updateDoc, 
     arrayUnion, 
-    arrayRemove, 
-    onSnapshot, 
-    deleteDoc 
+    onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Configuração do Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCC2hfTgTHbbQLUp0HaxxzUhfy6BCHh21o",
     authDomain: "amestia.firebaseapp.com",
@@ -27,21 +29,21 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Estado Global
+setPersistence(auth, browserLocalPersistence);
+
 let usuarioAtual = null;
 let codigoCampanhaAtiva = null;
-let unsubscribeCampanha = null; // Escutador em tempo real
+let unsubscribeCampanha = null;
 let isMestre = false;
 
-// ==========================================
-// INICIALIZAÇÃO E AUTENTICAÇÃO
-// ==========================================
 onAuthStateChanged(auth, (user) => {
     usuarioAtual = user;
     carregarCampanhasDoUsuario();
+    if (codigoCampanhaAtiva) {
+        entrarCampanha(codigoCampanhaAtiva);
+    }
 });
 
-// Tornando funções acessíveis pelo HTML (onclick)
 window.abrirCriacaoCampanha = abrirCriacaoCampanha;
 window.salvarCampanha = salvarCampanha;
 window.entrarPorCodigo = entrarPorCodigo;
@@ -53,15 +55,11 @@ window.removerJogador = removerJogador;
 window.apagarCampanha = apagarCampanha;
 window.avancarRelogio = avancarRelogio;
 
-// ==========================================
-// LOBBY E CARREGAMENTO
-// ==========================================
 async function carregarCampanhasDoUsuario() {
     const grid = document.querySelector('#campanhasLobby .campaign-grid');
     if (!grid) return;
 
     document.querySelectorAll('.cartao-dinamico').forEach(el => el.remove());
-
     const campanhasSalvas = JSON.parse(localStorage.getItem('minhas_salas_rpg')) || [];
 
     for (const codigo of campanhasSalvas) {
@@ -78,10 +76,10 @@ async function carregarCampanhasDoUsuario() {
                 <img src="${camp.img}" alt="Capa" class="campaign-img" onclick="entrarCampanha('${camp.codigo}')">
                 <div class="campaign-info">
                     <h2 onclick="entrarCampanha('${camp.codigo}')">${camp.nome}</h2>
-                    <p style="color: #7a1b9c; font-weight: bold; font-size: 0.85rem; letter-spacing: 1px;"><i class="fas fa-key"></i> Código: ${camp.codigo}</p>
+                    <p style="color: #7a1b9c; font-weight: bold; font-size: 0.85rem;"><i class="fas fa-key"></i> Código: ${camp.codigo}</p>
                     <p><strong>Mestre:</strong> ${camp.mestreNome}</p>
                     <p><strong>Jogadores:</strong> <i class="fas fa-users"></i> ${qtd}</p>
-                    <button class="btn-remover-card" onclick="apagarCampanha('${camp.codigo}')"><i class="fas fa-trash"></i> Sair / Remover</button>
+                    <button class="btn-remover-card" onclick="apagarCampanha('${camp.codigo}')"><i class="fas fa-trash"></i> Remover do Lobby</button>
                 </div>
             `;
             grid.appendChild(novoCartao);
@@ -89,9 +87,6 @@ async function carregarCampanhasDoUsuario() {
     }
 }
 
-// ==========================================
-// SALA EM TEMPO REAL (ON SNAPSHOT)
-// ==========================================
 function entrarCampanha(codigo) {
     const lobby = document.getElementById('campanhasLobby');
     const campanhaInterna = document.getElementById('campanhaInterna');
@@ -102,139 +97,81 @@ function entrarCampanha(codigo) {
 
     codigoCampanhaAtiva = codigo;
 
-    // Cancela a escuta anterior se houver
     if (unsubscribeCampanha) unsubscribeCampanha();
 
-    // Conecta ao servidor Firebase em tempo real
+    // Sincronização em tempo real (Servidor Firestore)
     unsubscribeCampanha = onSnapshot(doc(db, "campanhas", codigo), (docSnap) => {
         if (!docSnap.exists()) {
-            alert("Esta campanha foi encerrada pelo mestre.");
+            alert("Esta campanha não existe ou foi encerrada pelo mestre.");
             voltarLobby();
             return;
         }
 
         const dados = docSnap.data();
 
-        // Verifica se quem está logado é o Mestre
-        isMestre = usuarioAtual && usuarioAtual.uid === dados.mestreUid;
+        // Validação estrita do Mestre com base na conta Google
+        isMestre = usuarioAtual && (usuarioAtual.uid === dados.mestreUid);
         aplicarPermissoes();
 
         if (titleDisplay) {
             titleDisplay.innerHTML = `${dados.nome} <span style="font-size: 0.8rem; color: #888; display: block; margin-top: 5px;"><i class="fas fa-key"></i> ${dados.codigo}</span>`;
         }
 
-        // 1. Atualiza Lista de Jogadores para TODOS na sala
         renderizarJogadores(dados.jogadores || []);
-
-        // 2. Atualiza Relógio para TODOS
         atualizarRelogioVisual(dados.relogio || 0);
     });
 }
 
-function renderizarJogadores(jogadores) {
-    const grid = document.getElementById('gridJogadores');
-    if (!grid) return;
-
-    grid.innerHTML = ''; // Limpa a grade para reexibir atualizado
-
-    if (jogadores.length === 0) {
-        grid.innerHTML = '<p style="color: #aaa; text-align: center; grid-column: 1/-1;">Nenhum personagem foi adicionado a esta campanha ainda.</p>';
-        return;
+function aplicarPermissoes() {
+    const body = document.body;
+    if (isMestre) {
+        body.classList.remove('visao-jogador');
+    } else {
+        body.classList.add('visao-jogador');
     }
 
-    jogadores.forEach((perso, index) => {
-        const card = document.createElement('div');
-        card.className = 'campaign-card';
-        card.innerHTML = `
-            <img src="${perso.imagem || 'https://via.placeholder.com/150'}" alt="${perso.nome}" class="campaign-img">
-            <div class="campaign-info">
-                <h2>${perso.nome}</h2>
-                <p><strong>Jogador:</strong> ${perso.jogadorNome}</p>
-                <p><strong>Ocupação:</strong> ${perso.ocupacao || 'Investigador'}</p>
-                <p class="last-session">
-                    <i class="fas fa-heart"></i> PV: ${perso.vitalidade || 10} | <i class="fas fa-brain"></i> SAN: ${perso.sanidade || 100}
-                </p>
-                ${(isMestre || (usuarioAtual && usuarioAtual.uid === perso.uidDono)) ? `
-                    <button class="btn-remover-card" onclick="removerJogador(${index})"><i class="fas fa-trash"></i> Remover Personagem</button>
-                ` : ''}
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
+    const botaoEscudo = document.querySelector('button[onclick*="openCamTab(event, \'Mestre\')"]');
+    const abaMestreConteudo = document.getElementById('Mestre');
 
-// ==========================================
-// ADICIONAR PERSONAGEM AO SERVIDOR
-// ==========================================
-async function adicionarJogador() {
-    if (!codigoCampanhaAtiva) return;
-
-    // Puxa os personagens salvos localmente no criador
-    const personagensLocais = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
-
-    if (personagensLocais.length === 0) {
-        alert("Você não possui personagens criados! Acesse o menu 'Criar Personagem' primeiro.");
-        return;
-    }
-
-    let listaTexto = "Selecione o personagem para entrar na campanha:\n\n";
-    personagensLocais.forEach((p, i) => {
-        listaTexto += `[ ${i + 1} ] ${p.nome} (${p.ocupacao || 'Investigador'})\n`;
-    });
-
-    const escolha = prompt(listaTexto);
-    if (!escolha) return;
-
-    const idx = parseInt(escolha) - 1;
-    if (isNaN(idx) || idx < 0 || idx >= personagensLocais.length) {
-        alert("Opção inválida!");
-        return;
-    }
-
-    const perso = personagensLocais[idx];
-    const nomeJogador = usuarioAtual ? (usuarioAtual.displayName || "Investigador") : "Anônimo";
-
-    const novoJogadorDoc = {
-        uidDono: usuarioAtual ? usuarioAtual.uid : "anonimo",
-        jogadorNome: nomeJogador,
-        nome: perso.nome,
-        ocupacao: perso.ocupacao || "Investigador",
-        vitalidade: perso.vitalidade || 10,
-        sanidade: perso.sanidade || 100,
-        imagem: perso.imagem || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"
-    };
-
-    // Atualiza o documento no Firestore -> Todos os players recebem na hora via onSnapshot
-    const docRef = doc(db, "campanhas", codigoCampanhaAtiva);
-    await updateDoc(docRef, {
-        jogadores: arrayUnion(novoJogadorDoc)
-    });
-}
-
-async function removerJogador(index) {
-    if (!confirm("Deseja remover este personagem da campanha?")) return;
-
-    const docRef = doc(db, "campanhas", codigoCampanhaAtiva);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        const listaAtual = docSnap.data().jogadores || [];
-        listaAtual.splice(index, 1);
-        await updateDoc(docRef, { jogadores: listaAtual });
+    if (!isMestre) {
+        if (botaoEscudo) botaoEscudo.style.display = 'none';
+        if (abaMestreConteudo) {
+            abaMestreConteudo.style.display = 'none';
+            abaMestreConteudo.classList.remove('active');
+        }
+    } else {
+        if (botaoEscudo) botaoEscudo.style.display = 'block';
     }
 }
 
-// ==========================================
-// CRIAÇÃO E CONEXÃO DE SALAS
-// ==========================================
-function gerarCodigoConvite() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let res = '';
-    for (let i = 0; i < 6; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
-    return `RPG-${res}`;
+function openCamTab(evt, tabName) {
+    // Bloqueio de segurança da Aba do Mestre
+    if (tabName === 'Mestre' && !isMestre) {
+        alert("Acesso negado: Apenas o Mestre da campanha pode ver esta área.");
+        return;
+    }
+
+    document.querySelectorAll('.campaign-content .tab-content').forEach(c => {
+        c.classList.remove('active');
+        if (c.id === 'Mestre' && !isMestre) c.style.display = 'none';
+    });
+
+    document.querySelectorAll('.campaign-nav .tab-btn').forEach(b => b.classList.remove('active'));
+
+    const abaAlvo = document.getElementById(tabName);
+    if (abaAlvo) {
+        abaAlvo.style.display = 'block';
+        abaAlvo.classList.add('active');
+    }
+    if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
 }
 
 async function salvarCampanha() {
+    if (!usuarioAtual) {
+        alert("Você precisa estar conectado com sua conta Google para criar uma campanha!");
+        return;
+    }
+
     const nomeInput = document.getElementById('novaCamNome');
     const nome = nomeInput ? nomeInput.value.trim() : "";
     const fileInput = document.getElementById('novaCamImg');
@@ -244,60 +181,52 @@ async function salvarCampanha() {
         return; 
     }
 
-    // Imagem padrão caso o usuário não faça o upload
     let imgBase64 = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60";
 
-    // Se o usuário selecionou uma imagem do celular/PC
     if (fileInput && fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
         const reader = new FileReader();
-        
-        // Converte a imagem para Base64
         reader.readAsDataURL(file);
         reader.onload = async function () {
-            imgBase64 = reader.result;
-            await finalizarCriacaoCampanha(nome, imgBase64);
-        };
-        reader.onerror = function (error) {
-            alert("Erro ao carregar a imagem selecionada.");
-            console.error("Erro no FileReader: ", error);
+            await finalizarCriacaoCampanha(nome, reader.result);
         };
     } else {
-        // Cria a campanha com a imagem padrão
         await finalizarCriacaoCampanha(nome, imgBase64);
     }
 }
 
-// Função auxiliar para enviar os dados para o servidor do Firebase
 async function finalizarCriacaoCampanha(nome, img) {
-    const codigoGerado = gerarCodigoConvite();
-    const nomeMestre = usuarioAtual ? usuarioAtual.displayName || "Mestre" : "Mestre";
-    const uidMestre = usuarioAtual ? usuarioAtual.uid : "";
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let res = '';
+    for (let i = 0; i < 6; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+    const codigoGerado = `RPG-${res}`;
 
     try {
-        // Salva a nova sala no Firestore para que todos acessem o mesmo servidor
         await setDoc(doc(db, "campanhas", codigoGerado), {
             nome: nome,
             img: img,
             codigo: codigoGerado,
-            mestreNome: nomeMestre,
-            mestreUid: uidMestre,
+            mestreNome: usuarioAtual.displayName || "Mestre",
+            mestreUid: usuarioAtual.uid,
             jogadores: [],
             relogio: 0
         });
 
         salvarChaveLocalmente(codigoGerado);
-
-        alert(`Campanha "${nome}" criada com sucesso!\nCompartilhe o código com os jogadores: ${codigoGerado}`);
+        alert(`Campanha criada!\nCódigo de acesso: ${codigoGerado}`);
         voltarLobby();
         carregarCampanhasDoUsuario();
     } catch (error) {
-        console.error("Erro ao salvar campanha no servidor: ", error);
-        alert("Ocorreu um erro ao conectar com o servidor. Tente novamente.");
+        console.error("Erro ao criar campanha:", error);
     }
 }
 
 async function entrarPorCodigo() {
+    if (!usuarioAtual) {
+        alert("Conecte-se à sua conta Google para entrar em uma campanha.");
+        return;
+    }
+
     const codigo = prompt("Digite o código da campanha (Ex: RPG-XXXXXX):");
     if (!codigo) return;
 
@@ -323,8 +252,89 @@ function salvarChaveLocalmente(codigo) {
     }
 }
 
+function renderizarJogadores(jogadores) {
+    const grid = document.getElementById('gridJogadores');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+
+    if (jogadores.length === 0) {
+        grid.innerHTML = '<p style="color: #aaa; text-align: center; grid-column: 1/-1;">Nenhum personagem adicionado.</p>';
+        return;
+    }
+
+    jogadores.forEach((perso, index) => {
+        const card = document.createElement('div');
+        card.className = 'campaign-card';
+        card.innerHTML = `
+            <img src="${perso.imagem}" alt="${perso.nome}" class="campaign-img">
+            <div class="campaign-info">
+                <h2>${perso.nome}</h2>
+                <p><strong>Jogador:</strong> ${perso.jogadorNome}</p>
+                <p><strong>Ocupação:</strong> ${perso.ocupacao || 'Investigador'}</p>
+                <p class="last-session"><i class="fas fa-heart"></i> PV: ${perso.vitalidade || 10} | <i class="fas fa-brain"></i> SAN: ${perso.sanidade || 100}</p>
+                ${(isMestre || (usuarioAtual && usuarioAtual.uid === perso.uidDono)) ? `
+                    <button class="btn-remover-card" onclick="removerJogador(${index})"><i class="fas fa-trash"></i> Remover Personagem</button>
+                ` : ''}
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+async function adicionarJogador() {
+    if (!codigoCampanhaAtiva || !usuarioAtual) return;
+
+    const personagensLocais = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
+    if (personagensLocais.length === 0) {
+        alert("Você precisa criar um personagem primeiro no menu 'Criar Personagem'.");
+        return;
+    }
+
+    let listaTexto = "Selecione o personagem:\n\n";
+    personagensLocais.forEach((p, i) => {
+        listaTexto += `[ ${i + 1} ] ${p.nome}\n`;
+    });
+
+    const escolha = prompt(listaTexto);
+    if (!escolha) return;
+
+    const idx = parseInt(escolha) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= personagensLocais.length) return;
+
+    const perso = personagensLocais[idx];
+
+    const novoJogadorDoc = {
+        uidDono: usuarioAtual.uid,
+        jogadorNome: usuarioAtual.displayName || "Investigador",
+        nome: perso.nome,
+        ocupacao: perso.ocupacao || "Investigador",
+        vitalidade: perso.vitalidade || 10,
+        sanidade: perso.sanidade || 100,
+        imagem: perso.imagem || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"
+    };
+
+    const docRef = doc(db, "campanhas", codigoCampanhaAtiva);
+    await updateDoc(docRef, {
+        jogadores: arrayUnion(novoJogadorDoc)
+    });
+}
+
+async function removerJogador(index) {
+    if (!confirm("Remover este personagem da campanha?")) return;
+
+    const docRef = doc(db, "campanhas", codigoCampanhaAtiva);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const listaAtual = docSnap.data().jogadores || [];
+        listaAtual.splice(index, 1);
+        await updateDoc(docRef, { jogadores: listaAtual });
+    }
+}
+
 async function apagarCampanha(codigo) {
-    if (!confirm("Deseja remover esta campanha do seu lobby?")) return;
+    if (!confirm("Remover esta campanha do seu lobby local?")) return;
 
     let salas = JSON.parse(localStorage.getItem('minhas_salas_rpg')) || [];
     salas = salas.filter(c => c !== codigo);
@@ -333,11 +343,10 @@ async function apagarCampanha(codigo) {
     carregarCampanhasDoUsuario();
 }
 
-// ==========================================
-// CONTROLES DE INTERFACE E RELÓGIO
-// ==========================================
 function voltarLobby() {
     if (unsubscribeCampanha) unsubscribeCampanha();
+    codigoCampanhaAtiva = null;
+
     const campanhaInterna = document.getElementById('campanhaInterna');
     const telaCriarCampanha = document.getElementById('telaCriarCampanha');
     const lobby = document.getElementById('campanhasLobby');
@@ -352,24 +361,6 @@ function abrirCriacaoCampanha() {
     const telaCriarCampanha = document.getElementById('telaCriarCampanha');
     if (lobby) lobby.classList.remove('active');
     if (telaCriarCampanha) telaCriarCampanha.classList.add('active');
-}
-
-function openCamTab(evt, tabName) {
-    document.querySelectorAll('.campaign-content .tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.campaign-nav .tab-btn').forEach(b => b.classList.remove('active'));
-
-    const abaAlvo = document.getElementById(tabName);
-    if (abaAlvo) abaAlvo.classList.add('active');
-    if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
-}
-
-function aplicarPermissoes() {
-    const body = document.body;
-    if (isMestre) body.classList.remove('visao-jogador');
-    else body.classList.add('visao-jogador');
-
-    const botaoEscudo = document.querySelector('button[onclick*="openCamTab(event, \'Mestre\')"]');
-    if (botaoEscudo) botaoEscudo.style.display = isMestre ? 'block' : 'none';
 }
 
 async function avancarRelogio() {
