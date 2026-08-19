@@ -153,13 +153,16 @@ function openCamTab(evt, tabName) {
         return;
     }
 
+    // Esconde TODAS as abas e reseta o display inline
     document.querySelectorAll('.campaign-content .tab-content').forEach(c => {
         c.classList.remove('active');
-        if (c.id === 'Mestre' && !isMestre) c.style.display = 'none';
+        c.style.display = 'none'; // <--- Garante que a aba anterior saia da tela
     });
 
+    // Remove a classe ativa dos botões do menu lateral
     document.querySelectorAll('.campaign-nav .tab-btn').forEach(b => b.classList.remove('active'));
 
+    // Exibe apenas a aba selecionada
     const abaAlvo = document.getElementById(tabName);
     if (abaAlvo) {
         abaAlvo.style.display = 'block';
