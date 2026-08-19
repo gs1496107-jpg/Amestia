@@ -127,58 +127,52 @@
                     <textarea id="ficha-habilidade-inata" class="inline-input w-100" style="resize: vertical; min-height: 60px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; font-family: 'Inter', sans-serif; line-height: 1.5;"></textarea>
                 </section>
 
-                <!-- Atributos -->
-                <section class="sheet-section attributes-section">
-                    <h2>Atributos Mortais</h2>
-                    <div class="attributes-grid">
-                        <div class="attr-box">
-                            <input type="number" id="attr-proeza" class="attr-input" value="1" min="1" max="10">
-                            <span class="attr-name">Proeza</span>
-                        </div>
-                        <div class="attr-box">
-                            <input type="number" id="attr-percepcao" class="attr-input" value="1" min="1" max="10">
-                            <span class="attr-name">Percepção</span>
-                        </div>
-                        <div class="attr-box">
-                            <input type="number" id="attr-cognicao" class="attr-input" value="1" min="1" max="10">
-                            <span class="attr-name">Cognição</span>
-                        </div>
-                        <div class="attr-box">
-                            <input type="number" id="attr-influencia" class="attr-input" value="1" min="1" max="10">
-                            <span class="attr-name">Influência</span>
-                        </div>
-                        <div class="attr-box attribute-anchor">
-                            <input type="number" id="attr-ancora" class="attr-input" value="1" min="1" max="10">
-                            <span class="attr-name">Âncora</span>
-                        </div>
-                    </div>
-                </section>
+                <!-- Atributos Mortais Interativos -->
+<section class="sheet-section attributes-section">
+    <h2>Atributos Mortais</h2>
+    <div class="attributes-grid">
+        <div class="attr-box">
+            <span class="attr-name">Proeza</span>
+            <div class="attr-controls">
+                <button class="btn-ctrl-small" onclick="changeAttr('proeza', -1)">-</button>
+                <span id="attr-proeza-display" class="attr-val">1</span>
+                <button class="btn-ctrl-small" onclick="changeAttr('proeza', 1)">+</button>
             </div>
-
-            <div class="sheet-column">
-                <section class="sheet-section anchors-section">
-                    <h2>Âncoras Literais</h2>
-                    <ul class="anchor-list">
-                        <li>
-                            <i class="fas fa-user anchor-icon"></i>
-                            <div class="anchor-info w-100">
-                                <strong>Pessoa:</strong> <input type="text" id="ancora-pessoa" class="inline-input">
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fas fa-map-marker-alt anchor-icon"></i>
-                            <div class="anchor-info w-100">
-                                <strong>Lugar:</strong> <input type="text" id="ancora-lugar" class="inline-input">
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fas fa-gem anchor-icon"></i>
-                            <div class="anchor-info w-100">
-                                <strong>Objeto:</strong> <input type="text" id="ancora-objeto" class="inline-input">
-                            </div>
-                        </li>
-                    </ul>
-                </section>
+        </div>
+        <div class="attr-box">
+            <span class="attr-name">Percepção</span>
+            <div class="attr-controls">
+                <button class="btn-ctrl-small" onclick="changeAttr('percepcao', -1)">-</button>
+                <span id="attr-percepcao-display" class="attr-val">1</span>
+                <button class="btn-ctrl-small" onclick="changeAttr('percepcao', 1)">+</button>
+            </div>
+        </div>
+        <div class="attr-box">
+            <span class="attr-name">Cognição</span>
+            <div class="attr-controls">
+                <button class="btn-ctrl-small" onclick="changeAttr('cognicao', -1)">-</button>
+                <span id="attr-cognicao-display" class="attr-val">1</span>
+                <button class="btn-ctrl-small" onclick="changeAttr('cognicao', 1)">+</button>
+            </div>
+        </div>
+        <div class="attr-box">
+            <span class="attr-name">Influência</span>
+            <div class="attr-controls">
+                <button class="btn-ctrl-small" onclick="changeAttr('influencia', -1)">-</button>
+                <span id="attr-influencia-display" class="attr-val">1</span>
+                <button class="btn-ctrl-small" onclick="changeAttr('influencia', 1)">+</button>
+            </div>
+        </div>
+        <div class="attr-box attribute-anchor">
+            <span class="attr-name">Âncora</span>
+            <div class="attr-controls">
+                <button class="btn-ctrl-small" onclick="changeAttr('ancora', -1)">-</button>
+                <span id="attr-ancora-display" class="attr-val">1</span>
+                <button class="btn-ctrl-small" onclick="changeAttr('ancora', 1)">+</button>
+            </div>
+        </div>
+    </div>
+</section>
 
                 <section class="sheet-section inventory-section">
     <div class="inventory-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -196,237 +190,185 @@
     </div>
 
     <script>
-        let personagemAtual = null;
+let personagemAtual = null;
 
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const personagemId = urlParams.get('id');
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const personagemId = urlParams.get('id');
 
-            if (!personagemId) {
-                alert("Nenhum personagem selecionado!");
-                window.location.href = "perfil.html";
-                return;
-            }
+    if (!personagemId) {
+        alert("Nenhum personagem selecionado!");
+        window.location.href = "perfil.html";
+        return;
+    }
 
-// Configuração do Inventário
-personagemAtual.inventario = personagemAtual.inventario || [];
-renderizarInventario();
+    // 1. Busca primeiro o personagem no localStorage
+    const bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
+    personagemAtual = bancoDePersonagens.find(p => p.id == personagemId);
 
-// Preenche os campos de texto principais
-document.getElementById('ficha-nome').value = personagemAtual.nome || "Desconhecido";
-document.getElementById('ficha-conceito').value = personagemAtual.conceito || "";
-document.getElementById('grau-display').innerText = personagemAtual.grau; // Atualizado
-document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "";
-document.getElementById('ficha-habilidade-inata').value = personagemAtual.habilidadeInata || "";
+    if (!personagemAtual) {
+        alert("Personagem não encontrado!");
+        window.location.href = "perfil.html";
+        return;
+    }
 
+    // 2. Garante que os objetos internos existam
+    personagemAtual.atributos = personagemAtual.atributos || { proeza: 1, percepcao: 1, cognicao: 1, influencia: 1, ancora: 1 };
+    personagemAtual.ancorasLiterais = personagemAtual.ancorasLiterais || { pessoa: "", lugar: "", objeto: "" };
+    personagemAtual.inventario = personagemAtual.inventario || [];
+    personagemAtual.estresse = personagemAtual.estresse || 0;
+    personagemAtual.grau = personagemAtual.grau || 1;
 
-            const bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
-            personagemAtual = bancoDePersonagens.find(p => p.id == personagemId);
+    // 3. Calcula limites de vitalidade, sanidade, fluxo e slots
+    recalcularLimites();
 
-            if (!personagemAtual) {
-                alert("Personagem não encontrado!");
-                window.location.href = "perfil.html";
-                return;
-            }
+    if(personagemAtual.vitalidade === undefined) personagemAtual.vitalidade = personagemAtual.maxVit;
+    if(personagemAtual.sanidade === undefined) personagemAtual.sanidade = personagemAtual.maxSan;
+    if(personagemAtual.fluxo === undefined) personagemAtual.fluxo = personagemAtual.maxFluxo;
 
-            // Garante que o objeto tenha as estruturas necessárias
-            personagemAtual.atributos = personagemAtual.atributos || { proeza: 1, percepcao: 1, cognicao: 1, influencia: 1, ancora: 1 };
-            personagemAtual.ancorasLiterais = personagemAtual.ancorasLiterais || { pessoa: "", lugar: "", objeto: "" };
-            personagemAtual.estresse = personagemAtual.estresse || 0;
-            personagemAtual.grau = personagemAtual.grau || 1;
+    // 4. Preenche os campos da interface
+    document.getElementById('ficha-nome').value = personagemAtual.nome || "Desconhecido";
+    document.getElementById('ficha-conceito').value = personagemAtual.conceito || "";
+    document.getElementById('grau-display').innerText = personagemAtual.grau;
+    document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "";
+    document.getElementById('ficha-habilidade-inata').value = personagemAtual.habilidadeInata || "";
 
-            // Calcula os máximos baseados nos atributos reais
-            recalcularLimites();
+    // Preenche Âncoras
+    document.getElementById('ancora-pessoa').value = personagemAtual.ancorasLiterais.pessoa || "";
+    document.getElementById('ancora-lugar').value = personagemAtual.ancorasLiterais.lugar || "";
+    document.getElementById('ancora-objeto').value = personagemAtual.ancorasLiterais.objeto || "";
 
-            // Configura os valores de Vida/Sanidade atuais (se não existirem, enche a barra)
-            if(personagemAtual.vitalidade === undefined) personagemAtual.vitalidade = personagemAtual.maxVit;
-            if(personagemAtual.sanidade === undefined) personagemAtual.sanidade = personagemAtual.maxSan;
-            if(personagemAtual.fluxo === undefined) personagemAtual.fluxo = personagemAtual.maxFluxo;
+    // Foto do personagem
+    if (personagemAtual.imagem) {
+        document.getElementById('ficha-foto').style.backgroundImage = `url('${personagemAtual.imagem}')`;
+    }
 
-            // Preenche os campos de texto principais
-            document.getElementById('ficha-nome').value = personagemAtual.nome || "Desconhecido";
-            document.getElementById('ficha-conceito').value = personagemAtual.conceito || "";
-            document.getElementById('ficha-grau').value = personagemAtual.grau;
-            document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "";
-            document.getElementById('ficha-habilidade-inata').value = personagemAtual.habilidadeInata || "";
+    // Renderiza Atributos, Inventário e Barras
+    atualizarExibicaoAtributos();
+    renderizarInventario();
+    atualizarTodasAsBarras();
+    atualizarEstresseVisual(personagemAtual.estresse);
+    
+    // Inicia ouvintes de salvamento automático
+    configurarAutoSave();
+};
 
-            // Preenche as Âncoras
-            document.getElementById('ancora-pessoa').value = personagemAtual.ancorasLiterais.pessoa || "";
-            document.getElementById('ancora-lugar').value = personagemAtual.ancorasLiterais.lugar || "";
-            document.getElementById('ancora-objeto').value = personagemAtual.ancorasLiterais.objeto || "";
+// Modificar Atributos (Proeza, Percepção, etc.)
+window.changeAttr = function(attr, delta) {
+    if (!personagemAtual || !personagemAtual.atributos) return;
 
-            // Atualiza a Foto
-            if (personagemAtual.imagem) {
-                document.getElementById('ficha-foto').style.backgroundImage = `url('${personagemAtual.imagem}')`;
-            }
+    let valorAtual = parseInt(personagemAtual.atributos[attr]) || 1;
+    let novoValor = valorAtual + delta;
+    
+    if (novoValor < 1) novoValor = 1;
+    if (novoValor > 10) novoValor = 10;
 
-            // Atualiza os inputs de atributos
-            document.getElementById('attr-proeza').value = personagemAtual.atributos.proeza;
-            document.getElementById('attr-percepcao').value = personagemAtual.atributos.percepcao;
-            document.getElementById('attr-cognicao').value = personagemAtual.atributos.cognicao;
-            document.getElementById('attr-influencia').value = personagemAtual.atributos.influencia;
-            document.getElementById('attr-ancora').value = personagemAtual.atributos.ancora;
+    personagemAtual.atributos[attr] = novoValor;
 
-            // Atualiza visualmente as barras
-            atualizarTodasAsBarras();
-            atualizarEstresseVisual(personagemAtual.estresse);
-            
-            // Inicia listeners de AutoSave
-            configurarAutoSave();
-        };
+    recalcularLimites();
+    atualizarExibicaoAtributos();
+    atualizarTodasAsBarras();
+    salvarAlteracoesNoBanco();
+};
 
-        // Função crucial para atrelar a matemática do sistema à ficha
-        function recalcularLimites() {
-            const pro = parseInt(personagemAtual.atributos.proeza) || 1;
-            const anc = parseInt(personagemAtual.atributos.ancora) || 1;
-            const grau = parseInt(personagemAtual.grau) || 1;
+function atualizarExibicaoAtributos() {
+    const attrs = ['proeza', 'percepcao', 'cognicao', 'influencia', 'ancora'];
+    attrs.forEach(attr => {
+        const el = document.getElementById(`attr-${attr}-display`);
+        if (el) el.innerText = personagemAtual.atributos[attr] || 1;
+    });
+}
 
-            personagemAtual.maxVit = 10 + (pro * 5);
-            personagemAtual.maxSan = 10 + (anc * 5);
-            personagemAtual.maxFluxo = 3 + grau + anc;
-            personagemAtual.maxSlots = 3 + pro;
+function recalcularLimites() {
+    const pro = parseInt(personagemAtual.atributos.proeza) || 1;
+    const anc = parseInt(personagemAtual.atributos.ancora) || 1;
+    const grau = parseInt(personagemAtual.grau) || 1;
 
-            document.getElementById('hp-max').innerText = personagemAtual.maxVit;
-            document.getElementById('san-max').innerText = personagemAtual.maxSan;
-            document.getElementById('fluxo-max').innerText = personagemAtual.maxFluxo;
-            document.getElementById('slots-max').innerText = personagemAtual.maxSlots;
+    personagemAtual.maxVit = 10 + (pro * 5);
+    personagemAtual.maxSan = 10 + (anc * 5);
+    personagemAtual.maxFluxo = 3 + grau + anc;
+    personagemAtual.maxSlots = 3 + pro;
 
-            // Impede que o valor atual fique maior que o novo máximo se o atributo baixar
-            if(personagemAtual.vitalidade > personagemAtual.maxVit) personagemAtual.vitalidade = personagemAtual.maxVit;
-            if(personagemAtual.sanidade > personagemAtual.maxSan) personagemAtual.sanidade = personagemAtual.maxSan;
-            if(personagemAtual.fluxo > personagemAtual.maxFluxo) personagemAtual.fluxo = personagemAtual.maxFluxo;
-        }
+    document.getElementById('hp-max').innerText = personagemAtual.maxVit;
+    document.getElementById('san-max').innerText = personagemAtual.maxSan;
+    document.getElementById('fluxo-max').innerText = personagemAtual.maxFluxo;
+    document.getElementById('slots-max').innerText = personagemAtual.maxSlots;
 
-        function atualizarTodasAsBarras() {
-            atualizarBarraVisual('hp', personagemAtual.vitalidade, personagemAtual.maxVit);
-            atualizarBarraVisual('san', personagemAtual.sanidade, personagemAtual.maxSan);
-            atualizarBarraVisual('fluxo', personagemAtual.fluxo, personagemAtual.maxFluxo);
-        }
+    if(personagemAtual.vitalidade > personagemAtual.maxVit) personagemAtual.vitalidade = personagemAtual.maxVit;
+    if(personagemAtual.sanidade > personagemAtual.maxSan) personagemAtual.sanidade = personagemAtual.maxSan;
+    if(personagemAtual.fluxo > personagemAtual.maxFluxo) personagemAtual.fluxo = personagemAtual.maxFluxo;
+}
 
-        function atualizarBarraVisual(stat, valor, max) {
-            document.getElementById(stat + '-val').innerText = valor;
-            const barElement = document.getElementById(stat + '-bar-fill');
-            const percentage = Math.max(0, Math.min(100, (valor / max) * 100));
-            barElement.style.width = percentage + '%';
-        }
+function atualizarTodasAsBarras() {
+    atualizarBarraVisual('hp', personagemAtual.vitalidade, personagemAtual.maxVit);
+    atualizarBarraVisual('san', personagemAtual.sanidade, personagemAtual.maxSan);
+    atualizarBarraVisual('fluxo', personagemAtual.fluxo, personagemAtual.maxFluxo);
+}
 
-        function atualizarEstresseVisual(valor) {
-            document.getElementById('stress-val').innerText = valor;
-            const marks = document.getElementById('stress-track').children;
-            for (let i = 0; i < marks.length; i++) {
-                if (i < valor) marks[i].classList.add('filled');
-                else marks[i].classList.remove('filled');
-            }
-        }
+function atualizarBarraVisual(stat, valor, max) {
+    document.getElementById(stat + '-val').innerText = valor;
+    const barElement = document.getElementById(stat + '-bar-fill');
+    const percentage = Math.max(0, Math.min(100, (valor / max) * 100));
+    barElement.style.width = percentage + '%';
+}
 
-        // Alterado: Agora ele puxa o max dinamicamente via JS e não do HTML
-        window.changeBar = function(stat, delta) {
-            if(!personagemAtual) return;
-            
-            let valorAtual = 0;
-            let max = 0;
+function atualizarEstresseVisual(valor) {
+    document.getElementById('stress-val').innerText = valor;
+    const marks = document.getElementById('stress-track').children;
+    for (let i = 0; i < marks.length; i++) {
+        if (i < valor) marks[i].classList.add('filled');
+        else marks[i].classList.remove('filled');
+    }
+}
 
-            if(stat === 'hp') { valorAtual = personagemAtual.vitalidade; max = personagemAtual.maxVit; }
-            if(stat === 'san') { valorAtual = personagemAtual.sanidade; max = personagemAtual.maxSan; }
-            if(stat === 'fluxo') { valorAtual = personagemAtual.fluxo; max = personagemAtual.maxFluxo; }
+window.changeBar = function(stat, delta) {
+    if(!personagemAtual) return;
+    let valorAtual = 0, max = 0;
 
-            let novoValor = valorAtual + delta;
-            if (novoValor > max) novoValor = max; 
-            if (novoValor < 0) novoValor = 0;     
+    if(stat === 'hp') { valorAtual = personagemAtual.vitalidade; max = personagemAtual.maxVit; }
+    if(stat === 'san') { valorAtual = personagemAtual.sanidade; max = personagemAtual.maxSan; }
+    if(stat === 'fluxo') { valorAtual = personagemAtual.fluxo; max = personagemAtual.maxFluxo; }
 
-            if(stat === 'hp') personagemAtual.vitalidade = novoValor;
-            if(stat === 'san') personagemAtual.sanidade = novoValor;
-            if(stat === 'fluxo') personagemAtual.fluxo = novoValor;
+    let novoValor = valorAtual + delta;
+    if (novoValor > max) novoValor = max; 
+    if (novoValor < 0) novoValor = 0;     
 
-            atualizarBarraVisual(stat, novoValor, max);
-            salvarAlteracoesNoBanco();
-        };
+    if(stat === 'hp') personagemAtual.vitalidade = novoValor;
+    if(stat === 'san') personagemAtual.sanidade = novoValor;
+    if(stat === 'fluxo') personagemAtual.fluxo = novoValor;
 
-        window.changeStress = function(delta) {
-            if(!personagemAtual) return;
-            let novoValor = personagemAtual.estresse + delta;
-            if (novoValor > 8) novoValor = 8;
-            if (novoValor < 0) novoValor = 0;
-            personagemAtual.estresse = novoValor;
-            atualizarEstresseVisual(novoValor);
-            salvarAlteracoesNoBanco();
-        };
+    atualizarBarraVisual(stat, novoValor, max);
+    salvarAlteracoesNoBanco();
+};
 
-        function salvarAlteracoesNoBanco() {
-            let bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
-            const index = bancoDePersonagens.findIndex(p => p.id == personagemAtual.id);
-            if(index !== -1) {
-                bancoDePersonagens[index] = personagemAtual;
-                localStorage.setItem('amestia_personagens', JSON.stringify(bancoDePersonagens));
-            }
-        }
+window.changeStress = function(delta) {
+    if(!personagemAtual) return;
+    let novoValor = personagemAtual.estresse + delta;
+    if (novoValor > 8) novoValor = 8;
+    if (novoValor < 0) novoValor = 0;
+    personagemAtual.estresse = novoValor;
+    atualizarEstresseVisual(novoValor);
+    salvarAlteracoesNoBanco();
+};
 
-        function configurarAutoSave() {
-            const mapeamentoAtributos = [
-                { id: 'attr-proeza', chaveSec: 'proeza' },
-                { id: 'attr-percepcao', chaveSec: 'percepcao' },
-                { id: 'attr-cognicao', chaveSec: 'cognicao' },
-                { id: 'attr-influencia', chaveSec: 'influencia' },
-                { id: 'attr-ancora', chaveSec: 'ancora' }
-            ];
+window.changeGrau = function(delta) {
+    if(!personagemAtual) return;
 
-            const mapeamentoTextos = [
-                { id: 'ficha-nome', chave: 'nome' },
-                { id: 'ficha-conceito', chave: 'conceito' },
-                { id: 'ficha-grau', chave: 'grau' },
-                { id: 'ficha-ocupacao', chave: 'ocupacao' },
-                { id: 'ficha-habilidade-inata', chave: 'habilidadeInata' }
-            ];
+    let novoGrau = (parseInt(personagemAtual.grau) || 1) + delta;
+    if(novoGrau < 1) novoGrau = 1;
 
-            const mapeamentoAncoras = [
-                { id: 'ancora-pessoa', chaveAnc: 'pessoa' },
-                { id: 'ancora-lugar', chaveAnc: 'lugar' },
-                { id: 'ancora-objeto', chaveAnc: 'objeto' }
-            ];
+    personagemAtual.grau = novoGrau;
+    document.getElementById('grau-display').innerText = novoGrau;
 
-            // Listener para Atributos (Gatilho de recálculo de limites)
-            mapeamentoAtributos.forEach(item => {
-                const input = document.getElementById(item.id);
-                if(input) {
-                    input.addEventListener('input', function() { 
-                        personagemAtual.atributos[item.chaveSec] = this.value;
-                        recalcularLimites(); 
-                        atualizarTodasAsBarras();
-                        salvarAlteracoesNoBanco();
-                    });
-                }
-            });
+    recalcularLimites();
+    atualizarTodasAsBarras();
+    salvarAlteracoesNoBanco();
+};
 
-            // Listener para Textos Simples
-            mapeamentoTextos.forEach(item => {
-                const input = document.getElementById(item.id);
-                if(input) {
-                    input.addEventListener('input', function() { 
-                        personagemAtual[item.chave] = this.value;
-                        if(item.chave === 'grau') {
-                            recalcularLimites();
-                            atualizarTodasAsBarras();
-                        }
-                        salvarAlteracoesNoBanco();
-                    });
-                }
-            });
-
-            // Listener para Âncoras Literais
-            mapeamentoAncoras.forEach(item => {
-                const input = document.getElementById(item.id);
-                if(input) {
-                    input.addEventListener('input', function() { 
-                        personagemAtual.ancorasLiterais[item.chaveAnc] = this.value;
-                        salvarAlteracoesNoBanco();
-                    });
-                }
-            });
-        }
-
-        function renderizarInventario() {
+// Inventário Dinâmico
+function renderizarInventario() {
     const list = document.getElementById('inventory-list');
-    list.innerHTML = ''; // Limpa a lista antes de recriar
+    list.innerHTML = '';
     
     personagemAtual.inventario.forEach((item, index) => {
         const div = document.createElement('div');
@@ -443,49 +385,65 @@ document.getElementById('ficha-habilidade-inata').value = personagemAtual.habili
 }
 
 window.addInventoryItem = function() {
-    // Adiciona um item vazio ao array e re-renderiza
     personagemAtual.inventario.push({ nome: "", slots: "" });
     renderizarInventario();
     salvarAlteracoesNoBanco();
 };
 
 window.atualizarItem = function(index, campo, valor) {
-    // Atualiza o nome ou os slots de um item específico no array
     personagemAtual.inventario[index][campo] = valor;
     salvarAlteracoesNoBanco();
 };
 
 window.removerItem = function(index) {
-    // Remove o item do array
     personagemAtual.inventario.splice(index, 1);
     renderizarInventario();
     salvarAlteracoesNoBanco();
 };
 
-          window.changeGrau = function(delta) {
-    if(!personagemAtual) return;
-    
-    // Guarda os máximos antigos antes de mudar o grau
-    const maxVitAntigo = personagemAtual.maxVit;
-    const maxSanAntigo = personagemAtual.maxSan;
-    const maxFluxoAntigo = personagemAtual.maxFluxo;
+function salvarAlteracoesNoBanco() {
+    let bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
+    const index = bancoDePersonagens.findIndex(p => p.id == personagemAtual.id);
+    if(index !== -1) {
+        bancoDePersonagens[index] = personagemAtual;
+        localStorage.setItem('amestia_personagens', JSON.stringify(bancoDePersonagens));
+    }
+}
 
-    let novoGrau = (parseInt(personagemAtual.grau) || 1) + delta;
-    if(novoGrau < 1) novoGrau = 1; // Grau mínimo é 1
-    
-    personagemAtual.grau = novoGrau;
-    document.getElementById('grau-display').innerText = novoGrau;
+function configurarAutoSave() {
+    const mapeamentoTextos = [
+        { id: 'ficha-nome', chave: 'nome' },
+        { id: 'ficha-conceito', chave: 'conceito' },
+        { id: 'ficha-ocupacao', chave: 'ocupacao' },
+        { id: 'ficha-habilidade-inata', chave: 'habilidadeInata' }
+    ];
 
-    recalcularLimites(); // Atualiza os limites máximos baseados no novo grau
+    const mapeamentoAncoras = [
+        { id: 'ancora-pessoa', chaveAnc: 'pessoa' },
+        { id: 'ancora-lugar', chaveAnc: 'lugar' },
+        { id: 'ancora-objeto', chaveAnc: 'objeto' }
+    ];
 
-    // Acrescenta a diferença aos valores atuais de Vida/Sanidade/Fluxo
-    personagemAtual.vitalidade += (personagemAtual.maxVit - maxVitAntigo);
-    personagemAtual.sanidade += (personagemAtual.maxSan - maxSanAntigo);
-    personagemAtual.fluxo += (personagemAtual.maxFluxo - maxFluxoAntigo);
+    mapeamentoTextos.forEach(item => {
+        const input = document.getElementById(item.id);
+        if(input) {
+            input.addEventListener('input', function() { 
+                personagemAtual[item.chave] = this.value;
+                salvarAlteracoesNoBanco();
+            });
+        }
+    });
 
-    atualizarTodasAsBarras();
-    salvarAlteracoesNoBanco();
-};
+    mapeamentoAncoras.forEach(item => {
+        const input = document.getElementById(item.id);
+        if(input) {
+            input.addEventListener('input', function() { 
+                personagemAtual.ancorasLiterais[item.chaveAnc] = this.value;
+                salvarAlteracoesNoBanco();
+            });
+        }
+    });
+}
     </script>
 </body>
 </html>
