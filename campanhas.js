@@ -382,3 +382,11 @@ function atualizarRelogioVisual(ticks) {
     if (clockProgress) clockProgress.style.height = `${(ticks / 12) * 100}%`;
     if (clockStatus) clockStatus.innerText = `${ticks}/12`;
 }
+window.loginComGoogle = async function() {
+    const provider = new GoogleAuthProvider();
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error("Erro no login:", error);
+    }
+};

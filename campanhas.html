@@ -76,7 +76,7 @@
             <button class="back-btn" onclick="voltarLobby()"><i class="fas fa-arrow-left"></i> Cancelar</button>
             <h1 class="page-title">Forjar Nova Realidade</h1>
             
-            < class="creator-box">
+            <div class="creator-box">
                 <div class="form-group">
                     <label>Nome da Campanha</label>
                     <input type="text" id="novaCamNome" placeholder="Ex: O Mistério de Dunwich">
@@ -255,6 +255,10 @@
             </section>
         </div>
     </main>
-  <script type="module" src="campanhas.js"></scrip>
+  <!-- 1. Importa o script responsável pelo Login -->
+<script type="module" src="auth_2.js"></script>
+
+<!-- 2. Importa o script das campanhas (com o "t" corrigido na tag) -->
+<script type="module" src="campanhas.js"></script>
 </body>
 </html>
