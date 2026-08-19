@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Ficha do Investigador - AMESTIA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="perfil.css">
@@ -35,13 +36,19 @@
         <header class="sheet-header">
             <div class="character-portrait" id="ficha-foto" style="background-image: url('default.jpg');"></div>
             <div class="character-identity">
-                <input type="text" id="ficha-nome" class="char-title-input" value="Nome do Personagem">
-                <input type="text" id="ficha-conceito" class="char-subtitle-input" value="Conceito | Caminho">
-                <div class="char-meta">
-                    <span><strong>Grau:</strong> <input type="number" id="ficha-grau" value="1" class="meta-input"></span>
-                    <span><strong>Ocupação:</strong> <input type="text" id="ficha-ocupacao" value="Ocupação" class="meta-input text-input"></span>
-                </div>
-            </div>
+    <input type="text" id="ficha-nome" class="char-title-input" value="Nome do Personagem">
+    <input type="text" id="ficha-conceito" class="char-subtitle-input" value="Conceito | Caminho">
+    <div class="char-meta">
+        <!-- Substituímos o input do Grau por controles interativos -->
+        <span class="grau-control-group">
+            <strong>Grau:</strong> 
+            <button class="btn-ctrl-small" onclick="changeGrau(-1)">-</button>
+            <span id="grau-display" class="highlight-val">1</span>
+            <button class="btn-ctrl-small" onclick="changeGrau(1)">+</button>
+        </span>
+        <span><strong>Ocupação:</strong> <input type="text" id="ficha-ocupacao" value="Ocupação" class="meta-input text-input"></span>
+    </div>
+</div>
         </header>
 
         <div class="sheet-grid">
@@ -174,21 +181,16 @@
                 </section>
 
                 <section class="sheet-section inventory-section">
-                    <div class="inventory-header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 style="border: none; margin: 0; padding: 0;">Inventário</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Slots: <strong id="slots-max" style="color: var(--accent-blue);">3</strong></span>
-                    </div>
-                    <button class="btn-add" onclick="addInventoryItem()" style="margin-bottom: 1rem;">+ Novo Item</button>
-                    
-                    <div class="inventory-list" id="inventory-list">
-                        <!-- Itens do inventário dinâmico -->
-                        <div class="inv-item">
-                            <input type="text" value="Item de Exemplo" class="inv-input-name">
-                            <input type="text" value="1 Slot" class="inv-input-slot">
-                            <button class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </section>
+    <div class="inventory-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="border: none; margin: 0; padding: 0;">Inventário</h2>
+        <span style="color: var(--text-secondary); font-size: 0.9rem;">Slots: <strong id="slots-max" style="color: var(--accent-blue);">3</strong></span>
+    </div>
+    <button class="btn-add" onclick="addInventoryItem()" style="margin-bottom: 1rem;">+ Novo Item</button>
+    
+    <!-- Deixe esta div vazia, o JS vai renderizar os itens salvos aqui -->
+    <div class="inventory-list" id="inventory-list"></div>
+</section>
+
             </div>
         </div>
     </div>
@@ -205,6 +207,18 @@
                 window.location.href = "perfil.html";
                 return;
             }
+
+// Configuração do Inventário
+personagemAtual.inventario = personagemAtual.inventario || [];
+renderizarInventario();
+
+// Preenche os campos de texto principais
+document.getElementById('ficha-nome').value = personagemAtual.nome || "Desconhecido";
+document.getElementById('ficha-conceito').value = personagemAtual.conceito || "";
+document.getElementById('grau-display').innerText = personagemAtual.grau; // Atualizado
+document.getElementById('ficha-ocupacao').value = personagemAtual.ocupacao || "";
+document.getElementById('ficha-habilidade-inata').value = personagemAtual.habilidadeInata || "";
+
 
             const bancoDePersonagens = JSON.parse(localStorage.getItem('amestia_personagens')) || [];
             personagemAtual = bancoDePersonagens.find(p => p.id == personagemId);
@@ -410,17 +424,68 @@
             });
         }
 
-        window.addInventoryItem = function() {
-            const list = document.getElementById('inventory-list');
-            const div = document.createElement('div');
-            div.className = 'inv-item';
-            div.innerHTML = `
-                <input type="text" placeholder="Nome do Item" class="inv-input-name">
-                <input type="text" placeholder="X Slots" class="inv-input-slot">
-                <button class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
-            `;
-            list.appendChild(div);
-        }
+        function renderizarInventario() {
+    const list = document.getElementById('inventory-list');
+    list.innerHTML = ''; // Limpa a lista antes de recriar
+    
+    personagemAtual.inventario.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'inv-item';
+        div.innerHTML = `
+            <input type="text" value="${item.nome}" class="inv-input-name" placeholder="Nome do Item" 
+                onchange="atualizarItem(${index}, 'nome', this.value)">
+            <input type="text" value="${item.slots}" class="inv-input-slot" placeholder="1 Slot" 
+                onchange="atualizarItem(${index}, 'slots', this.value)">
+            <button class="btn-remove" onclick="removerItem(${index})"><i class="fas fa-trash"></i></button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+window.addInventoryItem = function() {
+    // Adiciona um item vazio ao array e re-renderiza
+    personagemAtual.inventario.push({ nome: "", slots: "" });
+    renderizarInventario();
+    salvarAlteracoesNoBanco();
+};
+
+window.atualizarItem = function(index, campo, valor) {
+    // Atualiza o nome ou os slots de um item específico no array
+    personagemAtual.inventario[index][campo] = valor;
+    salvarAlteracoesNoBanco();
+};
+
+window.removerItem = function(index) {
+    // Remove o item do array
+    personagemAtual.inventario.splice(index, 1);
+    renderizarInventario();
+    salvarAlteracoesNoBanco();
+};
+
+          window.changeGrau = function(delta) {
+    if(!personagemAtual) return;
+    
+    // Guarda os máximos antigos antes de mudar o grau
+    const maxVitAntigo = personagemAtual.maxVit;
+    const maxSanAntigo = personagemAtual.maxSan;
+    const maxFluxoAntigo = personagemAtual.maxFluxo;
+
+    let novoGrau = (parseInt(personagemAtual.grau) || 1) + delta;
+    if(novoGrau < 1) novoGrau = 1; // Grau mínimo é 1
+    
+    personagemAtual.grau = novoGrau;
+    document.getElementById('grau-display').innerText = novoGrau;
+
+    recalcularLimites(); // Atualiza os limites máximos baseados no novo grau
+
+    // Acrescenta a diferença aos valores atuais de Vida/Sanidade/Fluxo
+    personagemAtual.vitalidade += (personagemAtual.maxVit - maxVitAntigo);
+    personagemAtual.sanidade += (personagemAtual.maxSan - maxSanAntigo);
+    personagemAtual.fluxo += (personagemAtual.maxFluxo - maxFluxoAntigo);
+
+    atualizarTodasAsBarras();
+    salvarAlteracoesNoBanco();
+};
     </script>
 </body>
 </html>

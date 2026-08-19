@@ -76,15 +76,16 @@
             <button class="back-btn" onclick="voltarLobby()"><i class="fas fa-arrow-left"></i> Cancelar</button>
             <h1 class="page-title">Forjar Nova Realidade</h1>
             
-            <div class="creator-box">
+            < class="creator-box">
                 <div class="form-group">
                     <label>Nome da Campanha</label>
                     <input type="text" id="novaCamNome" placeholder="Ex: O Mistério de Dunwich">
                 </div>
                 <div class="form-group">
-                    <label>URL da Imagem de Capa</label>
-                    <input type="text" id="novaCamImg" placeholder="Link da imagem da campanha">
-                </div>
+    <label>Capa da Campanha (Upload do Aparelho)</label>
+    <input type="file" id="novaCamImg" accept="image/*" style="background: rgba(0,0,0,0.5); padding: 10px; color: #fff; width: 100%; border: 1px solid #555; border-radius: 4px; font-family: 'Inter', sans-serif;">
+</div>
+            
                 <div class="form-group">
                     <label>Sinopse / Descrição Pública</label>
                     <textarea id="novaCamDesc" rows="4" placeholder="O que os investigadores sabem até agora?"></textarea>
@@ -254,8 +255,6 @@
             </section>
         </div>
     </main>
-
-    <script src="campanhas.js"></script>
-  <script type="module" src="campanhas.js"></script>
+  <script type="module" src="campanhas.js"></scrip>
 </body>
 </html>

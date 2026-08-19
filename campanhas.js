@@ -237,30 +237,64 @@ function gerarCodigoConvite() {
 async function salvarCampanha() {
     const nomeInput = document.getElementById('novaCamNome');
     const nome = nomeInput ? nomeInput.value.trim() : "";
-    const img = document.getElementById('novaCamImg').value || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60";
+    const fileInput = document.getElementById('novaCamImg');
 
-    if (!nome) { alert("Sua campanha precisa de um nome!"); return; }
+    if (!nome) { 
+        alert("Sua campanha precisa de um nome!"); 
+        return; 
+    }
 
+    // Imagem padrão caso o usuário não faça o upload
+    let imgBase64 = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60";
+
+    // Se o usuário selecionou uma imagem do celular/PC
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        
+        // Converte a imagem para Base64
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            imgBase64 = reader.result;
+            await finalizarCriacaoCampanha(nome, imgBase64);
+        };
+        reader.onerror = function (error) {
+            alert("Erro ao carregar a imagem selecionada.");
+            console.error("Erro no FileReader: ", error);
+        };
+    } else {
+        // Cria a campanha com a imagem padrão
+        await finalizarCriacaoCampanha(nome, imgBase64);
+    }
+}
+
+// Função auxiliar para enviar os dados para o servidor do Firebase
+async function finalizarCriacaoCampanha(nome, img) {
     const codigoGerado = gerarCodigoConvite();
-    const nomeMestre = usuarioAtual ? usuarioAtual.displayName : "Mestre";
+    const nomeMestre = usuarioAtual ? usuarioAtual.displayName || "Mestre" : "Mestre";
     const uidMestre = usuarioAtual ? usuarioAtual.uid : "";
 
-    // Salva a nova sala no Firestore
-    await setDoc(doc(db, "campanhas", codigoGerado), {
-        nome: nome,
-        img: img,
-        codigo: codigoGerado,
-        mestreNome: nomeMestre,
-        mestreUid: uidMestre,
-        jogadores: [],
-        relogio: 0
-    });
+    try {
+        // Salva a nova sala no Firestore para que todos acessem o mesmo servidor
+        await setDoc(doc(db, "campanhas", codigoGerado), {
+            nome: nome,
+            img: img,
+            codigo: codigoGerado,
+            mestreNome: nomeMestre,
+            mestreUid: uidMestre,
+            jogadores: [],
+            relogio: 0
+        });
 
-    salvarChaveLocalmente(codigoGerado);
+        salvarChaveLocalmente(codigoGerado);
 
-    alert(`Campanha "${nome}" criada!\nCódigo de acesso para os jogadores: ${codigoGerado}`);
-    voltarLobby();
-    carregarCampanhasDoUsuario();
+        alert(`Campanha "${nome}" criada com sucesso!\nCompartilhe o código com os jogadores: ${codigoGerado}`);
+        voltarLobby();
+        carregarCampanhasDoUsuario();
+    } catch (error) {
+        console.error("Erro ao salvar campanha no servidor: ", error);
+        alert("Ocorreu um erro ao conectar com o servidor. Tente novamente.");
+    }
 }
 
 async function entrarPorCodigo() {

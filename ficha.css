@@ -361,3 +361,57 @@
     .char-meta { justify-content: center; flex-wrap: wrap; }
     .status-controls { justify-content: center; }
 }
+/* Melhorias Visuais: Grau */
+.grau-control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.highlight-val {
+    color: var(--accent-purple);
+    font-weight: bold;
+    font-size: 1.2rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+.btn-ctrl-small {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.btn-ctrl-small:hover {
+    background: var(--accent-purple);
+}
+
+/* Melhorias Visuais: Inventário e Barras */
+.inv-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.inv-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(122, 27, 156, 0.3);
+}
+
+.status-bar {
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5); /* Dá profundidade às barras */
+}
