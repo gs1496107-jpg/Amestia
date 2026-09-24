@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Amestia — Até o Esquecimento</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            A
+        </div>
+
+        <div>
+            <strong>AMESTIA</strong>
+            <span>ATÉ O ESQUECIMENTO</span>
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <button class="nav-item active" data-tab="inicio">
+            ⌂
+            <span>Início</span>
+        </button>
+
+        <button class="nav-item" data-tab="ficha">
+            ✦
+            <span>Ficha</span>
+        </button>
+
+        <button class="nav-item" data-tab="criar-personagem">
+            ＋
+            <span>Criar personagem</span>
+        </button>
+
+        <button class="nav-item" data-tab="fichas">
+            ▣
+            <span>Minhas fichas</span>
+        </button>
+
+        <button class="nav-item" data-tab="linhagens">
+            ◈
+            <span>Linhagens</span>
+        </button>
+
+        <button class="nav-item" data-tab="caminhos">
+            ◇
+            <span>Caminhos</span>
+        </button>
+
+        <button class="nav-item" data-tab="progressao">
+            ↗
+            <span>Progressão</span>
+        </button>
+
+        <button class="nav-item" data-tab="regras">
+            ≡
+            <span>Regras</span>
+        </button>
+
+        <button class="nav-item" data-tab="mestre">
+            ⚙
+            <span>Mestre</span>
+        </button>
+
+        <button class="nav-item" data-tab="biblioteca">
+            ▤
+            <span>Biblioteca</span>
+        </button>
+
+    </nav>
+
+
+    <div class="sidebar-foot">
+        1970 · O Véu está rachado.
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     CONTEÚDO
+===================================================== -->
+
+<main class="main">
+
+<header class="mobile-head">
+
+    <button
+        id="menuBtn"
+        class="icon-btn"
+    >
+        ☰
+    </button>
+
+    <strong>AMESTIA</strong>
+
+    <button
+        class="icon-btn"
+        data-tab="criar-personagem"
+    >
+        ＋
+    </button>
+
+</header>
+
+
+<!-- =====================================================
+     INÍCIO
+===================================================== -->
+
+<section id="inicio" class="tab active">
+
+    <div class="hero">
+
+        <div>
+
+            <span class="eyebrow">
+                SISTEMA DE RPG INVESTIGATIVO
+            </span>
+
+            <h1>
+                Olhe através do Véu.
+                <br>
+                <em>Não espere sair igual.</em>
+            </h1>
+
+            <p>
+                Crie investigadores, acompanhe sua evolução,
+                consulte os Caminhos e administre sua campanha.
+            </p>
+
+            <div class="hero-actions">
+
+                <button
+                    class="btn primary"
+                    data-tab="ficha"
+                >
+                    Criar personagem
+                </button>
+
+                <button
+                    class="btn ghost"
+                    data-tab="regras"
+                >
+                    Consultar regras
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <span>AMESTIA</span>
+
+            <b>
+                ATÉ O
+                <br>
+                ESQUECIMENTO
+            </b>
+
+            <small>
+                1970 · O ABSTRATO SE TORNA REAL
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-head">
+
+        <div>
+
+            <span class="eyebrow">
+                VISÃO GERAL
+            </span>
+
+            <h2>
+                Seu painel de Amestia
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <button
+            class="dash-card"
+            data-tab="criar-personagem"
+        >
+
+            <span>01</span>
+
+            <b>
+                Criação de personagem
+            </b>
+
+            <small>
+                Atributos, perícias,
+                linhagem e Habilidade Única.
+            </small>
+
+        </button>
+
+
+        <button
+            class="dash-card"
+            data-tab="caminhos"
+        >
+
+            <span>02</span>
+
+            <b>
+                24 Caminhos
+            </b>
+
+            <small>
+                Escolha habilidades de diferentes Caminhos.
+            </small>
+
+        </button>
+
+
+        <button
+            class="dash-card"
+            data-tab="progressao"
+        >
+
+            <span>03</span>
+
+            <b>
+                Progressão
+            </b>
+
+            <small>
+                PRO, XP e domínio de Grau III.
+            </small>
+
+        </button>
+
+
+        <button
+            class="dash-card"
+            data-tab="mestre"
+        >
+
+            <span>04</span>
+
+            <b>
+                Painel do Mestre
+            </b>
+
+            <small>
+                Relógios, investigação e Véu.
+            </small>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CRIAÇÃO DE PERSONAGEM
+===================================================== -->
+
+<section id="criar-personagem" class="tab">
+
+<div id="editorBundle" class="editor-bundle">
+
+<div class="section-head">
+
+    <div>
+
+        <span class="eyebrow">
+            INVESTIGADOR
+        </span>
+
+        <h2>
+            Ficha de personagem
+        </h2>
+
+        <p>
+            Todos os valores derivados são recalculados automaticamente.
+        </p>
+
+    </div>
+
+
+    <div class="head-actions">
+
+        <button
+            class="btn ghost"
+            id="newSheet"
+        >
+            Nova ficha
+        </button>
+
+        <button
+            class="btn primary"
+            id="saveSheet"
+        >
+            Salvar
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="sheet-layout">
+
+
+<div class="sheet-main">
+
+
+<!-- IDENTIDADE -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>01</span>
+
+    <h3>
+        Identidade
+    </h3>
+
+</div>
+
+
+<div class="grid-2">
+
+<label>
+    Nome
+    <input
+        id="nome"
+        placeholder="Nome do investigador"
+    >
+</label>
+
+
+<label>
+    Jogador
+    <input
+        id="jogador"
+        placeholder="Nome do jogador"
+    >
+</label>
+
+
+<label>
+    Idade
+    <input
+        id="idade"
+        type="number"
+        min="0"
+        placeholder="Idade"
+    >
+</label>
+
+
+<label>
+    Profissão / Histórico
+    <input
+        id="historico"
+        placeholder="Ex.: Jornalista"
+    >
+</label>
+
+
+<label>
+    Linhagem
+
+    <select id="linhagem">
+
+        <option value="">
+            Selecione...
+        </option>
+
+    </select>
+
+</label>
+
+
+<label>
+    Atributo-Guia
+
+    <select id="guia">
+
+        <option value="cognicao">
+            Cognição
+        </option>
+
+        <option value="presenca">
+            Presença
+        </option>
+
+    </select>
+
+</label>
+
+
+<label class="full">
+
+    Descrição
+
+    <textarea
+        id="descricao"
+        rows="4"
+        placeholder="Aparência, personalidade, objetivos..."
+    ></textarea>
+
+</label>
+
+</div>
+
+</div>
+
+
+<!-- ATRIBUTOS -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>02</span>
+
+    <h3>
+        Atributos
+    </h3>
+
+    <small>
+        9 pontos · máximo 4
+    </small>
+
+</div>
+
+<div
+    id="attrGrid"
+    class="attr-grid"
+></div>
+
+<div
+    id="attrNotice"
+    class="notice"
+></div>
+
+</div>
+
+
+<!-- PERÍCIAS -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>03</span>
+
+    <h3>
+        Perícias
+    </h3>
+
+    <small>
+        15 pontos · Humanos 18
+    </small>
+
+</div>
+
+<div
+    id="skillGrid"
+    class="skill-grid"
+></div>
+
+<div
+    id="skillNotice"
+    class="notice"
+></div>
+
+</div>
+
+
+<!-- ÂNCORAS -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>04</span>
+
+    <h3>
+        As três Âncoras
+    </h3>
+
+    <small>
+        Aquilo que mantém o investigador ligado à realidade.
+    </small>
+
+</div>
+
+
+<div class="anchor-grid">
+
+
+<div class="anchor-card">
+
+    <strong>
+        Âncora I
+    </strong>
+
+    <input
+        id="ancora1Nome"
+        placeholder="Nome"
+    >
+
+    <textarea
+        id="ancora1Desc"
+        placeholder="O que representa e por que importa?"
+    ></textarea>
+
+</div>
+
+
+<div class="anchor-card">
+
+    <strong>
+        Âncora II
+    </strong>
+
+    <input
+        id="ancora2Nome"
+        placeholder="Nome"
+    >
+
+    <textarea
+        id="ancora2Desc"
+        placeholder="O que representa e por que importa?"
+    ></textarea>
+
+</div>
+
+
+<div class="anchor-card">
+
+    <strong>
+        Âncora III
+    </strong>
+
+    <input
+        id="ancora3Nome"
+        placeholder="Nome"
+    >
+
+    <textarea
+        id="ancora3Desc"
+        placeholder="O que representa e por que importa?"
+    ></textarea>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- HABILIDADE ÚNICA -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>05</span>
+
+    <h3>
+        Habilidade Única
+    </h3>
+
+    <small>
+        Gatilho + Efeito + Tributo
+    </small>
+
+</div>
+
+
+<div class="grid-2">
+
+<label>
+
+    Gatilho
+
+    <textarea
+        id="gatilho"
+        rows="4"
+        placeholder="Quando a habilidade pode ser usada?"
+    ></textarea>
+
+</label>
+
+
+<label>
+
+    Efeito
+
+    <textarea
+        id="efeito"
+        rows="4"
+        placeholder="O que ela faz?"
+    ></textarea>
+
+</label>
+
+
+<label class="full">
+
+    Tributo
+
+    <textarea
+        id="tributo"
+        rows="3"
+        placeholder="Qual é o preço?"
+    ></textarea>
+
+</label>
+
+</div>
+
+</div>
+
+
+<!-- EQUIPAMENTO -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>06</span>
+
+    <h3>
+        Equipamento
+    </h3>
+
+</div>
+
+
+<textarea
+    id="equipamento"
+    rows="6"
+    placeholder="Armas, itens, ferramentas, relíquias..."
+></textarea>
+
+</div>
+
+
+<!-- RECURSOS ATUAIS -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+    <span>07</span>
+
+    <h3>
+        Recursos atuais
+    </h3>
+
+</div>
+
+
+<div class="resource-grid">
+
+
+<label>
+    PV atual
+    <input
+        id="pvAtual"
+        type="number"
+        min="0"
+    >
+</label>
+
+
+<label>
+    Estabilidade atual
+    <input
+        id="estabilidadeAtual"
+        type="number"
+        min="0"
+    >
+</label>
+
+
+<label>
+    Fluxo atual
+    <input
+        id="fluxoAtual"
+        type="number"
+        min="0"
+    >
+</label>
+
+
+<label>
+    PRO
+    <input
+        id="pro"
+        type="number"
+        min="0"
+    >
+</label>
+
+
+<label>
+    XP
+    <input
+        id="xp"
+        type="number"
+        min="0"
+    >
+</label>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- LADO DIREITO -->
+
+<aside class="sheet-side">
+
+
+<div class="derived-card">
+
+<div class="derived-head">
+
+<span>
+CALCULADO
+</span>
+
+<b>
+Valores derivados
+</b>
+
+</div>
+
+
+<div class="derived-grid">
+
+
+<div>
+<small>PV MÁX.</small>
+<strong id="pvMax">20</strong>
+<em>
+20 + Vigor × 3
+</em>
+</div>
+
+
+<div>
+<small>ESTABILIDADE</small>
+<strong id="estabilidadeMax">20</strong>
+<em>
+20 + Vontade × 2 + Cognição
+</em>
+</div>
+
+
+<div>
+<small>FLUXO</small>
+<strong id="fluxoMax">10</strong>
+<em id="fluxoFormula">
+10 + Cognição × 2
+</em>
+</div>
+
+
+<div>
+<small>DEFESA</small>
+<strong id="defesa">8</strong>
+<em>
+8 + Agilidade + Proteção
+</em>
+</div>
+
+
+<div>
+<small>INICIATIVA</small>
+<strong id="iniciativa">
+1d20 + 0
+</strong>
+<em>
+1d20 + Percepção + Prontidão
+</em>
+</div>
+
+
+<div>
+<small>MOVIMENTO</small>
+<strong id="movimento">
+8 m
+</strong>
+<em>
+8 + Agilidade
+</em>
+</div>
+
+
+</div>
+
+</div>
+
+
+<div class="derived-card compact">
+
+<div class="derived-head">
+
+<span>
+LINHAGEM
+</span>
+
+<b id="lineageTitle">
+Nenhuma
+</b>
+
+</div>
+
+<p id="lineageText">
+Selecione uma linhagem.
+</p>
+
+</div>
+
+
+<div class="derived-card compact">
+
+<div class="derived-head">
+
+<span>
+CAMINHOS
+</span>
+
+<b id="grausIII">
+0 / 2
+</b>
+
+</div>
+
+<p>
+Você pode aprender habilidades de vários Caminhos,
+mas apenas dois podem alcançar o Grau III.
+</p>
+
+<button
+class="btn ghost full-btn"
+data-tab="progressao"
+>
+Gerenciar progressão
+</button>
+
+</div>
+
+
+</aside>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FICHA / VISUALIZAÇÃO
+===================================================== -->
+
+<section id="ficha" class="tab">
+
+<div class="section-head">
+    <div>
+        <span class="eyebrow">INVESTIGADOR</span>
+        <h2>Ficha de personagem</h2>
+        <p>Visualização da ficha atual. Você pode editar diretamente esta tela.</p>
+    </div>
+
+    <div class="head-actions">
+
+        <button
+            class="btn ghost"
+            id="backToSheets"
+        >
+            Minhas fichas
+        </button>
+
+        <button
+            class="btn primary"
+            id="editSheet"
+        >
+            Editar ficha
+        </button>
+
+    </div>
+</div>
+
+
+<div
+    id="sheetViewer"
+    class="sheet-viewer"
+></div>
+
+
+<div
+    id="sheetEditorMount"
+    class="sheet-editor-mount"
+></div>
+
+</section>
+
+
+<!-- =====================================================
+     FICHAS
+===================================================== -->
+
+<section id="fichas" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+ARQUIVO PESSOAL
+</span>
+
+<h2>
+Minhas fichas
+</h2>
+
+<p>
+Fichas armazenadas neste dispositivo.
+</p>
+
+</div>
+
+<button
+class="btn primary"
+data-tab="criar-personagem"
+>
+＋ Nova ficha
+</button>
+
+</div>
+
+
+<div
+id="savedSheets"
+class="saved-grid"
+></div>
+
+</section>
+
+
+<!-- =====================================================
+     LINHAGENS
+===================================================== -->
+
+<section id="linhagens" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+ORIGENS
+</span>
+
+<h2>
+Linhagens
+</h2>
+
+<p>
+A linhagem define aquilo que o personagem é.
+</p>
+
+</div>
+
+</div>
+
+
+<div
+id="lineageGrid"
+class="catalog-grid"
+></div>
+
+</section>
+
+
+<!-- =====================================================
+     CAMINHOS
+===================================================== -->
+
+<section id="caminhos" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+APOTEOSE
+</span>
+
+<h2>
+Os 24 Caminhos
+</h2>
+
+<p>
+Conheça os Caminhos e consulte suas habilidades.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="path-toolbar">
+
+<input
+id="pathSearch"
+placeholder="Pesquisar Caminho ou habilidade..."
+>
+
+
+<select id="pathGradeFilter">
+
+<option value="all">
+Todos os Graus
+</option>
+
+<option value="I">
+Grau I
+</option>
+
+<option value="II">
+Grau II
+</option>
+
+<option value="III">
+Grau III
+</option>
+
+</select>
+
+</div>
+
+
+<div
+id="pathGrid"
+class="path-grid"
+></div>
+
+</section>
+
+
+<!-- =====================================================
+     PROGRESSÃO
+===================================================== -->
+
+<section id="progressao" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+EVOLUÇÃO
+</span>
+
+<h2>
+Progressão
+</h2>
+
+<p>
+Gaste PRO para adquirir habilidades dos Caminhos.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="progress-header">
+
+<div class="progress-resource">
+
+<span>
+PRO DISPONÍVEL
+</span>
+
+<strong id="progressPRO">
+0
+</strong>
+
+</div>
+
+
+<div class="progress-resource">
+
+<span>
+GRAUS III
+</span>
+
+<strong id="progressIII">
+0 / 2
+</strong>
+
+</div>
+
+</div>
+
+
+<div
+id="progressPathGrid"
+class="progress-path-grid"
+></div>
+
+</section>
+
+
+<!-- =====================================================
+     REGRAS
+===================================================== -->
+
+<section id="regras" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+CONSULTA
+</span>
+
+<h2>
+Regras de Amestia
+</h2>
+
+<p>
+Consulta rápida das regras.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="rule-layout">
+
+<div
+id="ruleNav"
+class="rule-nav"
+></div>
+
+<div
+id="ruleContent"
+class="rule-content"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     MESTRE
+===================================================== -->
+
+<section id="mestre" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+MESTRE
+</span>
+
+<h2>
+Painel do Mestre
+</h2>
+
+<p>
+Ferramentas para conduzir investigações.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- DENSIDADE -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+<span>
+01
+</span>
+
+<h3>
+Densidade do Véu
+</h3>
+
+</div>
+
+
+<div class="veil-control">
+
+<button
+class="veil-btn"
+data-veil="-1"
+>
+−
+</button>
+
+
+<strong id="veilLevel">
+DV 0
+</strong>
+
+
+<button
+class="veil-btn"
+data-veil="1"
+>
++
+</button>
+
+</div>
+
+
+<p id="veilDescription">
+Realidade normal.
+</p>
+
+</div>
+
+
+<!-- RELÓGIOS -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+<span>
+02
+</span>
+
+<h3>
+Relógios das Sombras
+</h3>
+
+</div>
+
+
+<div class="clock-create">
+
+<input
+id="clockName"
+placeholder="Nome do relógio"
+>
+
+
+<select id="clockSize">
+
+<option value="4">
+4 segmentos
+</option>
+
+<option value="6">
+6 segmentos
+</option>
+
+<option value="8">
+8 segmentos
+</option>
+
+</select>
+
+
+<button
+id="createClock"
+class="btn primary"
+>
+Criar
+</button>
+
+</div>
+
+
+<div
+id="clockGrid"
+class="clock-grid"
+></div>
+
+</div>
+
+
+<!-- INVESTIGAÇÃO -->
+
+<div class="panel">
+
+<div class="panel-title">
+
+<span>
+03
+</span>
+
+<h3>
+Investigação
+</h3>
+
+</div>
+
+
+<div class="investigation-grid">
+
+<label>
+Mistério
+<textarea
+id="misterio"
+rows="4"
+></textarea>
+</label>
+
+
+<label>
+Ameaça
+<textarea
+id="ameaca"
+rows="4"
+></textarea>
+</label>
+
+
+<label>
+Pistas essenciais
+<textarea
+id="pistas"
+rows="4"
+></textarea>
+</label>
+
+
+<label>
+Consequência
+<textarea
+id="consequencia"
+rows="4"
+></textarea>
+</label>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<!-- =====================================================
+     BIBLIOTECA
+===================================================== -->
+
+<section id="biblioteca" class="tab">
+
+<div class="section-head">
+
+<div>
+
+<span class="eyebrow">
+ARQUIVO
+</span>
+
+<h2>
+Biblioteca
+</h2>
+
+<p>
+Consulta organizada do livro.
+</p>
+
+</div>
+
+</div>
+
+
+<div
+id="libraryGrid"
+class="library-grid"
+></div>
+
+</section>
+
+
+<footer>
+
+AMESTIA · ATÉ O ESQUECIMENTO · 1970
+
+</footer>
+
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="dados.js"></script>
+<script src="caminhos.js"></script>
+<script src="ficha.js"></script>
+<script src="mestre.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>
