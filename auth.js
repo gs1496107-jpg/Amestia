@@ -22,14 +22,14 @@ import {
 
 
 // ============================================================
-// ESTADO DO USUÁRIO
+// ESTADO
 // ============================================================
 
 let usuarioAtual = null;
 
 
 // ============================================================
-// ELEMENTOS DA INTERFACE
+// ELEMENTO
 // ============================================================
 
 function elemento(id) {
@@ -38,12 +38,21 @@ function elemento(id) {
 
 
 // ============================================================
-// LOGIN COM GOOGLE
+// LOGIN GOOGLE
 // ============================================================
 
 async function entrarComGoogle() {
 
+    const botao = elemento("btnEntrarGoogle");
+
     try {
+
+        if (botao) {
+            botao.disabled = true;
+            botao.textContent = "Conectando...";
+        }
+
+        console.log("Iniciando login com Google...");
 
         const resultado = await signInWithPopup(
             auth,
@@ -52,9 +61,14 @@ async function entrarComGoogle() {
 
         const usuario = resultado.user;
 
-        await salvarPerfil(usuario);
+        usuarioAtual = usuario;
 
-        console.log("Login realizado:", usuario.displayName);
+        console.log(
+            "Login realizado:",
+            usuario.displayName
+        );
+
+        await salvarPerfil(usuario);
 
         atualizarInterface(usuario);
 
@@ -62,49 +76,88 @@ async function entrarComGoogle() {
 
     } catch (erro) {
 
-        console.error("Erro ao entrar com Google:", erro);
+        console.error(
+            "Erro completo no login:",
+            erro
+        );
 
         tratarErroAuth(erro);
 
         return null;
+
+    } finally {
+
+        if (botao) {
+
+            botao.disabled = false;
+
+            if (!usuarioAtual) {
+                botao.textContent = "Entrar com Google";
+            }
+
+        }
+
     }
 }
 
 
 // ============================================================
-// SALVAR PERFIL DO USUÁRIO
+// SALVAR PERFIL
 // ============================================================
 
 async function salvarPerfil(usuario) {
 
-    if (!usuario) return;
+    if (!usuario) {
+        return;
+    }
 
-    const referencia = doc(
-        db,
-        "users",
-        usuario.uid
-    );
+    try {
 
-    await setDoc(
-        referencia,
-        {
-            uid: usuario.uid,
-            nome: usuario.displayName || "Investigador",
-            email: usuario.email || "",
-            foto: usuario.photoURL || "",
-            ultimoAcesso: serverTimestamp()
-        },
-        {
-            merge: true
-        }
-    );
+        const referencia = doc(
+            db,
+            "users",
+            usuario.uid
+        );
 
-    console.log("Perfil salvo no Firestore.");
+        await setDoc(
+            referencia,
+            {
+                uid: usuario.uid,
+                nome:
+                    usuario.displayName ||
+                    "Investigador",
+                email:
+                    usuario.email ||
+                    "",
+                foto:
+                    usuario.photoURL ||
+                    "",
+                ultimoAcesso:
+                    serverTimestamp()
+            },
+            {
+                merge: true
+            }
+        );
+
+        console.log(
+            "Perfil salvo no Firestore."
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao salvar perfil:",
+            erro
+        );
+
+        throw erro;
+    }
 }
 
 
 // ============================================================
-// LOGOUT
+// SAIR
 // ============================================================
 
 async function sairDaConta() {
@@ -113,29 +166,38 @@ async function sairDaConta() {
 
         await signOut(auth);
 
-        console.log("Usuário desconectado.");
+        usuarioAtual = null;
 
         atualizarInterface(null);
+
+        console.log(
+            "Usuário desconectado."
+        );
 
     } catch (erro) {
 
         console.error(
-            "Erro ao sair da conta:",
+            "Erro ao sair:",
             erro
+        );
+
+        alert(
+            "Não foi possível sair da conta."
         );
     }
 }
 
 
 // ============================================================
-// OBSERVAR ESTADO DE LOGIN
+// ESTADO DA AUTENTICAÇÃO
 // ============================================================
 
 onAuthStateChanged(
     auth,
     async (usuario) => {
 
-        usuarioAtual = usuario || null;
+        usuarioAtual =
+            usuario || null;
 
         if (usuario) {
 
@@ -144,7 +206,18 @@ onAuthStateChanged(
                 usuario.displayName
             );
 
-            await salvarPerfil(usuario);
+            try {
+
+                await salvarPerfil(usuario);
+
+            } catch (erro) {
+
+                console.error(
+                    "Não foi possível atualizar o perfil:",
+                    erro
+                );
+
+            }
 
             atualizarInterface(usuario);
 
@@ -166,48 +239,76 @@ onAuthStateChanged(
 
 function atualizarInterface(usuario) {
 
-    const nome = elemento("usuarioNome");
-    const email = elemento("usuarioEmail");
-    const foto = elemento("usuarioFoto");
+    const nome =
+        elemento("usuarioNome");
 
-    const botaoEntrar = elemento("btnEntrarGoogle");
-    const botaoSair = elemento("btnSair");
+    const email =
+        elemento("usuarioEmail");
 
-    const status = elemento("statusLogin");
+    const foto =
+        elemento("usuarioFoto");
+
+    const botaoEntrar =
+        elemento("btnEntrarGoogle");
+
+    const botaoSair =
+        elemento("btnSair");
+
+    const status =
+        elemento("statusLogin");
 
 
     // --------------------------------------------------------
-    // USUÁRIO LOGADO
+    // LOGADO
     // --------------------------------------------------------
 
     if (usuario) {
 
         if (nome) {
+
             nome.textContent =
                 usuario.displayName ||
                 "Investigador";
         }
 
         if (email) {
+
             email.textContent =
-                usuario.email || "";
+                usuario.email ||
+                "";
         }
 
         if (foto) {
 
             if (usuario.photoURL) {
-                foto.src = usuario.photoURL;
-            }
 
-            foto.style.display = "block";
+                foto.src =
+                    usuario.photoURL;
+
+                foto.style.display =
+                    "block";
+
+            } else {
+
+                foto.removeAttribute(
+                    "src"
+                );
+
+                foto.style.display =
+                    "none";
+            }
         }
 
         if (botaoEntrar) {
-            botaoEntrar.style.display = "none";
+
+            botaoEntrar.style.display =
+                "none";
         }
 
         if (botaoSair) {
-            botaoSair.style.display = "inline-flex";
+
+            botaoSair.style.display =
+                "inline-flex";
         }
 
         if (status) {
@@ -224,29 +325,45 @@ function atualizarInterface(usuario) {
 
 
     // --------------------------------------------------------
-    // USUÁRIO NÃO LOGADO
+    // DESLOGADO
     // --------------------------------------------------------
 
     if (nome) {
+
         nome.textContent =
             "Visitante";
     }
 
     if (email) {
+
         email.textContent =
             "Entre para continuar";
     }
 
     if (foto) {
-        foto.removeAttribute("src");
+
+        foto.removeAttribute(
+            "src"
+        );
+
+        foto.style.display =
+            "none";
     }
 
     if (botaoEntrar) {
+
         botaoEntrar.style.display =
             "inline-flex";
+
+        botaoEntrar.disabled =
+            false;
+
+        botaoEntrar.textContent =
+            "Entrar com Google";
     }
 
     if (botaoSair) {
+
         botaoSair.style.display =
             "none";
     }
@@ -263,28 +380,28 @@ function atualizarInterface(usuario) {
 
 
 // ============================================================
-// TRATAMENTO DE ERROS
+// ERROS
 // ============================================================
 
 function tratarErroAuth(erro) {
 
     let mensagem =
-        "Não foi possível entrar.";
+        "Não foi possível entrar com o Google.";
 
     switch (erro.code) {
+
+        case "auth/popup-blocked":
+
+            mensagem =
+                "O navegador bloqueou a janela de login. Permita pop-ups para este site.";
+
+            break;
+
 
         case "auth/popup-closed-by-user":
 
             mensagem =
                 "A janela de login foi fechada.";
-
-            break;
-
-
-        case "auth/popup-blocked":
-
-            mensagem =
-                "O navegador bloqueou a janela de login.";
 
             break;
 
@@ -297,23 +414,50 @@ function tratarErroAuth(erro) {
             break;
 
 
-        case "auth/network-request-failed":
-
-            mensagem =
-                "Verifique sua conexão com a internet.";
-
-            break;
-
-
         case "auth/unauthorized-domain":
 
             mensagem =
-                "Este domínio ainda não está autorizado no Firebase.";
+                "Este endereço do site não está autorizado no Firebase Authentication.";
 
             break;
+
+
+        case "auth/network-request-failed":
+
+            mensagem =
+                "Não foi possível conectar ao Firebase. Verifique sua internet.";
+
+            break;
+
+
+        case "auth/operation-not-allowed":
+
+            mensagem =
+                "O login com Google não está ativado no Firebase.";
+
+            break;
+
+
+        case "auth/internal-error":
+
+            mensagem =
+                "O Firebase encontrou um erro interno durante o login.";
+
+            break;
+
+
+        default:
+
+            mensagem =
+                erro.message ||
+                mensagem;
     }
 
-    console.warn(mensagem);
+    console.warn(
+        "Firebase Auth:",
+        erro.code,
+        erro.message
+    );
 
     alert(mensagem);
 }
@@ -340,6 +484,16 @@ document.addEventListener(
                 "click",
                 entrarComGoogle
             );
+
+            console.log(
+                "Botão Google conectado."
+            );
+
+        } else {
+
+            console.error(
+                "ERRO: #btnEntrarGoogle não foi encontrado no HTML."
+            );
         }
 
 
@@ -350,24 +504,32 @@ document.addEventListener(
                 sairDaConta
             );
         }
+
     }
 );
 
 
 // ============================================================
-// FUNÇÕES PÚBLICAS
+// API PÚBLICA
 // ============================================================
 
 window.AmestiaAuth = {
 
-    entrar: entrarComGoogle,
+    entrar:
+        entrarComGoogle,
 
-    sair: sairDaConta,
+    sair:
+        sairDaConta,
 
-    getUsuario: () => usuarioAtual,
+    getUsuario:
+        () => usuarioAtual,
 
-    estaLogado: () => {
-        return usuarioAtual !== null;
-    }
+    estaLogado:
+        () => usuarioAtual !== null
 
 };
+
+
+console.log(
+    "AmestiaAuth carregado."
+);

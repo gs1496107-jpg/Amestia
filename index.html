@@ -2,12 +2,48 @@
 <html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Amestia — Até o Esquecimento</title>
+    <meta charset="UTF-8">
 
-  <div class="amestia-conta" id="areaConta">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Amestia — Até o Esquecimento</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     CONTA / LOGIN
+===================================================== -->
+
+<div
+    class="amestia-conta"
+    id="areaConta"
+>
 
     <div class="amestia-conta-info">
 
@@ -56,26 +92,22 @@
 
 </div>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
+<!-- =====================================================
+     APLICAÇÃO
+===================================================== -->
 
 <div class="app">
+
 
 <!-- =====================================================
      SIDEBAR
 ===================================================== -->
 
-<aside class="sidebar" id="sidebar">
+<aside
+    class="sidebar"
+    id="sidebar"
+>
 
     <div class="brand">
 
@@ -84,8 +116,15 @@ rel="stylesheet">
         </div>
 
         <div>
-            <strong>AMESTIA</strong>
-            <span>ATÉ O ESQUECIMENTO</span>
+
+            <strong>
+                AMESTIA
+            </strong>
+
+            <span>
+                ATÉ O ESQUECIMENTO
+            </span>
+
         </div>
 
     </div>
@@ -93,91 +132,193 @@ rel="stylesheet">
 
     <nav class="nav">
 
-        <button class="nav-item active" data-tab="inicio">
+
+        <!-- INÍCIO -->
+
+        <button
+            class="nav-item active"
+            data-tab="inicio"
+        >
             ⌂
-            <span>Início</span>
+            <span>
+                Início
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="ficha">
+
+        <!-- FICHA -->
+
+        <button
+            class="nav-item"
+            data-tab="ficha"
+        >
             ✦
-            <span>Ficha</span>
+            <span>
+                Ficha
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="criar-personagem">
+
+        <!-- CRIAR PERSONAGEM -->
+
+        <button
+            class="nav-item"
+            data-tab="criar-personagem"
+        >
             ＋
-            <span>Criar personagem</span>
+            <span>
+                Criar personagem
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="fichas">
+
+        <!-- MINHAS FICHAS -->
+
+        <button
+            class="nav-item"
+            data-tab="fichas"
+        >
             ▣
-            <span>Minhas fichas</span>
+            <span>
+                Minhas fichas
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="linhagens">
+
+        <!-- LINHAGENS -->
+
+        <button
+            class="nav-item"
+            data-tab="linhagens"
+        >
             ◈
-            <span>Linhagens</span>
+            <span>
+                Linhagens
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="caminhos">
+
+        <!-- CAMINHOS -->
+
+        <button
+            class="nav-item"
+            data-tab="caminhos"
+        >
             ◇
-            <span>Caminhos</span>
+            <span>
+                Caminhos
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="progressao">
+
+        <!-- PROGRESSÃO -->
+
+        <button
+            class="nav-item"
+            data-tab="progressao"
+        >
             ↗
-            <span>Progressão</span>
+            <span>
+                Progressão
+            </span>
         </button>
 
-        <button class="nav-item" data-tab="regras">
+
+        <!-- REGRAS -->
+
+        <button
+            class="nav-item"
+            data-tab="regras"
+        >
             ≡
-            <span>Regras</span>
+            <span>
+                Regras
+            </span>
         </button>
 
-<button class="nav-item" data-tab="mestre">
-    ◉
-    <span>Painel do Mestre</span>
-</button>
 
-        <button class="nav-item" data-tab="biblioteca">
+        <!-- MESTRE -->
+
+        <button
+            class="nav-item"
+            data-tab="mestre"
+        >
+            ◉
+            <span>
+                Painel do Mestre
+            </span>
+        </button>
+
+
+        <!-- BIBLIOTECA -->
+
+        <button
+            class="nav-item"
+            data-tab="biblioteca"
+        >
             ▤
-            <span>Biblioteca</span>
+            <span>
+                Biblioteca
+            </span>
         </button>
 
-      <button class="nav-item" data-tab="campanhas">
-    ◫
-    <span>Campanhas</span>
-</button>
+
+        <!-- CAMPANHAS -->
+
+        <button
+            class="nav-item"
+            data-tab="campanhas"
+        >
+            ◫
+            <span>
+                Campanhas
+            </span>
+        </button>
+
 
     </nav>
 
 
     <div class="sidebar-foot">
+
         1970 · O Véu está rachado.
+
     </div>
 
 </aside>
 
 
 <!-- =====================================================
-     CONTEÚDO
+     CONTEÚDO PRINCIPAL
 ===================================================== -->
 
 <main class="main">
+
+
+<!-- =====================================================
+     CABEÇALHO MOBILE
+===================================================== -->
 
 <header class="mobile-head">
 
     <button
         id="menuBtn"
         class="icon-btn"
+        type="button"
     >
         ☰
     </button>
 
-    <strong>AMESTIA</strong>
+
+    <strong>
+        AMESTIA
+    </strong>
+
 
     <button
         class="icon-btn"
         data-tab="criar-personagem"
+        type="button"
     >
         ＋
     </button>
@@ -189,7 +330,10 @@ rel="stylesheet">
      INÍCIO
 ===================================================== -->
 
-<section id="inicio" class="tab active">
+<section
+    id="inicio"
+    class="tab active"
+>
 
     <div class="hero">
 
@@ -199,29 +343,43 @@ rel="stylesheet">
                 SISTEMA DE RPG INVESTIGATIVO
             </span>
 
+
             <h1>
+
                 Olhe através do Véu.
+
                 <br>
-                <em>Não espere sair igual.</em>
+
+                <em>
+                    Não espere sair igual.
+                </em>
+
             </h1>
 
+
             <p>
+
                 Crie investigadores, acompanhe sua evolução,
                 consulte os Caminhos e administre sua campanha.
+
             </p>
+
 
             <div class="hero-actions">
 
                 <button
                     class="btn primary"
                     data-tab="ficha"
+                    type="button"
                 >
                     Criar personagem
                 </button>
 
+
                 <button
                     class="btn ghost"
                     data-tab="regras"
+                    type="button"
                 >
                     Consultar regras
                 </button>
@@ -233,13 +391,21 @@ rel="stylesheet">
 
         <div class="hero-card">
 
-            <span>AMESTIA</span>
+            <span>
+                AMESTIA
+            </span>
+
 
             <b>
+
                 ATÉ O
+
                 <br>
+
                 ESQUECIMENTO
+
             </b>
+
 
             <small>
                 1970 · O ABSTRATO SE TORNA REAL
@@ -258,6 +424,7 @@ rel="stylesheet">
                 VISÃO GERAL
             </span>
 
+
             <h2>
                 Seu painel de Amestia
             </h2>
@@ -269,20 +436,28 @@ rel="stylesheet">
 
     <div class="dashboard-grid">
 
+
         <button
             class="dash-card"
             data-tab="criar-personagem"
+            type="button"
         >
 
-            <span>01</span>
+            <span>
+                01
+            </span>
+
 
             <b>
                 Criação de personagem
             </b>
 
+
             <small>
+
                 Atributos, perícias,
                 linhagem e Habilidade Única.
+
             </small>
 
         </button>
@@ -291,16 +466,23 @@ rel="stylesheet">
         <button
             class="dash-card"
             data-tab="caminhos"
+            type="button"
         >
 
-            <span>02</span>
+            <span>
+                02
+            </span>
+
 
             <b>
                 24 Caminhos
             </b>
 
+
             <small>
+
                 Escolha habilidades de diferentes Caminhos.
+
             </small>
 
         </button>
@@ -309,16 +491,23 @@ rel="stylesheet">
         <button
             class="dash-card"
             data-tab="progressao"
+            type="button"
         >
 
-            <span>03</span>
+            <span>
+                03
+            </span>
+
 
             <b>
                 Progressão
             </b>
 
+
             <small>
+
                 PRO, XP e domínio de Grau III.
+
             </small>
 
         </button>
@@ -327,19 +516,27 @@ rel="stylesheet">
         <button
             class="dash-card"
             data-tab="mestre"
+            type="button"
         >
 
-            <span>04</span>
+            <span>
+                04
+            </span>
+
 
             <b>
                 Painel do Mestre
             </b>
 
+
             <small>
+
                 Relógios, investigação e Véu.
+
             </small>
 
         </button>
+
 
     </div>
 
@@ -350,9 +547,16 @@ rel="stylesheet">
      CRIAÇÃO DE PERSONAGEM
 ===================================================== -->
 
-<section id="criar-personagem" class="tab">
+<section
+    id="criar-personagem"
+    class="tab"
+>
 
-<div id="editorBundle" class="editor-bundle">
+<div
+    id="editorBundle"
+    class="editor-bundle"
+>
+
 
 <div class="section-head">
 
@@ -362,9 +566,11 @@ rel="stylesheet">
             INVESTIGADOR
         </span>
 
+
         <h2>
             Ficha de personagem
         </h2>
+
 
         <p>
             Todos os valores derivados são recalculados automaticamente.
@@ -378,13 +584,16 @@ rel="stylesheet">
         <button
             class="btn ghost"
             id="newSheet"
+            type="button"
         >
             Nova ficha
         </button>
 
+
         <button
             class="btn primary"
             id="saveSheet"
+            type="button"
         >
             Salvar
         </button>
@@ -406,7 +615,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>01</span>
+    <span>
+        01
+    </span>
 
     <h3>
         Identidade
@@ -417,45 +628,59 @@ rel="stylesheet">
 
 <div class="grid-2">
 
+
 <label>
+
     Nome
+
     <input
         id="nome"
         placeholder="Nome do investigador"
     >
+
 </label>
 
 
 <label>
+
     Jogador
+
     <input
         id="jogador"
         placeholder="Nome do jogador"
     >
+
 </label>
 
 
 <label>
+
     Idade
+
     <input
         id="idade"
         type="number"
         min="0"
         placeholder="Idade"
     >
+
 </label>
 
 
 <label>
+
     Profissão / Histórico
+
     <input
         id="historico"
         placeholder="Ex.: Jornalista"
     >
+
 </label>
 
 
 <label>
+
     Linhagem
 
     <select id="linhagem">
@@ -470,6 +695,7 @@ rel="stylesheet">
 
 
 <label>
+
     Atributo-Guia
 
     <select id="guia">
@@ -499,6 +725,7 @@ rel="stylesheet">
 
 </label>
 
+
 </div>
 
 </div>
@@ -510,7 +737,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>02</span>
+    <span>
+        02
+    </span>
 
     <h3>
         Atributos
@@ -522,10 +751,12 @@ rel="stylesheet">
 
 </div>
 
+
 <div
     id="attrGrid"
     class="attr-grid"
 ></div>
+
 
 <div
     id="attrNotice"
@@ -541,7 +772,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>03</span>
+    <span>
+        03
+    </span>
 
     <h3>
         Perícias
@@ -553,10 +786,12 @@ rel="stylesheet">
 
 </div>
 
+
 <div
     id="skillGrid"
     class="skill-grid"
 ></div>
+
 
 <div
     id="skillNotice"
@@ -572,7 +807,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>04</span>
+    <span>
+        04
+    </span>
 
     <h3>
         As três Âncoras
@@ -594,10 +831,12 @@ rel="stylesheet">
         Âncora I
     </strong>
 
+
     <input
         id="ancora1Nome"
         placeholder="Nome"
     >
+
 
     <textarea
         id="ancora1Desc"
@@ -613,10 +852,12 @@ rel="stylesheet">
         Âncora II
     </strong>
 
+
     <input
         id="ancora2Nome"
         placeholder="Nome"
     >
+
 
     <textarea
         id="ancora2Desc"
@@ -632,10 +873,12 @@ rel="stylesheet">
         Âncora III
     </strong>
 
+
     <input
         id="ancora3Nome"
         placeholder="Nome"
     >
+
 
     <textarea
         id="ancora3Desc"
@@ -656,7 +899,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>05</span>
+    <span>
+        05
+    </span>
 
     <h3>
         Habilidade Única
@@ -670,6 +915,7 @@ rel="stylesheet">
 
 
 <div class="grid-2">
+
 
 <label>
 
@@ -709,6 +955,7 @@ rel="stylesheet">
 
 </label>
 
+
 </div>
 
 </div>
@@ -720,7 +967,9 @@ rel="stylesheet">
 
 <div class="panel-title">
 
-    <span>06</span>
+    <span>
+        06
+    </span>
 
     <h3>
         Equipamento
@@ -738,13 +987,15 @@ rel="stylesheet">
 </div>
 
 
-<!-- RECURSOS ATUAIS -->
+<!-- RECURSOS -->
 
 <div class="panel">
 
 <div class="panel-title">
 
-    <span>07</span>
+    <span>
+        07
+    </span>
 
     <h3>
         Recursos atuais
@@ -757,52 +1008,67 @@ rel="stylesheet">
 
 
 <label>
+
     PV atual
+
     <input
         id="pvAtual"
         type="number"
         min="0"
     >
+
 </label>
 
 
 <label>
+
     Estabilidade atual
+
     <input
         id="estabilidadeAtual"
         type="number"
         min="0"
     >
+
 </label>
 
 
 <label>
+
     Fluxo atual
+
     <input
         id="fluxoAtual"
         type="number"
         min="0"
     >
+
 </label>
 
 
 <label>
+
     PRO
+
     <input
         id="pro"
         type="number"
         min="0"
     >
+
 </label>
 
 
 <label>
+
     XP
+
     <input
         id="xp"
         type="number"
         min="0"
     >
+
 </label>
 
 
@@ -814,7 +1080,9 @@ rel="stylesheet">
 </div>
 
 
-<!-- LADO DIREITO -->
+<!-- =====================================================
+     LADO DIREITO
+===================================================== -->
 
 <aside class="sheet-side">
 
@@ -838,60 +1106,104 @@ Valores derivados
 
 
 <div>
-<small>PV MÁX.</small>
-<strong id="pvMax">20</strong>
+
+<small>
+PV MÁX.
+</small>
+
+<strong id="pvMax">
+20
+</strong>
+
 <em>
 20 + Vigor × 3
 </em>
+
 </div>
 
 
 <div>
-<small>ESTABILIDADE</small>
-<strong id="estabilidadeMax">20</strong>
+
+<small>
+ESTABILIDADE
+</small>
+
+<strong id="estabilidadeMax">
+20
+</strong>
+
 <em>
 20 + Vontade × 2 + Cognição
 </em>
+
 </div>
 
 
 <div>
-<small>FLUXO</small>
-<strong id="fluxoMax">10</strong>
+
+<small>
+FLUXO
+</small>
+
+<strong id="fluxoMax">
+10
+</strong>
+
 <em id="fluxoFormula">
 10 + Cognição × 2
 </em>
+
 </div>
 
 
 <div>
-<small>DEFESA</small>
-<strong id="defesa">8</strong>
+
+<small>
+DEFESA
+</small>
+
+<strong id="defesa">
+8
+</strong>
+
 <em>
 8 + Agilidade + Proteção
 </em>
+
 </div>
 
 
 <div>
-<small>INICIATIVA</small>
+
+<small>
+INICIATIVA
+</small>
+
 <strong id="iniciativa">
 1d20 + 0
 </strong>
+
 <em>
 1d20 + Percepção + Prontidão
 </em>
+
 </div>
 
 
 <div>
-<small>MOVIMENTO</small>
+
+<small>
+MOVIMENTO
+</small>
+
 <strong id="movimento">
 8 m
 </strong>
+
 <em>
 8 + Agilidade
 </em>
+
 </div>
 
 
@@ -914,6 +1226,7 @@ Nenhuma
 
 </div>
 
+
 <p id="lineageText">
 Selecione uma linhagem.
 </p>
@@ -935,22 +1248,28 @@ CAMINHOS
 
 </div>
 
+
 <p>
+
 Você pode aprender habilidades de vários Caminhos,
 mas apenas dois podem alcançar o Grau III.
+
 </p>
 
+
 <button
-class="btn ghost full-btn"
-data-tab="progressao"
+    class="btn ghost full-btn"
+    data-tab="progressao"
+    type="button"
 >
-Gerenciar progressão
+    Gerenciar progressão
 </button>
 
 </div>
 
 
 </aside>
+
 
 </div>
 
@@ -963,32 +1282,53 @@ Gerenciar progressão
      FICHA / VISUALIZAÇÃO
 ===================================================== -->
 
-<section id="ficha" class="tab">
+<section
+    id="ficha"
+    class="tab"
+>
 
 <div class="section-head">
+
     <div>
-        <span class="eyebrow">INVESTIGADOR</span>
-        <h2>Ficha de personagem</h2>
-        <p>Visualização da ficha atual. Você pode editar diretamente esta tela.</p>
+
+        <span class="eyebrow">
+            INVESTIGADOR
+        </span>
+
+
+        <h2>
+            Ficha de personagem
+        </h2>
+
+
+        <p>
+            Visualização da ficha atual. Você pode editar diretamente esta tela.
+        </p>
+
     </div>
+
 
     <div class="head-actions">
 
         <button
             class="btn ghost"
             id="backToSheets"
+            type="button"
         >
             Minhas fichas
         </button>
 
+
         <button
             class="btn primary"
             id="editSheet"
+            type="button"
         >
             Editar ficha
         </button>
 
     </div>
+
 </div>
 
 
@@ -1010,7 +1350,10 @@ Gerenciar progressão
      FICHAS
 ===================================================== -->
 
-<section id="fichas" class="tab">
+<section
+    id="fichas"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1020,9 +1363,11 @@ Gerenciar progressão
 ARQUIVO PESSOAL
 </span>
 
+
 <h2>
 Minhas fichas
 </h2>
+
 
 <p>
 Fichas armazenadas neste dispositivo.
@@ -1030,19 +1375,21 @@ Fichas armazenadas neste dispositivo.
 
 </div>
 
+
 <button
-class="btn primary"
-data-tab="criar-personagem"
+    class="btn primary"
+    data-tab="criar-personagem"
+    type="button"
 >
-＋ Nova ficha
+    ＋ Nova ficha
 </button>
 
 </div>
 
 
 <div
-id="savedSheets"
-class="saved-grid"
+    id="savedSheets"
+    class="saved-grid"
 ></div>
 
 </section>
@@ -1052,7 +1399,10 @@ class="saved-grid"
      LINHAGENS
 ===================================================== -->
 
-<section id="linhagens" class="tab">
+<section
+    id="linhagens"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1062,9 +1412,11 @@ class="saved-grid"
 ORIGENS
 </span>
 
+
 <h2>
 Linhagens
 </h2>
+
 
 <p>
 A linhagem define aquilo que o personagem é.
@@ -1076,8 +1428,8 @@ A linhagem define aquilo que o personagem é.
 
 
 <div
-id="lineageGrid"
-class="catalog-grid"
+    id="lineageGrid"
+    class="catalog-grid"
 ></div>
 
 </section>
@@ -1087,7 +1439,10 @@ class="catalog-grid"
      CAMINHOS
 ===================================================== -->
 
-<section id="caminhos" class="tab">
+<section
+    id="caminhos"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1097,9 +1452,11 @@ class="catalog-grid"
 APOTEOSE
 </span>
 
+
 <h2>
 Os 24 Caminhos
 </h2>
+
 
 <p>
 Conheça os Caminhos e consulte suas habilidades.
@@ -1112,9 +1469,10 @@ Conheça os Caminhos e consulte suas habilidades.
 
 <div class="path-toolbar">
 
+
 <input
-id="pathSearch"
-placeholder="Pesquisar Caminho ou habilidade..."
+    id="pathSearch"
+    placeholder="Pesquisar Caminho ou habilidade..."
 >
 
 
@@ -1138,12 +1496,13 @@ Grau III
 
 </select>
 
+
 </div>
 
 
 <div
-id="pathGrid"
-class="path-grid"
+    id="pathGrid"
+    class="path-grid"
 ></div>
 
 </section>
@@ -1153,7 +1512,10 @@ class="path-grid"
      PROGRESSÃO
 ===================================================== -->
 
-<section id="progressao" class="tab">
+<section
+    id="progressao"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1163,9 +1525,11 @@ class="path-grid"
 EVOLUÇÃO
 </span>
 
+
 <h2>
 Progressão
 </h2>
+
 
 <p>
 Gaste PRO para adquirir habilidades dos Caminhos.
@@ -1178,11 +1542,13 @@ Gaste PRO para adquirir habilidades dos Caminhos.
 
 <div class="progress-header">
 
+
 <div class="progress-resource">
 
 <span>
 PRO DISPONÍVEL
 </span>
+
 
 <strong id="progressPRO">
 0
@@ -1197,18 +1563,20 @@ PRO DISPONÍVEL
 GRAUS III
 </span>
 
+
 <strong id="progressIII">
 0 / 2
 </strong>
 
 </div>
 
+
 </div>
 
 
 <div
-id="progressPathGrid"
-class="progress-path-grid"
+    id="progressPathGrid"
+    class="progress-path-grid"
 ></div>
 
 </section>
@@ -1218,7 +1586,10 @@ class="progress-path-grid"
      REGRAS
 ===================================================== -->
 
-<section id="regras" class="tab">
+<section
+    id="regras"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1228,9 +1599,11 @@ class="progress-path-grid"
 CONSULTA
 </span>
 
+
 <h2>
 Regras de Amestia
 </h2>
+
 
 <p>
 Consulta rápida das regras.
@@ -1243,15 +1616,18 @@ Consulta rápida das regras.
 
 <div class="rule-layout">
 
-<div
-id="ruleNav"
-class="rule-nav"
-></div>
 
 <div
-id="ruleContent"
-class="rule-content"
+    id="ruleNav"
+    class="rule-nav"
 ></div>
+
+
+<div
+    id="ruleContent"
+    class="rule-content"
+></div>
+
 
 </div>
 
@@ -1262,7 +1638,10 @@ class="rule-content"
      MESTRE
 ===================================================== -->
 
-<section id="mestre" class="tab">
+<section
+    id="mestre"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1272,9 +1651,11 @@ class="rule-content"
 MESTRE
 </span>
 
+
 <h2>
 Painel do Mestre
 </h2>
+
 
 <p>
 Ferramentas para conduzir investigações.
@@ -1284,9 +1665,10 @@ Ferramentas para conduzir investigações.
 
 </div>
 
-  <!-- =========================================================
-     PAINEL DO MESTRE
-========================================================= -->
+
+<!-- =====================================================
+     PAINEL DA CAMPANHA DO MESTRE
+===================================================== -->
 
 <section
     id="masterCampaignPanel"
@@ -1314,7 +1696,9 @@ Ferramentas para conduzir investigações.
 ></div>
 
 
-<!-- DENSIDADE -->
+<!-- =====================================================
+     DENSIDADE DO VÉU
+===================================================== -->
 
 <div class="panel">
 
@@ -1323,6 +1707,7 @@ Ferramentas para conduzir investigações.
 <span>
 01
 </span>
+
 
 <h3>
 Densidade do Véu
@@ -1333,11 +1718,13 @@ Densidade do Véu
 
 <div class="veil-control">
 
+
 <button
-class="veil-btn"
-data-veil="-1"
+    class="veil-btn"
+    data-veil="-1"
+    type="button"
 >
-−
+    −
 </button>
 
 
@@ -1347,11 +1734,13 @@ DV 0
 
 
 <button
-class="veil-btn"
-data-veil="1"
+    class="veil-btn"
+    data-veil="1"
+    type="button"
 >
-+
+    +
 </button>
+
 
 </div>
 
@@ -1363,7 +1752,9 @@ Realidade normal.
 </div>
 
 
-<!-- RELÓGIOS -->
+<!-- =====================================================
+     RELÓGIOS
+===================================================== -->
 
 <div class="panel">
 
@@ -1372,6 +1763,7 @@ Realidade normal.
 <span>
 02
 </span>
+
 
 <h3>
 Relógios das Sombras
@@ -1382,9 +1774,10 @@ Relógios das Sombras
 
 <div class="clock-create">
 
+
 <input
-id="clockName"
-placeholder="Nome do relógio"
+    id="clockName"
+    placeholder="Nome do relógio"
 >
 
 
@@ -1406,24 +1799,28 @@ placeholder="Nome do relógio"
 
 
 <button
-id="createClock"
-class="btn primary"
+    id="createClock"
+    class="btn primary"
+    type="button"
 >
 Criar
 </button>
+
 
 </div>
 
 
 <div
-id="clockGrid"
-class="clock-grid"
+    id="clockGrid"
+    class="clock-grid"
 ></div>
 
 </div>
 
 
-<!-- INVESTIGAÇÃO -->
+<!-- =====================================================
+     INVESTIGAÇÃO
+===================================================== -->
 
 <div class="panel">
 
@@ -1432,6 +1829,7 @@ class="clock-grid"
 <span>
 03
 </span>
+
 
 <h3>
 Investigação
@@ -1442,41 +1840,55 @@ Investigação
 
 <div class="investigation-grid">
 
+
 <label>
+
 Mistério
+
 <textarea
-id="misterio"
-rows="4"
+    id="misterio"
+    rows="4"
 ></textarea>
+
 </label>
 
 
 <label>
+
 Ameaça
+
 <textarea
-id="ameaca"
-rows="4"
+    id="ameaca"
+    rows="4"
 ></textarea>
+
 </label>
 
 
 <label>
+
 Pistas essenciais
+
 <textarea
-id="pistas"
-rows="4"
+    id="pistas"
+    rows="4"
 ></textarea>
+
 </label>
 
 
 <label>
+
 Consequência
+
 <textarea
-id="consequencia"
-rows="4"
+    id="consequencia"
+    rows="4"
 ></textarea>
+
 </label>
 
+
 </div>
 
 </div>
@@ -1484,224 +1896,244 @@ rows="4"
 
 </section>
 
-  <section
-    id="tab-campanhas"
-    class="app-screen"
->
-    <!-- conteúdo das campanhas -->
-</section>
 
-  
 <!-- =====================================================
      CAMPANHAS
 ===================================================== -->
 
-<section id="campanhas" class="tab">
+<section
+    id="campanhas"
+    class="tab"
+>
 
-    <div class="section-head">
+<div class="section-head">
 
-        <div>
+    <div>
 
-            <span class="eyebrow">
-                ARQUIVO DO VÉU
-            </span>
+        <span class="eyebrow">
+            ARQUIVO DO VÉU
+        </span>
 
-            <h2>
-                Campanhas
-            </h2>
 
-            <p>
-                Crie, participe e acompanhe suas campanhas de Amestia.
-            </p>
+        <h2>
+            Campanhas
+        </h2>
 
-        </div>
+
+        <p>
+            Crie, participe e acompanhe suas campanhas de Amestia.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     AÇÕES DE CAMPANHA
+===================================================== -->
+
+<div class="campaign-actions-grid">
+
+
+<!-- =====================================================
+     CRIAR CAMPANHA
+===================================================== -->
+
+<section class="panel">
+
+    <div class="section-heading">
+
+        <span class="tag">
+            NOVA CAMPANHA
+        </span>
+
+
+        <h3>
+            Criar campanha
+        </h3>
 
     </div>
 
 
-    <!-- =================================================
-         AÇÕES
-    ================================================== -->
-
-    <div class="campaign-actions-grid">
-
-        <!-- CRIAR -->
-
-        <section class="panel">
-
-            <div class="section-heading">
-
-                <span class="tag">
-                    NOVA CAMPANHA
-                </span>
-
-                <h3>
-                    Criar campanha
-                </h3>
-
-            </div>
+    <form id="campaignCreateForm">
 
 
-            <form id="campaignCreateForm">
+        <div class="field">
 
-                <div class="field">
-
-                    <label for="campaignName">
-                        Nome da campanha
-                    </label>
-
-                    <input
-                        id="campaignName"
-                        type="text"
-                        placeholder="Ex.: O Último Véu"
-                        maxlength="100"
-                        required
-                    >
-
-                </div>
+            <label for="campaignName">
+                Nome da campanha
+            </label>
 
 
-                <div class="field">
-
-                    <label for="campaignDescription">
-                        Descrição
-                    </label>
-
-                    <textarea
-                        id="campaignDescription"
-                        rows="5"
-                        maxlength="500"
-                        placeholder="Descreva brevemente a campanha..."
-                    ></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn primary"
-                >
-                    Criar campanha
-                </button>
-
-            </form>
-
-        </section>
-
-
-        <!-- ENTRAR -->
-
-        <section class="panel">
-
-            <div class="section-heading">
-
-                <span class="tag">
-                    PARTICIPAR
-                </span>
-
-                <h3>
-                    Entrar em campanha
-                </h3>
-
-            </div>
-
-
-            <form id="campaignJoinForm">
-
-                <div class="field">
-
-                    <label for="campaignCode">
-                        Código da campanha
-                    </label>
-
-                    <input
-                        id="campaignCode"
-                        type="text"
-                        placeholder="Ex.: AM7K2P"
-                        maxlength="6"
-                        autocomplete="off"
-                        required
-                    >
-
-                </div>
-
-
-                <p class="field-help">
-                    Digite o código fornecido pelo mestre.
-                </p>
-
-
-                <button
-                    type="submit"
-                    class="btn primary"
-                >
-                    Entrar na campanha
-                </button>
-
-            </form>
-
-        </section>
-
-    </div>
-
-
-    <!-- =================================================
-         MINHAS CAMPANHAS
-    ================================================== -->
-
-    <section class="panel campaign-list-panel">
-
-        <div class="section-heading">
-
-            <span class="tag">
-                ARQUIVO
-            </span>
-
-            <h3>
-                Minhas campanhas
-            </h3>
-
-            <p>
-                Campanhas das quais você participa ou é mestre.
-            </p>
+            <input
+                id="campaignName"
+                type="text"
+                placeholder="Ex.: O Último Véu"
+                maxlength="100"
+                required
+            >
 
         </div>
 
 
-        <div
-            id="campaignGrid"
-            class="campaign-grid"
+        <div class="field">
+
+            <label for="campaignDescription">
+                Descrição
+            </label>
+
+
+            <textarea
+                id="campaignDescription"
+                rows="5"
+                maxlength="500"
+                placeholder="Descreva brevemente a campanha..."
+            ></textarea>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn primary"
         >
-
-            <div class="empty-state">
-
-                <p>
-                    Carregando campanhas...
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
+            Criar campanha
+        </button>
 
 
-    <!-- =================================================
-         CAMPANHA ABERTA
-    ================================================== -->
-
-    <section
-        id="campaignPanel"
-        class="campaign-open-panel"
-    ></section>
+    </form>
 
 </section>
+
+
+<!-- =====================================================
+     ENTRAR EM CAMPANHA
+===================================================== -->
+
+<section class="panel">
+
+    <div class="section-heading">
+
+        <span class="tag">
+            PARTICIPAR
+        </span>
+
+
+        <h3>
+            Entrar em campanha
+        </h3>
+
+    </div>
+
+
+    <form id="campaignJoinForm">
+
+
+        <div class="field">
+
+            <label for="campaignCode">
+                Código da campanha
+            </label>
+
+
+            <input
+                id="campaignCode"
+                type="text"
+                placeholder="Ex.: AM7K2P"
+                maxlength="6"
+                autocomplete="off"
+                required
+            >
+
+        </div>
+
+
+        <p class="field-help">
+            Digite o código fornecido pelo mestre.
+        </p>
+
+
+        <button
+            type="submit"
+            class="btn primary"
+        >
+            Entrar na campanha
+        </button>
+
+
+    </form>
+
+</section>
+
+
+</div>
+
+
+<!-- =====================================================
+     MINHAS CAMPANHAS
+===================================================== -->
+
+<section class="panel campaign-list-panel">
+
+    <div class="section-heading">
+
+        <span class="tag">
+            ARQUIVO
+        </span>
+
+
+        <h3>
+            Minhas campanhas
+        </h3>
+
+
+        <p>
+            Campanhas das quais você participa ou é mestre.
+        </p>
+
+    </div>
+
+
+    <div
+        id="campaignGrid"
+        class="campaign-grid"
+    >
+
+        <div class="empty-state">
+
+            <p>
+                Carregando campanhas...
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CAMPANHA ABERTA
+===================================================== -->
+
+<section
+    id="campaignPanel"
+    class="campaign-open-panel"
+></section>
+
+
+</section>
+
 
 <!-- =====================================================
      BIBLIOTECA
 ===================================================== -->
 
-<section id="biblioteca" class="tab">
+<section
+    id="biblioteca"
+    class="tab"
+>
 
 <div class="section-head">
 
@@ -1711,9 +2143,11 @@ rows="4"
 ARQUIVO
 </span>
 
+
 <h2>
 Biblioteca
 </h2>
+
 
 <p>
 Consulta organizada do livro.
@@ -1725,109 +2159,54 @@ Consulta organizada do livro.
 
 
 <div
-id="libraryGrid"
-class="library-grid"
+    id="libraryGrid"
+    class="library-grid"
 ></div>
 
 </section>
 
 
+<!-- =====================================================
+     RODAPÉ
+===================================================== -->
+
 <footer>
 
-AMESTIA · ATÉ O ESQUECIMENTO · 1970
+    AMESTIA · ATÉ O ESQUECIMENTO · 1970
 
 </footer>
 
 
 </main>
 
+
 </div>
 
-  <section id="screen-campanhas" class="screen">
-
-    <div class="page-header">
-
-        <div>
-            <span class="eyebrow">
-                ARQUIVO DO VÉU
-            </span>
-
-            <h1>Campanhas</h1>
-
-            <p>
-                Crie, participe e acompanhe suas campanhas de Amestia.
-            </p>
-        </div>
-
-    </div>
-
-    
-    <!-- =====================================================
-         MINHAS CAMPANHAS
-    ====================================================== -->
-
-    <section class="panel campaign-list-panel">
-
-        <div class="section-heading">
-
-            <span class="tag">
-                ARQUIVO
-            </span>
-
-            <h2>
-                Minhas campanhas
-            </h2>
-
-            <p>
-                Campanhas das quais você participa ou é mestre.
-            </p>
-
-        </div>
-
-
-        <div
-            id="campaignGrid"
-            class="campaign-grid"
-        >
-
-            <div class="empty-state">
-
-                <p>
-                    Carregando campanhas...
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         CAMPANHA ABERTA
-    ====================================================== -->
-
-    <section
-        id="campaignPanel"
-        class="campaign-open-panel"
-    ></section>
-
-</section>
 
 <!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
 
 <script src="dados.js"></script>
+
 <script src="caminhos.js"></script>
+
 <script src="ficha.js"></script>
+
 <script src="mestre.js"></script>
+
 <script src="campanhas.js"></script>
+
 <script src="painel-mestre.js"></script>
+
 <script src="app.js"></script>
 
-<script type="module" src="auth.js"></script>
-  
+<script
+    type="module"
+    src="auth.js"
+></script>
+
+
 </body>
 
 </html>
