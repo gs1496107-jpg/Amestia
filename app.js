@@ -7,12 +7,30 @@
 "use strict";
 
 
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
 const KEY =
     "amestia_fichas_v3";
 
 
+/*
+   Cache local da sessão.
+
+   O armazenamento definitivo das fichas
+   fica no Firebase / Firestore.
+*/
+let fichasCache = [];
+
 let ficha =
     AmestiaFicha.criarFicha();
+
+let usuarioFirebase =
+    null;
+
+let modoEdicao =
+    false;
 
 
 const $ =
@@ -118,6 +136,10 @@ function construirAtributos() {
         $("attrGrid");
 
 
+    if (!container)
+        return;
+
+
     container.innerHTML =
         Object.entries(
             AMESTIA.atributos
@@ -137,7 +159,9 @@ function construirAtributos() {
                             type="number"
                             min="0"
                             max="4"
-                            value="${ficha.atributos[id]}"
+                            value="${
+                                ficha.atributos[id] || 0
+                            }"
                             data-atributo="${id}"
                         >
 
@@ -201,6 +225,10 @@ function construirPericias() {
         $("skillGrid");
 
 
+    if (!container)
+        return;
+
+
     container.innerHTML =
         AMESTIA.pericias
         .map(
@@ -221,7 +249,12 @@ function construirPericias() {
                             </span>
 
                             <small>
-                                ${AMESTIA.atributos[atributo].nome}
+                                ${
+                                    AMESTIA
+                                        .atributos[
+                                            atributo
+                                        ].nome
+                                }
                             </small>
 
                         </div>
@@ -285,28 +318,48 @@ function construirPericias() {
 
 function construirLinhagens() {
 
-    $("linhagem").innerHTML = `
-
-        <option value="">
-            Selecione...
-        </option>
-
-        ${
-            AMESTIA.linhagens
-            .map(
-                linhagem => `
-                    <option value="${linhagem.id}">
-                        ${linhagem.nome}
-                    </option>
-                `
-            )
-            .join("")
-        }
-
-    `;
+    const select =
+        $("linhagem");
 
 
-    $("lineageGrid").innerHTML =
+    if (select) {
+
+        select.innerHTML = `
+
+            <option value="">
+                Selecione...
+            </option>
+
+            ${
+                AMESTIA.linhagens
+                .map(
+                    linhagem => `
+
+                        <option
+                            value="${linhagem.id}"
+                        >
+                            ${linhagem.nome}
+                        </option>
+
+                    `
+                )
+                .join("")
+            }
+
+        `;
+
+    }
+
+
+    const grid =
+        $("lineageGrid");
+
+
+    if (!grid)
+        return;
+
+
+    grid.innerHTML =
         AMESTIA.linhagens
         .map(
             linhagem => `
@@ -408,7 +461,9 @@ function configurarCampos() {
                 ) {
 
                     valor =
-                        Number(valor || 0);
+                        Number(
+                            valor || 0
+                        );
 
                 }
 
@@ -439,7 +494,7 @@ function configurarCampos() {
 
 
     $("linhagem")
-        .addEventListener(
+        ?.addEventListener(
             "change",
             evento => {
 
@@ -449,12 +504,14 @@ function configurarCampos() {
 
                 atualizarLinhagem();
 
+                recalcular();
+
             }
         );
 
 
     $("guia")
-        .addEventListener(
+        ?.addEventListener(
             "change",
             evento => {
 
@@ -483,43 +540,56 @@ function recalcular() {
         );
 
 
-    $("pvMax")
-        .textContent =
-        derivados.pv;
+    if ($("pvMax"))
+        $("pvMax").textContent =
+            derivados.pv;
 
 
-    $("estabilidadeMax")
-        .textContent =
-        derivados.estabilidade;
+    if ($("estabilidadeMax"))
+        $("estabilidadeMax")
+            .textContent =
+                derivados.estabilidade;
 
 
-    $("fluxoMax")
-        .textContent =
-        derivados.fluxo;
+    if ($("fluxoMax"))
+        $("fluxoMax")
+            .textContent =
+                derivados.fluxo;
 
 
-    $("defesa")
-        .textContent =
-        derivados.defesa;
+    if ($("defesa"))
+        $("defesa")
+            .textContent =
+                derivados.defesa;
 
 
-    $("iniciativa")
-        .textContent =
-        `1d20 + ${derivados.iniciativa}`;
+    if ($("iniciativa"))
+        $("iniciativa")
+            .textContent =
+                `1d20 + ${derivados.iniciativa}`;
 
 
-    $("movimento")
-        .textContent =
-        `${derivados.movimento} m`;
+    if ($("movimento"))
+        $("movimento")
+            .textContent =
+                `${derivados.movimento} m`;
 
 
-    $("fluxoFormula")
-        .textContent =
-        `10 + ${
+    if ($("fluxoFormula")) {
+
+        const atributoGuia =
             AMESTIA.atributos[
                 ficha.guia
-            ].nome
-        } × 2`;
+            ];
+
+
+        $("fluxoFormula")
+            .textContent =
+                atributoGuia
+                    ? `10 + ${atributoGuia.nome} × 2`
+                    : "Selecione um Guia";
+
+    }
 
 
     const totalA =
@@ -536,16 +606,19 @@ function recalcular() {
             );
 
 
-    $("attrNotice")
-        .textContent =
-        `${totalA}/9 pontos distribuídos.`;
+    if ($("attrNotice")) {
 
+        $("attrNotice")
+            .textContent =
+                `${totalA}/9 pontos distribuídos.`;
 
-    $("attrNotice")
-        .classList.toggle(
-            "bad",
-            totalA > 9
-        );
+        $("attrNotice")
+            .classList.toggle(
+                "bad",
+                totalA > 9
+            );
+
+    }
 
 
     const limitePericia =
@@ -554,16 +627,19 @@ function recalcular() {
             : 15;
 
 
-    $("skillNotice")
-        .textContent =
-        `${totalP}/${limitePericia} pontos distribuídos.`;
+    if ($("skillNotice")) {
 
+        $("skillNotice")
+            .textContent =
+                `${totalP}/${limitePericia} pontos distribuídos.`;
 
-    $("skillNotice")
-        .classList.toggle(
-            "bad",
-            totalP > limitePericia
-        );
+        $("skillNotice")
+            .classList.toggle(
+                "bad",
+                totalP > limitePericia
+            );
+
+    }
 
 
     atualizarRecursos();
@@ -586,18 +662,20 @@ function atualizarLinhagem() {
         );
 
 
-    $("lineageTitle")
-        .textContent =
-        linhagem
-            ? linhagem.nome
-            : "Nenhuma";
+    if ($("lineageTitle"))
+        $("lineageTitle")
+            .textContent =
+                linhagem
+                    ? linhagem.nome
+                    : "Nenhuma";
 
 
-    $("lineageText")
-        .textContent =
-        linhagem
-            ? linhagem.descricao
-            : "Selecione uma linhagem.";
+    if ($("lineageText"))
+        $("lineageText")
+            .textContent =
+                linhagem
+                    ? linhagem.descricao
+                    : "Selecione uma linhagem.";
 
 }
 
@@ -615,40 +693,83 @@ function atualizarRecursos() {
         );
 
 
-    $("pvAtual")
-        .max =
-        derivados.pv;
+    const pv =
+        $("pvAtual");
+
+    if (pv) {
+
+        pv.max =
+            derivados.pv;
+
+        if (
+            Number(pv.value) >
+            derivados.pv
+        )
+            pv.value =
+                derivados.pv;
+
+    }
 
 
-    $("estabilidadeAtual")
-        .max =
-        derivados.estabilidade;
+    const estabilidade =
+        $("estabilidadeAtual");
+
+    if (estabilidade) {
+
+        estabilidade.max =
+            derivados.estabilidade;
+
+        if (
+            Number(estabilidade.value) >
+            derivados.estabilidade
+        )
+            estabilidade.value =
+                derivados.estabilidade;
+
+    }
 
 
-    $("fluxoAtual")
-        .max =
-        derivados.fluxo;
+    const fluxo =
+        $("fluxoAtual");
+
+    if (fluxo) {
+
+        fluxo.max =
+            derivados.fluxo;
+
+        if (
+            Number(fluxo.value) >
+            derivados.fluxo
+        )
+            fluxo.value =
+                derivados.fluxo;
+
+    }
 
 
-    const progressPRO = $("progressPRO");
+    const progressPRO =
+        $("progressPRO");
 
     if (progressPRO)
         progressPRO.textContent =
             ficha.pro || 0;
 
 
-    const progressIII = $("progressIII");
-
-    if (progressIII)
-        progressIII.textContent =
-            `${(ficha.caminhosGrauIII || []).length}/2`;
+    const graus =
+        ficha.caminhosGrauIII ||
+        [];
 
 
-    const grausIII = $("grausIII");
+    if ($("progressIII"))
+        $("progressIII")
+            .textContent =
+                `${graus.length}/2`;
 
-    if (grausIII)
-        grausIII.textContent =
-            `${(ficha.caminhosGrauIII || []).length}/2`;
+
+    if ($("grausIII"))
+        $("grausIII")
+            .textContent =
+                `${graus.length}/2`;
 
 }
 
@@ -671,7 +792,7 @@ function renderizarCaminhos() {
     const pesquisa =
         (
             $("pathSearch")
-            ?.value || ""
+                ?.value || ""
         )
         .toLowerCase();
 
@@ -682,47 +803,50 @@ function renderizarCaminhos() {
 
 
     const grauFiltro =
-        filtroElemento?.value || "all";
+        filtroElemento?.value ||
+        "all";
 
 
     container.innerHTML =
         CAMINHOS
-        .filter(caminho => {
+        .filter(
+            caminho => {
 
-            const caminhoMatch =
-                caminho.nome
-                    .toLowerCase()
-                    .includes(
-                        pesquisa
-                    ) ||
-                caminho.conceito
-                    .toLowerCase()
-                    .includes(
-                        pesquisa
+                const caminhoMatch =
+                    caminho.nome
+                        .toLowerCase()
+                        .includes(
+                            pesquisa
+                        ) ||
+                    caminho.conceito
+                        .toLowerCase()
+                        .includes(
+                            pesquisa
+                        );
+
+
+                const habilidadeMatch =
+                    Object.values(
+                        caminho.graus
+                    )
+                    .flat()
+                    .some(
+                        habilidade =>
+                            habilidade.nome
+                                .toLowerCase()
+                                .includes(
+                                    pesquisa
+                                )
                     );
 
 
-            const habilidadeMatch =
-                Object.values(
-                    caminho.graus
-                )
-                .flat()
-                .some(
-                    habilidade =>
-                        habilidade.nome
-                            .toLowerCase()
-                            .includes(
-                                pesquisa
-                            )
+                return (
+                    caminhoMatch ||
+                    habilidadeMatch
                 );
 
-
-            return (
-                caminhoMatch ||
-                habilidadeMatch
-            );
-
-        })
+            }
+        )
         .map(
             caminho =>
                 renderCardCaminho(
@@ -771,69 +895,81 @@ function renderCardCaminho(
 
 
     ["I", "II", "III"]
-        .forEach(grau => {
+        .forEach(
+            grau => {
 
-            if (
-                filtro !== "all" &&
-                filtro !== grau
-            )
-                return;
-
-
-            const habilidades =
-                caminho.graus[grau];
+                if (
+                    filtro !== "all" &&
+                    filtro !== grau
+                )
+                    return;
 
 
-            if (!habilidades)
-                return;
+                const habilidades =
+                    caminho.graus[grau];
 
 
-            html += `
-
-                <div class="grade-section">
-
-                    <h4>
-                        Grau ${grau}
-                        ·
-                        ${AMESTIA.graus[grau].nome}
-                    </h4>
-
-            `;
+                if (!habilidades)
+                    return;
 
 
-            habilidades.forEach(
-                habilidade => {
+                html += `
 
-                    html += `
+                    <div class="grade-section">
 
-                        <div class="ability-card">
+                        <h4>
+                            Grau ${grau}
+                            ·
+                            ${
+                                AMESTIA
+                                    .graus[
+                                        grau
+                                    ].nome
+                            }
+                        </h4>
 
-                            <strong>
-                                ${habilidade.nome}
-                            </strong>
-
-                            <p>
-                                ${habilidade.texto}
-                            </p>
-
-                            <small>
-                                ${AMESTIA.graus[grau].custo}
-                                PRO
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }
-            );
+                `;
 
 
-            html += `
-                </div>
-            `;
+                habilidades.forEach(
+                    habilidade => {
 
-        });
+                        html += `
+
+                            <div class="ability-card">
+
+                                <strong>
+                                    ${habilidade.nome}
+                                </strong>
+
+                                <p>
+                                    ${habilidade.texto}
+                                </p>
+
+                                <small>
+                                    ${
+                                        AMESTIA
+                                            .graus[
+                                                grau
+                                            ].custo
+                                    }
+                                    PRO
+                                </small>
+
+                            </div>
+
+                        `;
+
+                    }
+                );
+
+
+                html += `
+                    </div>
+                `;
+
+            }
+        );
 
 
     html += `
@@ -862,13 +998,18 @@ function renderizarProgressao() {
         return;
 
 
+    const habilidadesFicha =
+        ficha.habilidades ||
+        [];
+
+
     container.innerHTML =
         CAMINHOS
         .map(
             caminho => {
 
                 const habilidades =
-                    ficha.habilidades
+                    habilidadesFicha
                     .filter(
                         x =>
                             Number(
@@ -929,19 +1070,24 @@ function renderizarProgressao() {
                                     ? habilidades
                                         .map(
                                             h => `
+
                                                 <div>
                                                     <b>
                                                         Grau ${h.grau}
                                                     </b>
+
                                                     ${h.nome}
                                                 </div>
+
                                             `
                                         )
                                         .join("")
                                     : `
+
                                         <span>
                                             Nenhuma habilidade adquirida.
                                         </span>
+
                                     `
                             }
 
@@ -984,7 +1130,13 @@ function renderBotoesCompra(
 
             ·
 
-            ${AMESTIA.graus[grau].custo}
+            ${
+                AMESTIA
+                    .graus[
+                        grau
+                    ].custo
+            }
+
             PRO
 
         </button>
@@ -1001,7 +1153,7 @@ function renderBotoesCompra(
 
 document.addEventListener(
     "click",
-    evento => {
+    async evento => {
 
         const botao =
             evento.target.closest(
@@ -1038,7 +1190,7 @@ document.addEventListener(
         const proxima =
             habilidades.find(
                 habilidade =>
-                    !ficha.habilidades
+                    !(ficha.habilidades || [])
                     .some(
                         h =>
                             h.caminhoId ===
@@ -1082,11 +1234,18 @@ document.addEventListener(
         }
 
 
-        salvarAutomaticamente();
+        const salvo =
+            await salvarAutomaticamente();
+
+
+        if (!salvo)
+            return;
+
 
         renderizarProgressao();
 
         atualizarRecursos();
+
 
         alert(
             `${proxima.nome} adquirida.`
@@ -1107,13 +1266,21 @@ function construirRegras() {
         $("ruleNav");
 
 
+    if (!nav)
+        return;
+
+
     nav.innerHTML =
         AMESTIA.regras
         .map(
             (regra, index) => `
 
                 <button
-                    class="${index === 0 ? "active" : ""}"
+                    class="${
+                        index === 0
+                            ? "active"
+                            : ""
+                    }"
                     data-regra="${index}"
                 >
                     ${regra.nome}
@@ -1139,11 +1306,13 @@ function construirRegras() {
             );
 
 
-        $("ruleContent")
-            .innerHTML =
-            AMESTIA
-                .regras[index]
-                .texto;
+        if ($("ruleContent"))
+            $("ruleContent")
+                .innerHTML =
+                    AMESTIA
+                        .regras[
+                            index
+                        ].texto;
 
     }
 
@@ -1259,8 +1428,15 @@ function construirBiblioteca() {
     ];
 
 
-    $("libraryGrid")
-        .innerHTML =
+    const grid =
+        $("libraryGrid");
+
+
+    if (!grid)
+        return;
+
+
+    grid.innerHTML =
         capitulos
         .map(
             capitulo => `
@@ -1290,7 +1466,7 @@ function construirBiblioteca() {
 
 
 /* =========================================================
-   SALVAR FICHA
+   COLETAR FICHA
 ========================================================= */
 
 function coletarFicha() {
@@ -1315,12 +1491,14 @@ function coletarFicha() {
     });
 
 
-    ficha.guia =
-        $("guia").value;
+    if ($("guia"))
+        ficha.guia =
+            $("guia").value;
 
 
-    ficha.linhagem =
-        $("linhagem").value;
+    if ($("linhagem"))
+        ficha.linhagem =
+            $("linhagem").value;
 
 
     return ficha;
@@ -1329,101 +1507,150 @@ function coletarFicha() {
 
 
 
-function salvarAutomaticamente() {
+/* =========================================================
+   SALVAR NO FIREBASE
+========================================================= */
 
-    const fichas =
-        carregarFichas();
+async function salvarAutomaticamente() {
+
+    try {
+
+        if (
+            !window.AmestiaFirebase ||
+            !window.AmestiaFirebase.auth
+        ) {
+
+            throw new Error(
+                "Firebase ainda não foi carregado."
+            );
+
+        }
 
 
-    const indice =
-        fichas.findIndex(
-            x =>
-                x.id ===
-                ficha.id
-        );
+        const usuario =
+            window.AmestiaFirebase
+                .auth
+                .currentUser;
 
 
-    if (indice === -1) {
+        if (!usuario) {
 
-        ficha.id =
-            ficha.id ||
-            Date.now();
+            alert(
+                "Entre com sua conta Google antes de salvar a ficha."
+            );
+
+            return false;
+
+        }
 
 
-        fichas.push(
-            structuredClone(
-                ficha
-            )
-        );
+        if (!ficha.id) {
 
-    }
-    else {
+            ficha.id =
+                (
+                    typeof crypto !== "undefined" &&
+                    typeof crypto.randomUUID ===
+                    "function"
+                )
+                    ? crypto.randomUUID()
+                    : (
+                        Date.now()
+                        .toString(36) +
+                        Math.random()
+                            .toString(36)
+                            .slice(2)
+                    );
 
-        fichas[indice] =
-            structuredClone(
+        }
+
+
+        ficha.donoId =
+            usuario.uid;
+
+
+        await AmestiaFicha
+            .salvarNoFirebase(
                 ficha
             );
 
+
+        const indice =
+            fichasCache.findIndex(
+                x =>
+                    x.id === ficha.id
+            );
+
+
+        const copia =
+            JSON.parse(
+                JSON.stringify(
+                    ficha
+                )
+            );
+
+
+        if (indice === -1) {
+
+            fichasCache.push(
+                copia
+            );
+
+        }
+        else {
+
+            fichasCache[indice] =
+                copia;
+
+        }
+
+
+        renderizarFichas();
+
+
+        console.log(
+            "Ficha salva no Firestore:",
+            ficha.id
+        );
+
+
+        return true;
+
     }
+    catch (erro) {
+
+        console.error(
+            "Erro ao salvar ficha:",
+            erro
+        );
 
 
-    localStorage.setItem(
-        KEY,
-        JSON.stringify(
-            fichas
-        )
-    );
+        alert(
+            "Não foi possível salvar a ficha no Firebase.\n\n" +
+            erro.message
+        );
 
 
-    renderizarFichas();
+        return false;
+
+    }
 
 }
 
 
 
-function salvarFicha() {
+/* =========================================================
+   SALVAR FICHA
+========================================================= */
+
+async function salvarFicha() {
+
+    if (
+        !validarFichaAntesDeSalvar()
+    )
+        return;
+
 
     coletarFicha();
-
-
-    const totalA =
-        AmestiaFicha.totalAtributos(
-            ficha
-        );
-
-
-    const totalP =
-        AmestiaFicha.totalPericias(
-            ficha
-        );
-
-
-    const limite =
-        ficha.linhagem === "humano"
-            ? 18
-            : 15;
-
-
-    if (totalA > 9) {
-
-        alert(
-            "Você ultrapassou os 9 pontos de Atributo."
-        );
-
-        return;
-
-    }
-
-
-    if (totalP > limite) {
-
-        alert(
-            `Você ultrapassou o limite de ${limite} pontos de Perícia.`
-        );
-
-        return;
-
-    }
 
 
     const derivados =
@@ -1433,8 +1660,10 @@ function salvarFicha() {
 
 
     if (
-        !ficha.pvAtual &&
-        ficha.pvAtual !== 0
+        ficha.pvAtual ===
+        undefined ||
+        ficha.pvAtual ===
+        null
     )
         ficha.pvAtual =
             derivados.pv;
@@ -1442,7 +1671,9 @@ function salvarFicha() {
 
     if (
         ficha.estabilidadeAtual ===
-        undefined
+        undefined ||
+        ficha.estabilidadeAtual ===
+        null
     )
         ficha.estabilidadeAtual =
             derivados.estabilidade;
@@ -1450,13 +1681,23 @@ function salvarFicha() {
 
     if (
         ficha.fluxoAtual ===
-        undefined
+        undefined ||
+        ficha.fluxoAtual ===
+        null
     )
         ficha.fluxoAtual =
             derivados.fluxo;
 
 
-    salvarAutomaticamente();
+    const salva =
+        await salvarAutomaticamente();
+
+
+    if (!salva)
+        return;
+
+
+    preencherFicha();
 
 
     if (
@@ -1466,17 +1707,8 @@ function salvarFicha() {
         renderizarFichaVisual();
 
 
-    if (
-        typeof abrirAba ===
-        "function"
-    )
-        abrirAba(
-            "ficha"
-        );
-
-
     alert(
-        "Ficha salva."
+        "Ficha salva no Firebase."
     );
 
 }
@@ -1484,21 +1716,145 @@ function salvarFicha() {
 
 
 /* =========================================================
-   FICHAS SALVAS
+   CARREGAR FICHAS
 ========================================================= */
 
 function carregarFichas() {
 
+    return fichasCache;
+
+}
+
+
+
+/* =========================================================
+   SINCRONIZAR FICHAS COM FIREBASE
+========================================================= */
+
+async function sincronizarFichasFirebase() {
+
     try {
 
-        return JSON.parse(
-            localStorage.getItem(
-                KEY
-            ) || "[]"
+        if (
+            !window.AmestiaFirebase ||
+            !window.AmestiaFirebase.auth
+        ) {
+
+            console.warn(
+                "Firebase ainda não disponível."
+            );
+
+            return [];
+
+        }
+
+
+        const usuario =
+            window.AmestiaFirebase
+                .auth
+                .currentUser;
+
+
+        if (!usuario) {
+
+            fichasCache =
+                [];
+
+            renderizarFichas();
+
+            return [];
+
+        }
+
+
+        usuarioFirebase =
+            usuario;
+
+
+        const fichas =
+            await AmestiaFicha
+                .carregarDoFirebase();
+
+
+        fichasCache =
+            Array.isArray(fichas)
+                ? fichas
+                : [];
+
+
+        renderizarFichas();
+
+
+        if (
+            fichasCache.length > 0
+        ) {
+
+            const atual =
+                fichasCache.find(
+                    x =>
+                        x.id === ficha.id
+                );
+
+
+            if (atual) {
+
+                ficha =
+                    JSON.parse(
+                        JSON.stringify(
+                            atual
+                        )
+                    );
+
+            }
+            else {
+
+                ficha =
+                    JSON.parse(
+                        JSON.stringify(
+                            fichasCache[
+                                fichasCache.length - 1
+                            ]
+                        )
+                    );
+
+            }
+
+
+            preencherFicha();
+
+
+            if (
+                typeof renderizarFichaVisual ===
+                "function"
+            )
+                renderizarFichaVisual();
+
+        }
+
+
+        console.log(
+            "Fichas sincronizadas:",
+            fichasCache.length
         );
 
+
+        return fichasCache;
+
     }
-    catch {
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar fichas do Firebase:",
+            erro
+        );
+
+
+        fichasCache =
+            [];
+
+
+        renderizarFichas();
+
 
         return [];
 
@@ -1508,10 +1864,18 @@ function carregarFichas() {
 
 
 
+/* =========================================================
+   RENDERIZAR FICHAS
+========================================================= */
+
 function renderizarFichas() {
 
     const container =
         $("savedSheets");
+
+
+    if (!container)
+        return;
 
 
     const fichas =
@@ -1580,6 +1944,7 @@ function renderizarFichas() {
                     <div class="card-actions">
 
                         <button
+                            type="button"
                             class="small-btn"
                             data-open="${x.id}"
                         >
@@ -1588,6 +1953,7 @@ function renderizarFichas() {
 
 
                         <button
+                            type="button"
                             class="small-btn danger"
                             data-delete="${x.id}"
                         >
@@ -1607,12 +1973,12 @@ function renderizarFichas() {
 
 
 /* =========================================================
-   ABRIR / EXCLUIR
+   ABRIR / EXCLUIR FICHA
 ========================================================= */
 
 document.addEventListener(
     "click",
-    evento => {
+    async evento => {
 
         const abrir =
             evento.target.closest(
@@ -1622,16 +1988,13 @@ document.addEventListener(
 
         if (abrir) {
 
-            const fichas =
-                carregarFichas();
-
-
             const encontrada =
-                fichas.find(
-                    x =>
-                        x.id ==
-                        abrir.dataset.open
-                );
+                carregarFichas()
+                    .find(
+                        x =>
+                            x.id ===
+                            abrir.dataset.open
+                    );
 
 
             if (!encontrada)
@@ -1639,8 +2002,10 @@ document.addEventListener(
 
 
             ficha =
-                structuredClone(
-                    encontrada
+                JSON.parse(
+                    JSON.stringify(
+                        encontrada
+                    )
                 );
 
 
@@ -1658,6 +2023,9 @@ document.addEventListener(
                 "ficha"
             );
 
+
+            return;
+
         }
 
 
@@ -1667,34 +2035,72 @@ document.addEventListener(
             );
 
 
-        if (excluir) {
+        if (!excluir)
+            return;
 
-            if (
-                !confirm(
-                    "Excluir esta ficha?"
-                )
+
+        if (
+            !confirm(
+                "Excluir esta ficha permanentemente?"
             )
-                return;
+        )
+            return;
 
 
-            const fichas =
-                carregarFichas()
-                .filter(
-                    x =>
-                        x.id !=
-                        excluir.dataset.delete
+        const id =
+            excluir.dataset.delete;
+
+
+        try {
+
+            await AmestiaFicha
+                .excluirDoFirebase(
+                    id
                 );
 
 
-            localStorage.setItem(
-                KEY,
-                JSON.stringify(
-                    fichas
-                )
-            );
+            fichasCache =
+                fichasCache.filter(
+                    x =>
+                        x.id !== id
+                );
+
+
+            if (
+                ficha.id === id
+            ) {
+
+                ficha =
+                    AmestiaFicha
+                        .criarFicha();
+
+
+                preencherFicha();
+
+            }
 
 
             renderizarFichas();
+
+
+            console.log(
+                "Ficha excluída do Firebase:",
+                id
+            );
+
+        }
+        catch (erro) {
+
+            console.error(
+                "Erro ao excluir ficha:",
+                erro
+            );
+
+
+            alert(
+                "Não foi possível excluir a ficha.\n\n" +
+                erro.message
+            );
 
         }
 
@@ -1726,14 +2132,16 @@ function preencherFicha() {
     });
 
 
-    $("guia").value =
-        ficha.guia ||
-        "cognicao";
+    if ($("guia"))
+        $("guia").value =
+            ficha.guia ||
+            "cognicao";
 
 
-    $("linhagem").value =
-        ficha.linhagem ||
-        "";
+    if ($("linhagem"))
+        $("linhagem").value =
+            ficha.linhagem ||
+            "";
 
 
     construirAtributos();
@@ -1773,23 +2181,15 @@ function novaFicha() {
     preencherFicha();
 
 
-    if (
-        typeof prepararCriacao ===
-        "function"
-    )
-        prepararCriacao();
+    prepararCriacao();
 
 }
 
 
 
-
 /* =========================================================
-   MODO VISUAL / EDIÇÃO DA FICHA
+   ESCAPAR TEXTO
 ========================================================= */
-
-let modoEdicao = false;
-
 
 function escapar(valor) {
 
@@ -1819,6 +2219,11 @@ function escapar(valor) {
 
 }
 
+
+
+/* =========================================================
+   NOME DOS ATRIBUTOS
+========================================================= */
 
 function formatarNomeAtributo(id) {
 
@@ -1851,6 +2256,11 @@ function formatarNomeAtributo(id) {
 }
 
 
+
+/* =========================================================
+   FICHA VISUAL
+========================================================= */
+
 function abrirFichaVisual() {
 
     modoEdicao =
@@ -1870,6 +2280,7 @@ function abrirFichaVisual() {
     );
 
 }
+
 
 
 function renderizarFichaVisual() {
@@ -1896,8 +2307,11 @@ function renderizarFichaVisual() {
         ficha.habilidades ||
         [];
 
+
     const derivados =
-    AmestiaFicha.calcular(ficha);
+        AmestiaFicha.calcular(
+            ficha
+        );
 
 
     viewer.innerHTML = `
@@ -1999,47 +2413,60 @@ function renderizarFichaVisual() {
 
             <div class="sheet-resources">
 
-    <div class="resource-card">
-        <span>
-            Vida
-        </span>
+                <div class="resource-card">
 
-        <strong>
-            ${ficha.pvAtual ?? derivados.pv}
-            /
-            ${derivados.pv}
-        </strong>
-    </div>
+                    <span>
+                        Vida
+                    </span>
 
-
-    <div class="resource-card">
-        <span>
-            Estabilidade
-        </span>
-
-        <strong>
-            ${ficha.estabilidadeAtual ?? derivados.estabilidade}
-            /
-            ${derivados.estabilidade}
-        </strong>
-    </div>
-
-
-    <div class="resource-card">
-        <span>
-            Fluxo
-        </span>
-
-        <strong>
-            ${ficha.fluxoAtual ?? derivados.fluxo}
-            /
-            ${derivados.fluxo}
-                
+                    <strong>
+                        ${
+                            ficha.pvAtual ??
+                            derivados.pv
+                        }
+                        /
+                        ${derivados.pv}
                     </strong>
-             
-                 </div>
-       
-           </div>
+
+                </div>
+
+
+                <div class="resource-card">
+
+                    <span>
+                        Estabilidade
+                    </span>
+
+                    <strong>
+                        ${
+                            ficha.estabilidadeAtual ??
+                            derivados.estabilidade
+                        }
+                        /
+                        ${derivados.estabilidade}
+                    </strong>
+
+                </div>
+
+
+                <div class="resource-card">
+
+                    <span>
+                        Fluxo
+                    </span>
+
+                    <strong>
+                        ${
+                            ficha.fluxoAtual ??
+                            derivados.fluxo
+                        }
+                        /
+                        ${derivados.fluxo}
+                    </strong>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -2403,6 +2830,11 @@ function renderizarFichaVisual() {
 }
 
 
+
+/* =========================================================
+   MOVER EDITOR
+========================================================= */
+
 function moverEditor(
     paraFicha
 ) {
@@ -2458,6 +2890,11 @@ function moverEditor(
 }
 
 
+
+/* =========================================================
+   EDIÇÃO DIRETA
+========================================================= */
+
 function entrarEdicaoDireta() {
 
     modoEdicao =
@@ -2492,15 +2929,6 @@ function entrarEdicaoDireta() {
     );
 
 
-    const botao =
-        $("editSheet");
-
-
-    if (botao)
-        botao.hidden =
-            true;
-
-
     window.scrollTo({
         top: 0,
         behavior: "smooth"
@@ -2509,29 +2937,32 @@ function entrarEdicaoDireta() {
 }
 
 
-function sairEdicaoDireta(
+
+/* =========================================================
+   SAIR DA EDIÇÃO
+========================================================= */
+
+async function sairEdicaoDireta(
     salvar = true
 ) {
 
     if (salvar) {
 
-        const resultado =
-            validarFichaAntesDeSalvar();
-
-
-        if (!resultado)
+        if (
+            !validarFichaAntesDeSalvar()
+        )
             return false;
 
 
         coletarFicha();
 
 
-        if (!ficha.id)
-            ficha.id =
-                Date.now();
+        const salvo =
+            await salvarAutomaticamente();
 
 
-        salvarAutomaticamente();
+        if (!salvo)
+            return false;
 
     }
 
@@ -2570,6 +3001,11 @@ function sairEdicaoDireta(
 
 }
 
+
+
+/* =========================================================
+   VALIDAR FICHA
+========================================================= */
 
 function validarFichaAntesDeSalvar() {
 
@@ -2621,6 +3057,11 @@ function validarFichaAntesDeSalvar() {
 }
 
 
+
+/* =========================================================
+   PREPARAR CRIAÇÃO
+========================================================= */
+
 function prepararCriacao() {
 
     modoEdicao =
@@ -2659,22 +3100,17 @@ function prepararCriacao() {
             false;
 
 
-    const fichaTab =
-        $("criar-personagem");
-
-
-    if (fichaTab)
-        fichaTab.classList.add(
-            "active"
-        );
-
-
     abrirAba(
         "criar-personagem"
     );
 
 }
 
+
+
+/* =========================================================
+   TELAS DE FICHA
+========================================================= */
 
 function configurarTelasDeFicha() {
 
@@ -2716,50 +3152,18 @@ function configurarTelasDeFicha() {
     $("saveSheet")
         ?.addEventListener(
             "click",
-            () => {
-
-                if (
-                    !validarFichaAntesDeSalvar()
-                )
-                    return;
-
-
-                coletarFicha();
-
-
-                if (!ficha.id)
-                    ficha.id =
-                        Date.now();
-
-
-                salvarAutomaticamente();
-
-
-                renderizarFichaVisual();
-
-
-                abrirAba(
-                    "ficha"
-                );
-
-            }
+            salvarFicha
         );
 
 
-    const cancelar =
-        $("cancelEditSheet");
-
-
-    cancelar?.addEventListener(
-        "click",
-        () => {
-
-            sairEdicaoDireta(
-                false
-            );
-
-        }
-    );
+    $("cancelEditSheet")
+        ?.addEventListener(
+            "click",
+            () =>
+                sairEdicaoDireta(
+                    false
+                )
+        );
 
 }
 
@@ -2789,9 +3193,8 @@ filtroCaminhos
 
 
 
-
 /* =========================================================
-   CONTROLES GERAIS DA INTERFACE
+   INTERFACE
 ========================================================= */
 
 function configurarInterface() {
@@ -2800,13 +3203,6 @@ function configurarInterface() {
         ?.addEventListener(
             "click",
             novaFicha
-        );
-
-
-    $("saveSheet")
-        ?.addEventListener(
-            "click",
-            salvarFicha
         );
 
 
@@ -2823,41 +3219,20 @@ function configurarInterface() {
             }
         );
 
-
-    $("editSheet")
-        ?.addEventListener(
-            "click",
-            entrarEdicaoDireta
-        );
-
-
-    $("backToSheets")
-        ?.addEventListener(
-            "click",
-            () =>
-                abrirAba(
-                    "fichas"
-                )
-        );
-
-
-    $("cancelEditSheet")
-        ?.addEventListener(
-            "click",
-            () =>
-                sairEdicaoDireta(
-                    false
-                )
-        );
-
 }
+
 
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-function iniciar() {
+async function iniciar() {
+
+    console.log(
+        "AMÉSTIA: iniciando aplicação..."
+    );
+
 
     construirAtributos();
 
@@ -2876,29 +3251,69 @@ function iniciar() {
     configurarTelasDeFicha();
 
 
-    const fichas =
-        carregarFichas();
-
-
-    if (
-        fichas.length
-    ) {
-
-        ficha =
-            structuredClone(
-                fichas[
-                    fichas.length - 1
-                ]
-            );
-
-    }
-
-
     preencherFicha();
 
     renderizarFichas();
 
     renderizarCaminhos();
+
+
+    /*
+       Firebase
+    */
+
+    if (
+        window.AmestiaFirebase &&
+        window.AmestiaFirebase.auth
+    ) {
+
+        window.AmestiaFirebase
+            .auth
+            .onAuthStateChanged(
+                async usuario => {
+
+                    usuarioFirebase =
+                        usuario ||
+                        null;
+
+
+                    if (usuario) {
+
+                        console.log(
+                            "Usuário conectado:",
+                            usuario.email
+                        );
+
+
+                        await sincronizarFichasFirebase();
+
+                    }
+                    else {
+
+                        console.log(
+                            "Nenhum usuário conectado."
+                        );
+
+
+                        fichasCache =
+                            [];
+
+
+                        renderizarFichas();
+
+                    }
+
+                }
+            );
+
+    }
+    else {
+
+        console.warn(
+            "Firebase ainda não está disponível."
+        );
+
+    }
 
 
     if (
@@ -2908,7 +3323,22 @@ function iniciar() {
         renderizarFichaVisual();
 
 
-    AmestiaMestre.iniciar();
+    if (
+        typeof AmestiaMestre !==
+        "undefined" &&
+        AmestiaMestre &&
+        typeof AmestiaMestre.iniciar ===
+        "function"
+    ) {
+
+        AmestiaMestre.iniciar();
+
+    }
+
+
+    console.log(
+        "AMÉSTIA: aplicação pronta."
+    );
 
 }
 
@@ -2917,6 +3347,37 @@ document.addEventListener(
     "DOMContentLoaded",
     iniciar
 );
+
+
+/* =========================================================
+   EXPOR FUNÇÕES
+========================================================= */
+
+window.AmestiaApp = {
+
+    abrirAba,
+
+    novaFicha,
+
+    salvarFicha,
+
+    renderizarFichas,
+
+    renderizarCaminhos,
+
+    renderizarProgressao,
+
+    renderizarFichaVisual,
+
+    sincronizarFichasFirebase,
+
+    getFicha:
+        () => ficha,
+
+    getUsuario:
+        () => usuarioFirebase
+
+};
 
 
 })();

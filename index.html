@@ -7,6 +7,55 @@
 
 <title>Amestia — Até o Esquecimento</title>
 
+  <div class="amestia-conta" id="areaConta">
+
+    <div class="amestia-conta-info">
+
+        <img
+            id="usuarioFoto"
+            class="usuario-foto"
+            src=""
+            alt="Foto do usuário"
+            style="display: none;"
+        >
+
+        <div>
+
+            <strong id="usuarioNome">
+                Visitante
+            </strong>
+
+            <span id="usuarioEmail">
+                Entre para continuar
+            </span>
+
+            <small id="statusLogin">
+                Desconectado
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="btnEntrarGoogle"
+        type="button"
+    >
+        Entrar com Google
+    </button>
+
+
+    <button
+        id="btnSair"
+        type="button"
+        style="display: none;"
+    >
+        Sair
+    </button>
+
+</div>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -84,15 +133,20 @@ rel="stylesheet">
             <span>Regras</span>
         </button>
 
-        <button class="nav-item" data-tab="mestre">
-            ⚙
-            <span>Mestre</span>
-        </button>
+<button class="nav-item" data-tab="mestre">
+    ◉
+    <span>Painel do Mestre</span>
+</button>
 
         <button class="nav-item" data-tab="biblioteca">
             ▤
             <span>Biblioteca</span>
         </button>
+
+      <button class="nav-item" data-tab="campanhas">
+    ◫
+    <span>Campanhas</span>
+</button>
 
     </nav>
 
@@ -1230,6 +1284,35 @@ Ferramentas para conduzir investigações.
 
 </div>
 
+  <!-- =========================================================
+     PAINEL DO MESTRE
+========================================================= -->
+
+<section
+    id="masterCampaignPanel"
+    class="master-campaign-panel"
+>
+
+    <div class="empty-state">
+
+        <h3>
+            Nenhuma campanha aberta
+        </h3>
+
+        <p>
+            Abra uma campanha para acessar o painel do mestre.
+        </p>
+
+    </div>
+
+</section>
+
+
+<div
+    id="masterCharacterViewer"
+    class="master-character-viewer"
+></div>
+
 
 <!-- DENSIDADE -->
 
@@ -1401,6 +1484,218 @@ rows="4"
 
 </section>
 
+  <section
+    id="tab-campanhas"
+    class="app-screen"
+>
+    <!-- conteúdo das campanhas -->
+</section>
+
+  
+<!-- =====================================================
+     CAMPANHAS
+===================================================== -->
+
+<section id="campanhas" class="tab">
+
+    <div class="section-head">
+
+        <div>
+
+            <span class="eyebrow">
+                ARQUIVO DO VÉU
+            </span>
+
+            <h2>
+                Campanhas
+            </h2>
+
+            <p>
+                Crie, participe e acompanhe suas campanhas de Amestia.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         AÇÕES
+    ================================================== -->
+
+    <div class="campaign-actions-grid">
+
+        <!-- CRIAR -->
+
+        <section class="panel">
+
+            <div class="section-heading">
+
+                <span class="tag">
+                    NOVA CAMPANHA
+                </span>
+
+                <h3>
+                    Criar campanha
+                </h3>
+
+            </div>
+
+
+            <form id="campaignCreateForm">
+
+                <div class="field">
+
+                    <label for="campaignName">
+                        Nome da campanha
+                    </label>
+
+                    <input
+                        id="campaignName"
+                        type="text"
+                        placeholder="Ex.: O Último Véu"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="campaignDescription">
+                        Descrição
+                    </label>
+
+                    <textarea
+                        id="campaignDescription"
+                        rows="5"
+                        maxlength="500"
+                        placeholder="Descreva brevemente a campanha..."
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn primary"
+                >
+                    Criar campanha
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- ENTRAR -->
+
+        <section class="panel">
+
+            <div class="section-heading">
+
+                <span class="tag">
+                    PARTICIPAR
+                </span>
+
+                <h3>
+                    Entrar em campanha
+                </h3>
+
+            </div>
+
+
+            <form id="campaignJoinForm">
+
+                <div class="field">
+
+                    <label for="campaignCode">
+                        Código da campanha
+                    </label>
+
+                    <input
+                        id="campaignCode"
+                        type="text"
+                        placeholder="Ex.: AM7K2P"
+                        maxlength="6"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <p class="field-help">
+                    Digite o código fornecido pelo mestre.
+                </p>
+
+
+                <button
+                    type="submit"
+                    class="btn primary"
+                >
+                    Entrar na campanha
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+
+
+    <!-- =================================================
+         MINHAS CAMPANHAS
+    ================================================== -->
+
+    <section class="panel campaign-list-panel">
+
+        <div class="section-heading">
+
+            <span class="tag">
+                ARQUIVO
+            </span>
+
+            <h3>
+                Minhas campanhas
+            </h3>
+
+            <p>
+                Campanhas das quais você participa ou é mestre.
+            </p>
+
+        </div>
+
+
+        <div
+            id="campaignGrid"
+            class="campaign-grid"
+        >
+
+            <div class="empty-state">
+
+                <p>
+                    Carregando campanhas...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CAMPANHA ABERTA
+    ================================================== -->
+
+    <section
+        id="campaignPanel"
+        class="campaign-open-panel"
+    ></section>
+
+</section>
 
 <!-- =====================================================
      BIBLIOTECA
@@ -1448,6 +1743,76 @@ AMESTIA · ATÉ O ESQUECIMENTO · 1970
 
 </div>
 
+  <section id="screen-campanhas" class="screen">
+
+    <div class="page-header">
+
+        <div>
+            <span class="eyebrow">
+                ARQUIVO DO VÉU
+            </span>
+
+            <h1>Campanhas</h1>
+
+            <p>
+                Crie, participe e acompanhe suas campanhas de Amestia.
+            </p>
+        </div>
+
+    </div>
+
+    
+    <!-- =====================================================
+         MINHAS CAMPANHAS
+    ====================================================== -->
+
+    <section class="panel campaign-list-panel">
+
+        <div class="section-heading">
+
+            <span class="tag">
+                ARQUIVO
+            </span>
+
+            <h2>
+                Minhas campanhas
+            </h2>
+
+            <p>
+                Campanhas das quais você participa ou é mestre.
+            </p>
+
+        </div>
+
+
+        <div
+            id="campaignGrid"
+            class="campaign-grid"
+        >
+
+            <div class="empty-state">
+
+                <p>
+                    Carregando campanhas...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CAMPANHA ABERTA
+    ====================================================== -->
+
+    <section
+        id="campaignPanel"
+        class="campaign-open-panel"
+    ></section>
+
+</section>
 
 <!-- =====================================================
      JAVASCRIPT
@@ -1457,8 +1822,12 @@ AMESTIA · ATÉ O ESQUECIMENTO · 1970
 <script src="caminhos.js"></script>
 <script src="ficha.js"></script>
 <script src="mestre.js"></script>
+<script src="campanhas.js"></script>
+<script src="painel-mestre.js"></script>
 <script src="app.js"></script>
 
+<script type="module" src="auth.js"></script>
+  
 </body>
 
 </html>
